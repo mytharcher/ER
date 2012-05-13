@@ -12,7 +12,7 @@
 ///import er.locator;
 ///import er.permission;
 ///import er.init;
-///import baidu.sio.callByBrowser;
+///import er.lib.loadScript;
     
 /**
  * 控制器
@@ -117,7 +117,7 @@ er.controller = function () {
             if ( action || !actionPath ) {
                 _loadAction( action, arg );
             } else if ( actionPath ) {
-                baidu.sio.callByBrowser( actionPath, function () {
+                er.lib.loadScript( actionPath, function () {
                     _loadAction( findAction( actionName ), arg );
                 });
             }
@@ -315,7 +315,7 @@ er.controller = function () {
         
         // 初始化arg参数
         if ( opt_argMap ) {
-            baidu.extend( arg, opt_argMap );
+            er.lib.extend( arg, opt_argMap );
         }
         
         // 加载action，action不存在时自动加载
@@ -323,7 +323,7 @@ er.controller = function () {
             return loadAction( action, arg );
         } else {
             privateId = er._util.getUID();
-            baidu.sio.callByBrowser( actionPath, function () {
+            er.lib.loadScript( actionPath, function () {
                 loadAction( findAction( actionName ), arg, privateId );
             });
 

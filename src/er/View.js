@@ -9,8 +9,7 @@
 
 ///import er.Model;
 ///import er.template;
-///import baidu.object.extend;
-///import baidu.lang.inherits;
+///import er.lib;
 
 er.View = function () {
     var ext_ = {};
@@ -19,8 +18,8 @@ er.View = function () {
         var construct = new Function();
 
         options && (construct.prototype = options);
-        baidu.extend( construct.prototype, ext_ );
-        baidu.inherits( construct, arguments.callee );
+        er.lib.extend( construct.prototype, ext_ );
+        er.lib.inherits( construct, arguments.callee );
         return construct;
     }
 
@@ -75,7 +74,7 @@ er.View = function () {
          * @public
          */
         render: function () {
-            var target = baidu.g( this.target );
+            var target = er.lib.g( this.target );
             er.template.merge( target, this.template, this.model.getGUID() );
         },
         
@@ -94,7 +93,7 @@ er.View = function () {
          * @public
          */
         clear: function () {
-            var target = baidu.g( this.target );
+            var target = er.lib.g( this.target );
             target && (target.innerHTML = '');
         }
     };
@@ -107,7 +106,7 @@ er.View = function () {
      * @param {Object} ext 扩展功能
      */
     View.extend = function ( ext ) {
-        baidu.extend( ext_, ext );
+        er.lib.extend( ext_, ext );
     };
  
     return View;

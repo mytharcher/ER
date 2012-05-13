@@ -14,7 +14,7 @@ er.Model = function () {
     function Model( extend ) {
         var construct = new Function();
         construct.prototype = extend;
-        baidu.inherits( construct, Model );
+        er.lib.inherits( construct, Model );
 
         return construct;
     }
@@ -47,7 +47,7 @@ er.Model = function () {
          * @param {Any} value 数据值
          */
         set: function ( name, value, opt_arg ) {
-            var arg = baidu.object.clone( opt_arg || {} );
+            var arg = er.lib.clone( opt_arg || {} );
             arg.contextId = this._guid;
 
             er.context.set( name, value, arg );

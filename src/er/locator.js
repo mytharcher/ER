@@ -7,8 +7,7 @@
  * author:  erik
  */
 
-///import baidu.browser.ie;
-///import baidu.browser.firefox;
+///import er.lib;
 ///import er._util;
 ///import er.router;
 ///import er.init;
@@ -47,7 +46,7 @@ er.locator = function () {
         //   视觉上相当于decodeURI，
         //   但是读取location.hash的值相当于decodeURIComponent
         // 所以需要从location.href里取出hash值
-        if ( baidu.browser.firefox ) {
+        if ( er.lib.firefox ) {
             hash = location.href.match(/#(.*)$/);
             hash && (hash = hash[ 1 ]);
         } else {
@@ -147,7 +146,7 @@ er.locator = function () {
 
         // ie下使用中间iframe作为中转控制
         // 其他浏览器直接调用控制器方法
-        if ( baidu.ie && baidu.ie < 8 ) {
+        if ( er.lib.ie && er.lib.ie < 8 ) {
             ieRoute( loc );
         } else {
             er.router( loc );
@@ -172,12 +171,12 @@ er.locator = function () {
      * @param {string} loc 地址
      */
     function ieRoute( loc ) {
-        var iframe = baidu.g( er._util.getConfig( 'CONTROL_IFRAME_ID' ) ),
+        var iframe = er.lib.g( er._util.getConfig( 'CONTROL_IFRAME_ID' ) ),
             iframeDoc = iframe.contentWindow.document;
 
         iframeDoc.open( 'text/html' );
         iframeDoc.write(
-            baidu.format(
+            er.lib.format(
                 IFRAME_CONTENT, 
                 escapeIframeContent( loc )
             ));
@@ -201,7 +200,7 @@ er.locator = function () {
      * @private
      */
     function init() {
-        if ( baidu.ie && baidu.ie < 8 ) {
+        if ( er.lib.ie && er.lib.ie < 8 ) {
             ieCreateIframeRecorder();
             setInterval( changeListener, 100 );
         } 

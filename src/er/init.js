@@ -9,7 +9,6 @@
 
 ///import er;
 ///import er._util;
-///import baidu.ajax.request;
 
 /**
  * 初始化ER框架

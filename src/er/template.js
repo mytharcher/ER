@@ -9,7 +9,7 @@
 
 ///import er.config;
 ///import er.init;
-///import baidu.string.encodeHTML;
+///import er.lib;
 
 /**
  * 简易的模板解析器
@@ -22,7 +22,7 @@ er.template = function () {
         // 过滤器
         filterContainer = {
             'html': function ( source ) {
-                return baidu.string.encodeHTML( source );
+                return er.lib.encodeHTML( source );
             },
             
             'url': function ( source ) {
@@ -460,7 +460,7 @@ er.template = function () {
          * @inner
          */
         function loadTemplate() {
-            baidu.ajax.request( list[ i ], {
+            er.lib.ajax( list[ i ], {
                 'method'   : 'get',
                 'onsuccess': successCallback,
                 'onfailure': loadedCallback

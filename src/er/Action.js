@@ -9,8 +9,7 @@
 
 ///import er.AbstractAction;
 ///import er._util;
-///import baidu.lang.inherits;
-///import baidu.object.extend;
+///import er.lib;
 
 er.Action = function () {
     
@@ -31,7 +30,7 @@ er.Action = function () {
         
         var clazz = new Function();
         clazz.prototype = obj;
-        baidu.inherits( clazz, superClazz );
+        er.lib.inherits( clazz, superClazz );
         return clazz;
     };
 
@@ -169,7 +168,7 @@ er.Action = function () {
     }; 
 
     // 实现IAction
-    baidu.inherits( Action_, er.AbstractAction );
+    er.lib.inherits( Action_, er.AbstractAction );
 
     /**
      * 扩展Action的功能
@@ -187,7 +186,7 @@ er.Action = function () {
             if ( !base ) {
                 base = new Function();
                 base.prototype = ext;
-                baidu.inherits( base, Action_ );
+                er.lib.inherits( base, Action_ );
 
                 ActionBaseX_[ opt_name ] = base;
                 return;

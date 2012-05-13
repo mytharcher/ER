@@ -12,7 +12,7 @@
 ///import er.Model;
 ///import er.View;
 ///import er._util;
-///import baidu.lang.inherits;
+///import er.lib;
 
 er.AbstractAction = function () {
 
@@ -170,7 +170,7 @@ er.AbstractAction = function () {
         }
     };
 
-    baidu.inherits( AbstractAction_, er.IAction );
+    er.lib.inherits( AbstractAction_, er.IAction );
     return AbstractAction_;
 
 }();
