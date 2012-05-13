@@ -9,7 +9,7 @@
 
 ///import esui.validator.ValidityState;
 ///import esui.validator.Rule;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * 最大长度验证规则类
@@ -52,5 +52,5 @@ esui.validator.MaxLengthRule.prototype = {
     }
 };
 
-baidu.inherits( esui.validator.MaxLengthRule, esui.validator.Rule );
+esui.lib.inherits( esui.validator.MaxLengthRule, esui.validator.Rule );
 esui.validator.Rule.register( 'maxlength', esui.validator.MaxLengthRule );

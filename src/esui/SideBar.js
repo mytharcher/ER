@@ -9,7 +9,7 @@
 
 ///import esui.Control;
 ///import esui.Button;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * 左侧导航控件
@@ -127,20 +127,20 @@ esui.SideBar.prototype = {
         var neighborHideClass = this.__getClass( 'neighbor-hide' );
 
         if ( mode == 'fixed' ) {
-            baidu.hide( fixedMain );
-            baidu.show( autoHideMain );
+            fixedMain.style.display = 'none';
+            autoHideMain.style.display = '';
         } else {
-            baidu.show( fixedMain );
-            baidu.hide( autoHideMain );
+            fixedMain.style.display = '';
+            autoHideMain.style.display = 'none';
         }
 
         this.mode = mode;
         
         // 更新neighbor视图
         if ( this._isAutoHide() ) {
-            baidu.addClass( neighbor, neighborHideClass );
+            esui.lib.addClass( neighbor, neighborHideClass );
         } else {
-            baidu.removeClass( neighbor, neighborHideClass );
+            esui.lib.removeClass( neighbor, neighborHideClass );
             this._hideMat();
         }
 
@@ -185,17 +185,17 @@ esui.SideBar.prototype = {
      */
     _initContent: function () {
         var main = this.main;
-        var head = baidu.dom.first( main );
+        var head = esui.lib.firstChild( main );
         var body;
         
         if ( head ) {
-            baidu.addClass( head, this.__getClass( 'head' ) );
+            esui.lib.addClass( head, this.__getClass( 'head' ) );
             this._headEl = head;
-            body = baidu.dom.next( head );
+            body = esui.lib.nextSibling( head );
             
             if ( body ) {
                 this._bodyEl = body;
-                baidu.addClass( body, this.__getClass( 'body' ) );
+                esui.lib.addClass( body, this.__getClass( 'body' ) );
             }
         }
     },
@@ -208,8 +208,8 @@ esui.SideBar.prototype = {
     _caching: function () {
         var main        = this.main;
         var parent      = main.parentNode;
-        var parentPos   = baidu.dom.getPosition( parent );
-        var pos         = baidu.dom.getPosition( main )
+        var parentPos   = esui.lib.getPosition( parent );
+        var pos         = esui.lib.getPosition( main )
 
         if ( !esui.util.hasValue( this._mOffsetTop ) ) {
             this._mOffsetTop = pos.top - parentPos.top;
@@ -236,7 +236,7 @@ esui.SideBar.prototype = {
             me._caching();
             
             // 给邻居元素添加控制样式的class
-            baidu.addClass( me._getNeighbor(), me.__getClass( 'neighbor' ) );
+            esui.lib.addClass( me._getNeighbor(), me.__getClass( 'neighbor' ) );
             
             // 初始化控制按钮，内容区域，mat和minibar
             me._initContent();
@@ -247,8 +247,8 @@ esui.SideBar.prototype = {
             // 挂载resize和scorll的listener
             me.heightReseter = me._getHeightReseter();
             me.topReseter    = me._getTopReseter();
-            baidu.on( window, 'resize', me.heightReseter );
-            baidu.on( window, 'scroll', me.topReseter );
+            esui.lib.on( window, 'resize', me.heightReseter );
+            esui.lib.on( window, 'scroll', me.topReseter );
             
             // 给主元素添加over和out的事件handler
             me.main.onmouseover = me._getMainOverHandler();
@@ -318,7 +318,7 @@ esui.SideBar.prototype = {
             if ( me._isAutoHide() ) {
                 event = event || window.event;
                 var tar = event.relatedTarget || event.toElement;
-                if ( !baidu.dom.contains( me.main, tar ) ) {
+                if ( !esui.lib.elementContains( me.main, tar ) ) {
                     me._autoHideBar();                        
                 }                                        
             }
@@ -371,8 +371,8 @@ esui.SideBar.prototype = {
         var hoverClass = me.__getClass('minibar-hover');
 
         return function () {            
-            if ( !baidu.dom.hasClass(this, hoverClass ) ){
-                baidu.addClass( this, hoverClass );
+            if ( !esui.lib.hasClass(this, hoverClass ) ){
+                esui.lib.addClass( this, hoverClass );
                 me._autoTimer = setTimeout(
                     function () {
                         me._hideMiniBar();
@@ -390,7 +390,7 @@ esui.SideBar.prototype = {
     _getMiniOutHandler: function () {
         var me = this;
         return function () {
-            baidu.removeClass( this, me.__getClass( 'minibar-hover' ) );
+            esui.lib.removeClass( this, me.__getClass( 'minibar-hover' ) );
             clearTimeout( me._autoTimer );
         };
     },
@@ -402,10 +402,9 @@ esui.SideBar.prototype = {
      */
     _resetHeight: function () {
         var me          = this,
-            page        = baidu.page,
-            pos         = baidu.dom.getPosition( me.main ),
-            scrollTop   = page.getScrollTop(),
-            height      = page.getViewHeight(),
+            pos         = esui.lib.getPosition( me.main ),
+            scrollTop   = esui.lib.getPageScrollTop(),
+            height      = esui.lib.getPageViewHeight(),
             bodyHeight;
 
         if ( height ) {
@@ -455,7 +454,7 @@ esui.SideBar.prototype = {
     _resetTop: function () {
         var me          = this,
             marginTop   = me.marginTop,
-            scrollTop   = baidu.page.getScrollTop(),
+            scrollTop   = esui.lib.getPageScrollTop(),
             main        = me.main,
             mat         = me._getMat(),
             mini        = me._miniBar,
@@ -465,7 +464,7 @@ esui.SideBar.prototype = {
             mainTop, miniTop;
         
         // 2x2的判断，真恶心
-        if ( baidu.ie && baidu.ie < 7 ) {
+        if ( esui.lib.ie && esui.lib.ie < 7 ) {
             if ( scrollTop > top - marginTop ) {
                 mainTop = miniTop = scrollTop - top + me.top;
             } else {
@@ -585,7 +584,7 @@ esui.SideBar.prototype = {
         function finished( noMotion ) {
             me._getMat().style.left = '-10000px';
             me.main.style.left     = endLeft + 'px';
-            //baidu.addClass(me._getNeighbor(), me.__getClass('neighbor-hide'));
+            //esui.lib.addClass(me._getNeighbor(), me.__getClass('neighbor-hide'));
             //me._repaintNeighbor();
             
             // TODO: 永久取消js实现的sidebar动画效果
@@ -622,8 +621,8 @@ esui.SideBar.prototype = {
         var me = this;
         clearTimeout( me._autoTimer );
         me._autoTimer = setTimeout( function () {
-            var mPos   = baidu.page.getMousePosition(),
-                navPos = baidu.dom.getPosition( me.main ),
+            var mPos   = esui.lib.getMousePosition(),
+                navPos = esui.lib.getPosition( me.main ),
                 main   = me.main;
 
             if ( mPos.x > navPos.left + main.offsetWidth 
@@ -708,7 +707,7 @@ esui.SideBar.prototype = {
          */
         function finished() {
             me._miniBar.style.left = endLeft + 'px';
-            //baidu.removeClass(me._getNeighbor(), me.__getClass('neighbor-hide'));         
+            //esui.lib.removeClass(me._getNeighbor(), me.__getClass('neighbor-hide'));         
             //me._repaintNeighbor();
             
             // TODO: 永久取消js实现的sidebar动画效果
@@ -770,7 +769,7 @@ esui.SideBar.prototype = {
      * @return {HTMLElement}
      */
     _getNeighbor: function () {
-        return baidu.dom.next( this.main );
+        return esui.lib.nextSibling( this.main );
     },
     
     /**
@@ -780,7 +779,7 @@ esui.SideBar.prototype = {
      * @return {HTMLElement}
      */
     _getMat: function () {
-        return baidu.g( this.__getId( 'mat' ) );
+        return esui.lib.g( this.__getId( 'mat' ) );
     },
 
     /**
@@ -792,8 +791,8 @@ esui.SideBar.prototype = {
         var me = this;
         var mat = me._getMat();
             
-        baidu.un( window, 'resize' ,me.heightReseter );
-        baidu.un( window, 'scroll', me.topReseter );
+        esui.lib.un( window, 'resize' ,me.heightReseter );
+        esui.lib.un( window, 'scroll', me.topReseter );
         document.body.removeChild( me._miniBar );
         document.body.removeChild( mat );
 
@@ -820,4 +819,4 @@ esui.SideBar.prototype = {
     */
 };
 
-baidu.inherits( esui.SideBar, esui.Control );
+esui.lib.inherits( esui.SideBar, esui.Control );

@@ -8,7 +8,7 @@
  */
 
 ///import esui.BoxControl;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * 单选框控件
@@ -22,4 +22,4 @@ esui.Radio = function ( options ) {
     esui.BoxControl.call( this, options );
 };
 
-baidu.inherits( esui.Radio, esui.BoxControl );
+esui.lib.inherits( esui.Radio, esui.BoxControl );

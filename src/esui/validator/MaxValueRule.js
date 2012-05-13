@@ -9,7 +9,7 @@
 
 ///import esui.validator.ValidityState;
 ///import esui.validator.Rule;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * 最大值验证规则类
@@ -57,5 +57,5 @@ esui.validator.MaxValueRule.prototype = {
     }
 };
 
-baidu.inherits( esui.validator.MaxValueRule, esui.validator.Rule );
+esui.lib.inherits( esui.validator.MaxValueRule, esui.validator.Rule );
 esui.validator.Rule.register( 'max', esui.validator.MaxValueRule );

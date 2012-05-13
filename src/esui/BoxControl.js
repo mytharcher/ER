@@ -9,10 +9,7 @@
 
 ///import esui.InputControl;
 ///import esui.BoxGroup;
-///import baidu.lang.inherits;
-///import baidu.string.encodeHTML;
-///import baidu.dom.insertAfter;
-///import baidu.array.contains;
+///import esui.lib;
 
 /**
  * 选择框控件基类
@@ -153,15 +150,15 @@ esui.BoxControl.prototype = {
         if ( !me._label ) {
             label = document.createElement( 'label' );
             label.className = me.__getClass( 'label' );
-            baidu.setAttr( label, 'for', main.id );
+            esui.lib.setAttribute( label, 'for', main.id );
 
-            baidu.dom.insertAfter( label, main );
+            esui.lib.insertAfter( label, main );
             me._label = label;
         }
 
         // 初始化label的内容
         title = me.title || main.title || me.getValue();
-        label.innerHTML = baidu.encodeHTML( title );
+        label.innerHTML = esui.lib.encodeHTML( title );
         
         // 初始化disabled
         me.setDisabled ( !!me.disabled );
@@ -179,7 +176,7 @@ esui.BoxControl.prototype = {
 
         default:
             if ( data instanceof Array ) {
-                me.setChecked( baidu.array.contains( data, value ) );
+                me.setChecked( esui.lib.inArray( data, value ) );
             }
             break;
         }
@@ -227,4 +224,4 @@ esui.BoxControl.prototype = {
     }
 };
 
-baidu.inherits( esui.BoxControl, esui.InputControl );
+esui.lib.inherits( esui.BoxControl, esui.InputControl );

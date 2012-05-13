@@ -9,7 +9,7 @@
 
 
 ///import esui.Control;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * @class ui.Pager
@@ -263,7 +263,7 @@ esui.Pager.prototype = {
      * @param {Object} item
      */
     _itemOverHandler: function( item ) {
-        baidu.addClass( item, this.__getClass( 'hover' ) );
+        esui.lib.addClass( item, this.__getClass( 'hover' ) );
     },
 
     /**
@@ -271,8 +271,8 @@ esui.Pager.prototype = {
      * @param {Object} item
      */
     _itemOutHandler: function( item ) {
-        baidu.removeClass( item, this.__getClass( 'hover' ) );
+        esui.lib.removeClass( item, this.__getClass( 'hover' ) );
     }
 };
 
-baidu.inherits( esui.Pager, esui.Control );
+esui.lib.inherits( esui.Pager, esui.Control );

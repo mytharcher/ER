@@ -8,7 +8,7 @@
  */
 
 ///import esui.Control;
-///import baidu.lang.inherits;
+///import esui.lib;
 ///import esui.validator.Rule;
 ///import esui.validator.Validity;
 ///import esui.validator.ValidityState;
@@ -210,7 +210,7 @@ esui.InputControl.prototype = {
 
         if ( isValid ) {
             dom.innerHTML = '';
-            baidu.hide( dom );
+            dom.style.display = 'none';
         } else {
             if ( customMessage ) {
                 dom.innerHTML = customMessage;
@@ -223,7 +223,7 @@ esui.InputControl.prototype = {
                 dom.innerHTML = msg.join( ',' );
             }
 
-            baidu.show( dom );
+            dom.style.display = '';
         }
     },
 
@@ -235,7 +235,7 @@ esui.InputControl.prototype = {
      */
     __getValidMsgDom: function () {
         var id = this.__getId( 'validatemessage' );
-        var dom = baidu.g( id );
+        var dom = esui.lib.g( id );
         var father;
 
         if ( !dom ) {
@@ -250,4 +250,4 @@ esui.InputControl.prototype = {
     }
 };  
 
-baidu.inherits( esui.InputControl, esui.Control );
+esui.lib.inherits( esui.InputControl, esui.Control );

@@ -9,7 +9,7 @@
 
 ///import esui.validator.ValidityState;
 ///import esui.validator.Rule;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * 不能为空验证规则类
@@ -51,5 +51,5 @@ esui.validator.RequiredRule.prototype = {
     }
 };
 
-baidu.inherits( esui.validator.RequiredRule, esui.validator.Rule );
+esui.lib.inherits( esui.validator.RequiredRule, esui.validator.Rule );
 esui.validator.Rule.register( 'required', esui.validator.RequiredRule );

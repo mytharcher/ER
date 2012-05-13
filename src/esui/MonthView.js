@@ -8,10 +8,7 @@
  */
 
 ///import esui.Control;
-///import baidu.lang.inherits;
-///import baidu.dom.g;
-///import baidu.dom.addClass;
-///import baidu.dom.removeClass;
+///import esui.lib;
 
 
 /**
@@ -125,8 +122,8 @@ esui.MonthView.prototype = {
             itemClass   = me.__getClass( 'item' ),
             currentClass,
             customClass,
-            overHandler = "baidu.addClass(this, '" + overClass + "')",
-            outHandler  = "baidu.removeClass(this, '" + overClass + "')";
+            overHandler = "esui.lib.addClass(this, '" + overClass + "')",
+            outHandler  = "esui.lib.removeClass(this, '" + overClass + "')";
         
         // 绘制表头
         for ( tIndex = 0; tIndex < tLen; tIndex++ ) {
@@ -236,8 +233,8 @@ esui.MonthView.prototype = {
         var me = this;
 
         if ( me.valueAsDate ) {
-            var item = baidu.g( me._getItemId( me.valueAsDate ) );
-            item && baidu.removeClass( item, me.__getClass( 'selected' ) );
+            var item = esui.lib.g( me._getItemId( me.valueAsDate ) );
+            item && esui.lib.removeClass( item, me.__getClass( 'selected' ) );
 
             me.valueAsDate = null;
         }
@@ -253,9 +250,9 @@ esui.MonthView.prototype = {
 
         if ( me.valueAsDate ) {
             var date = me.valueAsDate;
-            var item = baidu.g( me._getItemId( date ) );
+            var item = esui.lib.g( me._getItemId( date ) );
 
-            item && baidu.addClass( item, me.__getClass( 'selected' ) );
+            item && esui.lib.addClass( item, me.__getClass( 'selected' ) );
         }
     },
     
@@ -275,4 +272,4 @@ esui.MonthView.prototype = {
     }
 };
 
-baidu.inherits( esui.MonthView, esui.Control );
+esui.lib.inherits( esui.MonthView, esui.Control );

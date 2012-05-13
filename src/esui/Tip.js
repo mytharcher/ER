@@ -10,10 +10,7 @@
 ///import esui.Control;
 ///import esui.Layer;
 ///import esui.Button;
-///import baidu.lang.inherits;
-///import baidu.event.on;
-///import baidu.event.un;
-///import baidu.dom.getPosition;
+///import esui.lib;
 
 /**
  * 提示控件
@@ -172,7 +169,7 @@ esui.Tip = function () {
     };
     
     // 从控件基类派生
-    baidu.inherits( Control, esui.Control );
+    esui.lib.inherits( Control, esui.Control );
     
     /**
      * 显示提示
@@ -194,27 +191,28 @@ esui.Tip = function () {
         }
         
         // 填入标题与内容
-        baidu.g( BODY_ID ).innerHTML = tipInfo.content;
+        esui.lib.g( BODY_ID ).innerHTML = tipInfo.content;
         var title = tipInfo.title;
+        var titleElem = esui.lib.g( TITLE_ID );
         if ( title ) {
-            baidu.g( TITLE_ID ).innerHTML = title;
-            baidu.show( TITLE_ID );
+            titleElem.innerHTML = title;
+            titleElem.style.display = '';
         } else {
-            baidu.hide( TITLE_ID );
+            titleElem.style.display = 'none';
         }
         
         // 预初始化各种变量
         var arrow       = tipInfo.arrow, // 1|tr|rt|rb|br|bl|lb|lt|tl
             closeBtn    = tipInfo.closeButton,
-            pos         = baidu.dom.getPosition( entrance ),
+            pos         = esui.lib.getPosition( entrance ),
             mainLeft    = pos.left,
             mainTop     = pos.top,
             mainWidth   = entrance.offsetWidth,
             mainHeight  = entrance.offsetHeight,
-            viewWidth   = baidu.page.getViewWidth(),
-            viewHeight  = baidu.page.getViewHeight(),
-            scrollLeft  = baidu.page.getScrollLeft(),
-            scrollTop   = baidu.page.getScrollTop(),
+            viewWidth   = esui.lib.getPageViewWidth(),
+            viewHeight  = esui.lib.getPageViewHeight(),
+            scrollLeft  = esui.lib.getPageScrollLeft(),
+            scrollTop   = esui.lib.getPageScrollTop(),
             layerMain   = _layer.main,
             closeMain   = esui.util.get( CLOSE_ID ).main,
             layerWidth  = layerMain.offsetWidth,
@@ -321,7 +319,7 @@ esui.Tip = function () {
         }
     
         arrow && ( arrowClass += ' ' + ARROW_CLASS + '-' + arrow );
-        baidu.g( ARROW_ID ).className = arrowClass;
+        esui.lib.g( ARROW_ID ).className = arrowClass;
         
         // 绑定浮出层行为
         if ( tipInfo.mode != 'auto' ) {
@@ -423,4 +421,4 @@ esui.Tip = function () {
     return Control;
 }();
 
-baidu.on( window, 'load', esui.Tip._init );
+esui.lib.on( window, 'load', esui.Tip._init );

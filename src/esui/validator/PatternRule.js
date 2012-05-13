@@ -9,7 +9,7 @@
 
 ///import esui.validator.ValidityState;
 ///import esui.validator.Rule;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * 正则表达式验证规则类
@@ -60,5 +60,5 @@ esui.validator.PatternRule.prototype = {
     }
 };
 
-baidu.inherits( esui.validator.PatternRule, esui.validator.Rule );
+esui.lib.inherits( esui.validator.PatternRule, esui.validator.Rule );
 esui.validator.Rule.register( 'pattern', esui.validator.PatternRule );

@@ -13,9 +13,7 @@
 ///import esui.Select;
 ///import esui.Button;
 ///import esui.MiniMultiCalendar;
-///import baidu.lang.inherits;
-///import baidu.date.format;
-///import baidu.date.parse;
+///import lib;
 
 /**
  * 多日期选择器
@@ -53,8 +51,8 @@ esui.MultiCalendar = function ( options ) {
         valueSplits = this.value.split( ',' ); 
         if ( valueSplits.length == 2 ) {
             valueAsObject = {
-                begin   : baidu.date.parse( valueSplits[ 0 ] ),
-                end     : baidu.date.parse( valueSplits[ 1 ] )
+                begin   : Date.parse( valueSplits[ 0 ] ),
+                end     : Date.parse( valueSplits[ 1 ] )
             };
         }
     }
@@ -137,9 +135,9 @@ esui.MultiCalendar.prototype = {
              && ( begin = valueAsObj.begin )
              && ( end = valueAsObj.end )
         ) {
-            return baidu.date.format( begin, format )
+            return esui.lib.formatDate( begin, format )
                     + ','
-                    + baidu.date.format( end, format );
+                    + esui.lib.formatDate( end, format );
         }
 
         return '';
@@ -168,8 +166,8 @@ esui.MultiCalendar.prototype = {
     setValue: function ( value ) {
         value = value.split( ',' );
         if ( value.length == 2 ) {
-            var begin = baidu.date.parse( value[ 0 ] );
-            var end = baidu.date.parse( value[ 1 ] );
+            var begin = Date.parse( value[ 0 ] );
+            var end = Date.parse( value[ 1 ] );
 
             if ( begin && end ) {
                 this.setValueAsObject( {
@@ -248,7 +246,7 @@ esui.MultiCalendar.prototype = {
      */
     _getOkHandler: function () {
         var me = this,
-            parse = baidu.date.parse;
+            parse = Date.parse;
             
         function getValue( type ) {
             return me._controlMap[ type + 'monthview' ].getValueAsDate();
@@ -316,8 +314,8 @@ esui.MultiCalendar.prototype = {
             }
 
             me.tempValue[ type ] = date;
-            var title = baidu.g( me.__getId( type + 'title' ) );
-            title.innerHTML = baidu.date.format( date, me.dateFormat );
+            var title = esui.lib.g( me.__getId( type + 'title' ) );
+            title.innerHTML = esui.lib.formatDate( date, me.dateFormat );
         };
     },
     
@@ -348,9 +346,9 @@ esui.MultiCalendar.prototype = {
      */
     _repaintMain: function ( valueAsObject, shortcutText ) {
         var scText = shortcutText || this.getShortcutText( valueAsObject );
-        var scEl   = baidu.g( this.__getId( 'shortcuttext' ) );
+        var scEl   = esui.lib.g( this.__getId( 'shortcuttext' ) );
 
-        baidu.g( this.__getId( 'text' ) ).innerHTML = this.getValueText( valueAsObject );
+        esui.lib.g( this.__getId( 'text' ) ).innerHTML = this.getValueText( valueAsObject );
         scText && ( scEl.innerHTML = scText );
         scEl.style.display = scText ? '' : 'none';
     },
@@ -373,7 +371,7 @@ esui.MultiCalendar.prototype = {
             rangeBegin  = range.begin.getFullYear() * 12 + range.begin.getMonth(),
             rangeEnd    = range.end.getFullYear() * 12 + range.end.getMonth(),
             viewMonth   = view.getFullYear() * 12 + view.getMonth(),
-            titleEl     = baidu.g( me.__getId( type + 'title' ) );
+            titleEl     = esui.lib.g( me.__getId( type + 'title' ) );
         
         monthSelect.datasource = me._getMonthOptions( year );
         monthSelect.render();
@@ -389,7 +387,7 @@ esui.MultiCalendar.prototype = {
         me._controlMap[ type + 'prevmonth' ].setDisabled( ( rangeBegin >= viewMonth ) );
         me._controlMap[ type + 'nextmonth' ].setDisabled( ( rangeEnd <= viewMonth ) );
         
-        titleEl.innerHTML = baidu.date.format( valueAsDate, me.dateFormat );
+        titleEl.innerHTML = esui.lib.formatDate( valueAsDate, me.dateFormat );
 
         // 绘制日历部件
         cal.setValueAsDate( valueAsDate );
@@ -766,8 +764,8 @@ esui.MultiCalendar.prototype = {
     showLayer: function () {
         var me = this,
             main        = me.main,
-            pos         = baidu.dom.getPosition( main ),
-            pageWidth   = baidu.page.getWidth(),
+            pos         = esui.lib.getPosition( main ),
+            pageWidth   = esui.lib.getPageWidth(),
             layer       = me.getLayer(),
             layerWidth  = layer.main.offsetWidth,
             value       = me.valueAsObject,
@@ -830,7 +828,7 @@ esui.MultiCalendar.prototype = {
         var begin       = valueAsObj.begin;
         var end         = valueAsObj.end;
         var format      = this.dateFormat;
-        var formatter   = baidu.date.format;
+        var formatter   = esui.lib.formatDate;
         var shortcut    = this._controlMap[ 'shortcut' ];
             
         if ( begin && end ) {
@@ -872,4 +870,4 @@ esui.MultiCalendar.prototype = {
 };
 
 
-baidu.inherits( esui.MultiCalendar, esui.InputControl );
+esui.lib.inherits( esui.MultiCalendar, esui.InputControl );

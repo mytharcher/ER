@@ -8,7 +8,7 @@
  */
 
 ///import esui.BoxControl;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * 多选框控件
@@ -22,4 +22,4 @@ esui.CheckBox = function ( options ) {
     esui.BoxControl.call( this, options );
 };
 
-baidu.inherits( esui.CheckBox, esui.BoxControl );
+esui.lib.inherits( esui.CheckBox, esui.BoxControl );

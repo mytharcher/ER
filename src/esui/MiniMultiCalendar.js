@@ -8,9 +8,7 @@
  */
 
 ///import esui.InputControl;
-///import baidu.lang.inherits;
-///import baidu.date.format;
-///import baidu.date.parse;
+///import esui.lib;
 
 /**
  * 多日期选择器
@@ -41,8 +39,8 @@ esui.MiniMultiCalendar = function ( options ) {
         valueSplits = this.value.split( ',' ); 
         if ( valueSplits.length == 2 ) {
             valueAsObject = {
-                begin   : baidu.date.parse( valueSplits[ 0 ] ),
-                end     : baidu.date.parse( valueSplits[ 1 ] )
+                begin   : Date.parse( valueSplits[ 0 ] ),
+                end     : Date.parse( valueSplits[ 1 ] )
             };
         }
     }
@@ -75,9 +73,9 @@ esui.MiniMultiCalendar.prototype = {
              && ( begin = valueAsObj.begin )
              && ( end = valueAsObj.end )
         ) {
-            return baidu.date.format( begin, format )
+            return esui.lib.formatDate( begin, format )
                     + ','
-                    + baidu.date.format( end, format );
+                    + esui.lib.formatDate( end, format );
         }
 
         return '';
@@ -92,8 +90,8 @@ esui.MiniMultiCalendar.prototype = {
     setValue: function ( value ) {
         value = value.split( ',' );
         if ( value.length == 2 ) {
-            var begin = baidu.date.parse( value[ 0 ] );
-            var end = baidu.date.parse( value[ 1 ] );
+            var begin = Date.parse( value[ 0 ] );
+            var end = Date.parse( value[ 1 ] );
 
             if ( begin && end ) {
                 this.setValueAsObject( {
@@ -406,4 +404,4 @@ esui.MiniMultiCalendar.OPTIONS = [
     }
 ];
 
-baidu.inherits( esui.MiniMultiCalendar, esui.InputControl );
+esui.lib.inherits( esui.MiniMultiCalendar, esui.InputControl );

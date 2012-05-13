@@ -9,7 +9,7 @@
 
 
 ///import esui.Control;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * 树状控件
@@ -242,7 +242,7 @@ esui.TreeView.prototype = {
             return;
         }
 
-        baidu.addClass( node, this.__getClass( 'node-hover' ) );
+        esui.lib.addClass( node, this.__getClass( 'node-hover' ) );
     },
     
     /**
@@ -255,7 +255,7 @@ esui.TreeView.prototype = {
             return;
         }
 
-        baidu.removeClass( node, this.__getClass( 'node-hover' ) );
+        esui.lib.removeClass( node, this.__getClass( 'node-hover' ) );
     },
     
     /**
@@ -314,14 +314,14 @@ esui.TreeView.prototype = {
         }
         
         var selectedClass = this.__getClass( 'node-selected' ),
-            selectedNode = baidu.g( this.__getId( 'node' + this._selected ) );
+            selectedNode = esui.lib.g( this.__getId( 'node' + this._selected ) );
         
         // 移除现有选中节点的样式
-        selectedNode && baidu.removeClass( selectedNode, selectedClass );
+        selectedNode && esui.lib.removeClass( selectedNode, selectedClass );
 
         // 选择节点
         this._selected = id;
-        baidu.addClass( this.__getId( 'node' + id ), selectedClass );
+        esui.lib.addClass( this.__getId( 'node' + id ), selectedClass );
     },
 
     /**
@@ -376,13 +376,13 @@ esui.TreeView.prototype = {
      * @param {string} id
      */
     expand: function ( id ) {
-        var node        = baidu.g( this.__getId( 'node' + id ) );
-        var childWrap   = baidu.g( this.__getId( 'children' + id ) );
+        var node        = esui.lib.g( this.__getId( 'node' + id ) );
+        var childWrap   = esui.lib.g( this.__getId( 'children' + id ) );
 
         if ( node ) {
             node.setAttribute( 'isExpanded', '1' );
             childWrap && (childWrap.style.display = '');
-            baidu.addClass( node, this.__getClass( 'node-expanded' ) );
+            esui.lib.addClass( node, this.__getClass( 'node-expanded' ) );
         }
     },
     
@@ -393,13 +393,13 @@ esui.TreeView.prototype = {
      * @param {string} id
      */
     collapse: function ( id ) {
-        var node        = baidu.g( this.__getId( 'node' + id ) );
-        var childWrap   = baidu.g( this.__getId( 'children' + id ) );
+        var node        = esui.lib.g( this.__getId( 'node' + id ) );
+        var childWrap   = esui.lib.g( this.__getId( 'children' + id ) );
         
         if ( node ) {
             node.setAttribute( 'isExpanded', '' );
             childWrap && (childWrap.style.display = 'none');
-            baidu.removeClass( node, this.__getClass( 'node-expanded' ) );
+            esui.lib.removeClass( node, this.__getClass( 'node-expanded' ) );
         }
     },
     
@@ -413,7 +413,7 @@ esui.TreeView.prototype = {
         var me          = this,
             itemId      = me.getItemId( dataItem ),
             itemHtml    = me.getItemHtml( dataItem ),
-            nodeEl      = baidu.g( me.__getId( 'node' + itemId ) );
+            nodeEl      = esui.lib.g( me.__getId( 'node' + itemId ) );
         
         if ( itemHtml ){
             nodeEl.lastChild.innerHTML = itemHtml;
@@ -430,9 +430,9 @@ esui.TreeView.prototype = {
         var me          = this,
             itemId      = me.getItemId( dataItem ),
             children    = me.getChildren( dataItem ),
-            nodeEl      = baidu.g( me.__getId( 'node' + itemId ) ),
+            nodeEl      = esui.lib.g( me.__getId( 'node' + itemId ) ),
             childrenId  = me.__getId( 'children' + itemId ),
-            childrenEl  = baidu.g( childrenId ),
+            childrenEl  = esui.lib.g( childrenId ),
             leafClass   = me.__getClass( 'node-leaf' ),
             branchClass = me.__getClass( 'node-branch' ),
             level       = parseInt( nodeEl.getAttribute( 'level' ), 10 );
@@ -452,12 +452,12 @@ esui.TreeView.prototype = {
             }
 
             childrenEl.innerHTML = me.getChildrenHtml( children, 1, level );
-            baidu.addClass( nodeEl, branchClass );
-            baidu.removeClass( nodeEl, leafClass );
+            esui.lib.addClass( nodeEl, branchClass );
+            esui.lib.removeClass( nodeEl, leafClass );
             nodeEl.setAttribute( 'type', 'branch' );
         } else {
-            baidu.removeClass( nodeEl, branchClass );
-            baidu.addClass( nodeEl, leafClass );
+            esui.lib.removeClass( nodeEl, branchClass );
+            esui.lib.addClass( nodeEl, leafClass );
             nodeEl.setAttribute( 'type', 'leaf' );
         }
     },
@@ -510,4 +510,4 @@ esui.TreeView.prototype = {
     }
 }
 
-baidu.inherits( esui.TreeView, esui.Control );
+esui.lib.inherits( esui.TreeView, esui.Control );

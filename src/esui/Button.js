@@ -8,7 +8,7 @@
  */
 
 ///import esui.Control;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * 按钮控件
@@ -130,7 +130,7 @@ esui.Button.prototype = {
      * @param {string} content 按钮的显示文字
      */
     setContent: function ( content ) {
-        baidu.g( this.__getId( 'label' ) ).innerHTML = content;
+        esui.lib.g( this.__getId( 'label' ) ).innerHTML = content;
     },
     
     /**
@@ -144,4 +144,4 @@ esui.Button.prototype = {
     }
 };
 
-baidu.inherits( esui.Button, esui.Control );
+esui.lib.inherits( esui.Button, esui.Control );

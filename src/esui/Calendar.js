@@ -12,11 +12,7 @@
 ///import esui.MonthView;
 ///import esui.Select;
 ///import esui.Button;
-///import baidu.lang.inherits;
-///import baidu.date.format;
-///import baidu.date.parse;
-///import baidu.dom.getPosition;
-///import baidu.page.getWidth;
+///import esui.lib;
 
 /**
  * 单日期选择器
@@ -50,7 +46,7 @@ esui.Calendar = function (options) {
     // 初始化value与valueAsDate
     var valueAsDate;
     if ( this.value ) {
-        valueAsDate = baidu.date.parse( this.value );
+        valueAsDate = Date.parse( this.value );
     }
 
     if ( valueAsDate ) {
@@ -107,7 +103,7 @@ esui.Calendar.prototype = {
      */
     getValue: function () {
         if ( this.valueAsDate ) {
-            return baidu.date.format( this.valueAsDate, this.valueFormat );
+            return esui.lib.formatDate( this.valueAsDate, this.valueFormat );
         }
 
         return '';
@@ -120,7 +116,7 @@ esui.Calendar.prototype = {
      * @param {string} value 选取的日期(字符串表示)
      */
     setValue: function ( value ) {
-        var valueAsDate = baidu.date.parse( value );
+        var valueAsDate = Date.parse( value );
         valueAsDate && ( this.setValueAsDate( valueAsDate ) );
     },
     
@@ -149,7 +145,7 @@ esui.Calendar.prototype = {
         me.valueAsDate = valueAsDate;
         
         me.getLayer()._controlMap.monthview.setValueAsDate( valueAsDate );
-        baidu.g( me.__getId('text') ).innerHTML = baidu.date.format( valueAsDate, me.dateFormat );
+        esui.lib.g( me.__getId('text') ).innerHTML = esui.lib.formatDate( valueAsDate, me.dateFormat );
     },
     
     /**
@@ -203,8 +199,8 @@ esui.Calendar.prototype = {
     showLayer: function () {
         var me = this,
             main        = me.main,
-            pos         = baidu.dom.getPosition(main),
-            pageWidth   = baidu.page.getWidth(),
+            pos         = esui.lib.getPosition(main),
+            pageWidth   = esui.lib.getPageWidth(),
             layer       = me.getLayer(),
             layerWidth  = layer.main.offsetWidth,
             layerTop    = pos.top + main.offsetHeight,
@@ -236,7 +232,7 @@ esui.Calendar.prototype = {
             me.__getId( input ),
             me.__getClass( input ),
             me.__getClass( 'arrow' ),
-            baidu.date.format( date, me.dateFormat ) 
+            esui.lib.formatDate( date, me.dateFormat ) 
         );
     },
     
@@ -380,8 +376,8 @@ esui.Calendar.prototype = {
                 me.value = date;
                 me.hideLayer();
 
-                var textEl = baidu.g( me.__getId( 'text' ) );
-                textEl.innerHTML = baidu.date.format( date, me.dateFormat );
+                var textEl = esui.lib.g( me.__getId( 'text' ) );
+                textEl.innerHTML = esui.lib.formatDate( date, me.dateFormat );
             } else {
                 return false;
             }
@@ -598,4 +594,4 @@ esui.Calendar.prototype = {
     }
 };
 
-baidu.inherits( esui.Calendar, esui.InputControl );
+esui.lib.inherits( esui.Calendar, esui.InputControl );

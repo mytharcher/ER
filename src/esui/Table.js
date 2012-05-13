@@ -22,7 +22,7 @@
 ///import esui.Layer;
 ///import esui.Button;
 ///import esui.TextInput;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * 表格框控件
@@ -53,7 +53,7 @@ esui.Table = function ( options ) {
     // 表格的单元格不需要考虑边框宽度，直接加齐就行
     // 而且即使table-layout:fixed，单元格宽度也不会从前向后分配
     // 而会以未知策略将剩余宽度分配给单元格
-    if ( baidu.browser.isWebkit ) {
+    if ( esui.lib.isWebkit ) {
         this.rowWidthOffset = 0;
     }
 
@@ -115,7 +115,7 @@ esui.Table.prototype = {
      * @return {HTMLElement}
      */
     getBody: function () {
-        return baidu.g( this.__getId( 'body' ) );
+        return esui.lib.g( this.__getId( 'body' ) );
     },
     
     /**
@@ -125,7 +125,7 @@ esui.Table.prototype = {
      * @return {HTMLElement}
      */
     getHead: function () {
-        return baidu.g( this.__getId( 'head' ) );
+        return esui.lib.g( this.__getId( 'head' ) );
     },
 
     /**
@@ -135,7 +135,7 @@ esui.Table.prototype = {
      * @return {HTMLElement}
      */
     getFoot: function () {
-        return baidu.g( this.__getId( 'foot' ) );
+        return esui.lib.g( this.__getId( 'foot' ) );
     },
     
     /**
@@ -146,7 +146,7 @@ esui.Table.prototype = {
      * @return {HTMLElement}
      */
     _getRow: function ( index ) {
-        return baidu.g( this.__getId( 'row' ) + index );
+        return esui.lib.g( this.__getId( 'row' ) + index );
     },
     
     /**
@@ -156,7 +156,7 @@ esui.Table.prototype = {
      * @return {HTMLElement}
      */
     _getHeadCheckbox: function () {
-        return baidu.g( this.__getId( 'selectAll' ) );
+        return esui.lib.g( this.__getId( 'selectAll' ) );
     },
     
     /**
@@ -231,7 +231,7 @@ esui.Table.prototype = {
             }
 
             function getStyleNum( dom, styleName ) {
-                var result = baidu.dom.getStyle( dom, styleName );
+                var result = esui.lib.getStyle( dom, styleName );
                 return ( result == '' ? 0 : +( result.replace( 'px','' ) ) );
             }
 
@@ -250,7 +250,7 @@ esui.Table.prototype = {
         }
 
         // 读取跟随的高度，缓存
-        me._followTop = baidu.dom.getPosition( followDoms[ 0 ] || me.main ).top;
+        me._followTop = esui.lib.getPosition( followDoms[ 0 ] || me.main ).top;
     },
 
     /**
@@ -436,7 +436,7 @@ esui.Table.prototype = {
         var me      = this,
             type    = 'foot',
             id      = me.__getId( type ),
-            foot    = baidu.g( id );
+            foot    = esui.lib.g( id );
 
         if ( !( me.foot instanceof Array ) ) {
             foot && (foot.style.display = 'none');
@@ -518,7 +518,7 @@ esui.Table.prototype = {
         var me      = this,
             type    = 'head',
             id      = me.__getId( type ),
-            head    = baidu.g( id );
+            head    = esui.lib.g( id );
             
         if ( me.noHead ) {
             return;
@@ -716,7 +716,7 @@ esui.Table.prototype = {
         }
         
         this._sortReady = 1;
-        baidu.addClass( cell, this.__getClass( 'hcell-hover' ) );
+        esui.lib.addClass( cell, this.__getClass( 'hcell-hover' ) );
     },
     
     /**
@@ -727,7 +727,7 @@ esui.Table.prototype = {
      */
     _titleOutHandler: function ( cell ) {
         this._sortReady = 0;
-        baidu.removeClass( cell, this.__getClass( 'hcell-hover' ) );
+        esui.lib.removeClass( cell, this.__getClass( 'hcell-hover' ) );
     },
     
     onsort: new Function(),
@@ -775,8 +775,7 @@ esui.Table.prototype = {
             
             e = e || window.event;
             var tar     = e.srcElement || e.target,
-                page    = baidu.page,
-                pageX   = e.pageX || e.clientX + page.getScrollLeft(),
+                pageX   = e.pageX || e.clientX + esui.lib.getPageScrollLeft(),
                 pos, 
                 index,
                 sortable;
@@ -788,7 +787,7 @@ esui.Table.prototype = {
             }
             
             // 获取位置与序号
-            pos         = baidu.dom.getPosition( tar );
+            pos         = esui.lib.getPosition( tar );
             index       = tar.getAttribute( 'index' );
             sortable    = tar.getAttribute( 'sortable' );
             
@@ -797,18 +796,18 @@ esui.Table.prototype = {
                  && pageX - pos.left < range
             ) {
                 sortable && ( me._titleOutHandler( tar ) ); // 清除可排序列的over样式
-                baidu.addClass( this, dragClass );
+                esui.lib.addClass( this, dragClass );
                 me._dragPoint = 'left';
                 me._dragReady = 1;
             } else if (tar.getAttribute( 'dragright' ) 
                        && pos.left + tar.offsetWidth - pageX < range
             ) {
                 sortable && ( me._titleOutHandler( tar ) ); // 清除可排序列的over样式
-                baidu.addClass( this, dragClass );
+                esui.lib.addClass( this, dragClass );
                 me._dragPoint = 'right';
                 me._dragReady = 1;
             } else {
-                baidu.removeClass( this, dragClass );
+                esui.lib.removeClass( this, dragClass );
                 sortable && ( me._titleOverHandler( tar ) ); // 附加可排序列的over样式
                 me._dragPoint = '';
                 me._dragReady = 0;
@@ -854,7 +853,7 @@ esui.Table.prototype = {
                 return;
             }
             
-            if ( baidu.g( me.__getId( 'head' ) ).className.indexOf( dragClass ) < 0 ) {
+            if ( esui.lib.g( me.__getId( 'head' ) ).className.indexOf( dragClass ) < 0 ) {
                 return;
             }            
                         
@@ -864,7 +863,7 @@ esui.Table.prototype = {
             // 记忆起始拖拽的状态
             me._isDraging = true;
             me._dragIndex = tar.getAttribute( 'index' );
-            me._dragStart = e.pageX || e.clientX + baidu.page.getScrollLeft();
+            me._dragStart = e.pageX || e.clientX + esui.lib.getPageScrollLeft();
             
             // 绑定拖拽事件
             document.onmousemove = me._getDragingHandler();
@@ -874,7 +873,7 @@ esui.Table.prototype = {
             me._showDragMark( me._dragStart );
             
             // 阻止默认行为
-            baidu.event.preventDefault( e );
+            esui.lib.preventDefaultEvent( e );
             return false;
         };
     },
@@ -890,8 +889,8 @@ esui.Table.prototype = {
         var me = this;
         return function ( e ) {
             e = e || window.event;
-            me._showDragMark( e.pageX || e.clientX + baidu.page.getScrollLeft() );
-            baidu.event.preventDefault( e );
+            me._showDragMark( e.pageX || e.clientX + esui.lib.getPageScrollLeft() );
+            esui.lib.preventDefaultEvent( e );
             return false;
         };
     },
@@ -906,7 +905,7 @@ esui.Table.prototype = {
             mark    = me._getDragMark();
         
         if ( !me.top ) {
-            me.top = baidu.dom.getPosition( me.main ).top;
+            me.top = esui.lib.getPosition( me.main ).top;
         }    
         
         if ( !mark ) {
@@ -915,7 +914,7 @@ esui.Table.prototype = {
         
         mark.style.top = me.top + 'px';
         mark.style.left = left + 'px';
-        mark.style.height = me._htmlHeight - me.top + baidu.page.getScrollTop() + 'px';
+        mark.style.height = me._htmlHeight - me.top + esui.lib.getPageScrollTop() + 'px';
     },
     
     /**
@@ -953,7 +952,7 @@ esui.Table.prototype = {
      * @return {HTMLElement}
      */
     _getDragMark: function () {
-        return baidu.g( this.__getId( 'dragMark' ) );
+        return esui.lib.g( this.__getId( 'dragMark' ) );
     },
     
     /**
@@ -968,7 +967,7 @@ esui.Table.prototype = {
             e = e || window.event;
             var minWidth,
                 index = parseInt( me._dragIndex, 10 ),
-                pageX = e.pageX || e.clientX + baidu.page.getScrollLeft(),
+                pageX = e.pageX || e.clientX + esui.lib.getPageScrollLeft(),
                 offsetX,
                 field,
                 fields      = me._fields, 
@@ -1060,7 +1059,7 @@ esui.Table.prototype = {
             me._isDraging = false;
             me._hideDragMark();
             
-            baidu.event.preventDefault( e );
+            esui.lib.preventDefaultEvent( e );
             return false;
         };
     },
@@ -1074,7 +1073,7 @@ esui.Table.prototype = {
         var me      = this,
             type    = 'body',
             id      = me.__getId( type ),
-            list    = baidu.g( id ),
+            list    = esui.lib.g( id ),
             style;
             
         if ( !list ) {
@@ -1289,7 +1288,7 @@ esui.Table.prototype = {
         
         var row = this._getRow( index );
         if ( row ) {
-            baidu.addClass( row, this.__getClass( 'row-hover' ) );
+            esui.lib.addClass( row, this.__getClass( 'row-hover' ) );
         }
     },
     
@@ -1302,7 +1301,7 @@ esui.Table.prototype = {
     _rowOutHandler: function ( index ) {
         var row = this._getRow( index );
         if ( row ) {
-            baidu.removeClass( row, this.__getClass( 'row-hover' ) );
+            esui.lib.removeClass( row, this.__getClass( 'row-hover' ) );
         }
     },
     
@@ -1332,7 +1331,7 @@ esui.Table.prototype = {
             
             switch ( this.select ) {
             case 'multi':
-                input = baidu.g( this.__getId( 'multiSelect' ) + index );
+                input = esui.lib.g( this.__getId( 'multiSelect' ) + index );
                 // 如果点击的是checkbox，则不做checkbox反向处理
                 if ( !esui.util.hasValue( this._preSelectIndex ) ) {
                     input.checked = !input.checked;
@@ -1342,7 +1341,7 @@ esui.Table.prototype = {
                 break;
 
             case 'single':
-                input = baidu.g( this.__getId( 'singleSelect' ) + index );
+                input = esui.lib.g( this.__getId( 'singleSelect' ) + index );
                 input.checked = true;
                 this._selectSingle( index );
                 break;
@@ -1396,7 +1395,7 @@ esui.Table.prototype = {
      * @return {HTMLElement}
      */
     getSubrow: function ( index ) {
-        return baidu.g( this._getSubrowId( index ) );    
+        return esui.lib.g( this._getSubrowId( index ) );    
     },
     
     /**
@@ -1428,7 +1427,7 @@ esui.Table.prototype = {
      * @param {number} index 入口元素的序号
      */
     _entryOver: function ( index ) {
-        var el          = baidu.g( this._getSubentryId( index ) ),
+        var el          = esui.lib.g( this._getSubentryId( index ) ),
             opened      = /subentry-opened/.test( el.className ),
             classBase   = 'subentry-hover';
             
@@ -1436,7 +1435,7 @@ esui.Table.prototype = {
             classBase = 'subentry-opened-hover';
         }    
         
-        baidu.addClass( el, this.__getClass( classBase ) );
+        esui.lib.addClass( el, this.__getClass( classBase ) );
     },
     
     /**
@@ -1447,8 +1446,8 @@ esui.Table.prototype = {
      */
     _entryOut: function ( index ) {
         var id = this._getSubentryId( index );
-        baidu.removeClass( id, this.__getClass( 'subentry-hover' ) );
-        baidu.removeClass( id, this.__getClass( 'subentry-opened-hover') );
+        esui.lib.removeClass( id, this.__getClass( 'subentry-hover' ) );
+        esui.lib.removeClass( id, this.__getClass( 'subentry-opened-hover') );
     },
     
     /**
@@ -1468,7 +1467,7 @@ esui.Table.prototype = {
             return;
         }
         
-        if ( !baidu.g( entryId ).getAttribute( 'data-subrowopened' ) ) {
+        if ( !esui.lib.g( entryId ).getAttribute( 'data-subrowopened' ) ) {
             dataItem = datasource[ index ];
             if ( me.onsubrowopen( index, dataItem ) !== false ) {
                 me.openSubrow( index );
@@ -1488,19 +1487,19 @@ esui.Table.prototype = {
      */
     _closeSubrow: function ( index ) {
         var me          = this,
-            entry       = baidu.g( me._getSubentryId( index ) );
+            entry       = esui.lib.g( me._getSubentryId( index ) );
         
         if ( me.onsubrowclose( index, me.datasource[ index ] ) !== false ) {
             me._entryOut( index );
             me._subrowIndex = null;
             
-            baidu.removeClass( entry, me.__getClass( 'subentry-opened' ) );
-            baidu.removeClass( me._getRow( index ), me.__getClass( 'row-unfolded') );
+            esui.lib.removeClass( entry, me.__getClass( 'subentry-opened' ) );
+            esui.lib.removeClass( me._getRow( index ), me.__getClass( 'row-unfolded') );
             
             entry.setAttribute( 'title', me.subEntryOpenTip );
             entry.setAttribute( 'data-subrowopened', '' );
             
-            baidu.hide( me._getSubrowId( index ) );
+            me._getSubrowId( index ).style.display = 'none';
             return true;
         }
         
@@ -1519,7 +1518,7 @@ esui.Table.prototype = {
     openSubrow: function ( index ) {
         var me           = this,
             currentIndex = me._subrowIndex,
-            entry        = baidu.g( me._getSubentryId( index ) ),
+            entry        = esui.lib.g( me._getSubentryId( index ) ),
             closeSuccess = 1;
         
         if ( esui.util.hasValue( currentIndex ) ) {
@@ -1530,12 +1529,12 @@ esui.Table.prototype = {
             return;
         }
 
-        baidu.addClass( entry, me.__getClass( 'subentry-opened' ) );
-        baidu.addClass( me._getRow( index ), me.__getClass( 'row-unfolded' ) );
+        esui.lib.addClass( entry, me.__getClass( 'subentry-opened' ) );
+        esui.lib.addClass( me._getRow( index ), me.__getClass( 'row-unfolded' ) );
         entry.setAttribute( 'title', me.subEntryCloseTip );
         entry.setAttribute( 'data-subrowopened', '1' );
         
-        baidu.show( me._getSubrowId( index ) );
+        me._getSubrowId( index ).style.display = '';
         
         me.subrowMutex && ( me._subrowIndex = index );
     },
@@ -1547,12 +1546,12 @@ esui.Table.prototype = {
      */
     _initResizeHandler: function () {
         var me        = this;
-        me.viewWidth  = baidu.page.getViewWidth();
-        me.viewHeight = baidu.page.getViewHeight();
+        me.viewWidth  = esui.lib.getPageViewWidth();
+        me.viewHeight = esui.lib.getPageViewHeight();
         
         me._resizeHandler = function () {
-            var viewWidth  = baidu.page.getViewWidth(),
-                viewHeight = baidu.page.getViewHeight();
+            var viewWidth  = esui.lib.getPageViewWidth(),
+                viewHeight = esui.lib.getPageViewHeight();
                 
             if ( viewWidth == me.viewWidth
                  && viewHeight == me.viewHeight
@@ -1566,7 +1565,7 @@ esui.Table.prototype = {
         };
 
         // 在dispose的时候会释放的哈
-        baidu.on( window, 'resize', me._resizeHandler );
+        esui.lib.on( window, 'resize', me._resizeHandler );
     },
     
     /**
@@ -1635,7 +1634,7 @@ esui.Table.prototype = {
         domPlaceholder.style.width = '100%';
         domPlaceholder.style.display = 'none';
 
-        baidu.dom.insertBefore( domPlaceholder, me.main );
+        esui.lib.insertBefore( domPlaceholder, me.main );
         domPlaceholder = null;
         
         // 写入表头跟随元素的宽度样式
@@ -1645,13 +1644,13 @@ esui.Table.prototype = {
         domHead && ( domHead.style.width = me._width + 'px' );
                 
         me._topReseter = function () {
-            var scrollTop   = baidu.page.getScrollTop(), 
+            var scrollTop   = esui.lib.getPageScrollTop(), 
                 fhArr       = me._followHeightArr,
                 fhLen       = fhArr.length, 
                 posStyle    = '',
                 followDoms  = me._followDoms,
                 len         = followDoms.length,
-                placeHolder = baidu.g( placeHolderId ),
+                placeHolder = esui.lib.g( placeHolderId ),
                 i = 0, 
                 posTop;
             
@@ -1663,7 +1662,7 @@ esui.Table.prototype = {
             }
 
             // 2x2的判断，真恶心
-            if ( baidu.ie && baidu.ie < 7 ) {
+            if ( esui.lib.ie && esui.lib.ie < 7 ) {
                 if ( scrollTop > me._followTop ) {
                     posStyle = 'absolute';
                     placeHolder.style.height = fhArr[ fhLen - 1 ] + domHead.offsetHeight + 'px';
@@ -1709,7 +1708,7 @@ esui.Table.prototype = {
             }
             
         };
-        baidu.on( window, 'scroll', me._topReseter );    
+        esui.lib.on( window, 'scroll', me._topReseter );    
     },
     
     /**
@@ -1750,7 +1749,7 @@ esui.Table.prototype = {
                 }
                 colIndex += colspan;
 
-                td = baidu.g( me._getFootCellId( i ) );
+                td = esui.lib.g( me._getFootCellId( i ) );
                 width = Math.max( width + me.rowWidthOffset, 0 );
                 
                 td.style.width      = width + 'px';
@@ -1764,7 +1763,7 @@ esui.Table.prototype = {
             for ( i = 0; i < len; i++ ) {
                 width = Math.max( colsWidth[ i ] + me.rowWidthOffset, 0 );
 
-                td = baidu.g( me._getTitleCellId( i ) );
+                td = esui.lib.g( me._getTitleCellId( i ) );
                 td.style.width      = width + 'px';
                 td.style.display    = width ? '' : 'none';
             }
@@ -1885,11 +1884,11 @@ esui.Table.prototype = {
                 if ( !input.checked ) {
                     allChecked = false;
                     // faster
-                    updateAll && baidu.removeClass( row, selectedClass ); 
+                    updateAll && esui.lib.removeClass( row, selectedClass ); 
                 } else {
                     selected.push( currentIndex );
                     // faster
-                    updateAll && baidu.addClass( row, selectedClass );
+                    updateAll && esui.lib.addClass( row, selectedClass );
                 }
                 currentIndex++;
             }
@@ -1899,11 +1898,11 @@ esui.Table.prototype = {
         this.onselect( selected );
         if ( !updateAll ) {
             row = me._getRow( index );
-            input = baidu.g( cbIdPrefix + index );
+            input = esui.lib.g( cbIdPrefix + index );
             if ( input.checked ) {
-                baidu.addClass( row, selectedClass );
+                esui.lib.addClass( row, selectedClass );
             } else {
-                baidu.removeClass( row, selectedClass );
+                esui.lib.removeClass( row, selectedClass );
             }
         }
 
@@ -1947,9 +1946,9 @@ esui.Table.prototype = {
                 
                 if ( checked ) {
                     selected.push( index );
-                    baidu.addClass( this._getRow( index ), selectedClass );
+                    esui.lib.addClass( this._getRow( index ), selectedClass );
                 } else {
-                    baidu.removeClass( this._getRow( index ), selectedClass );
+                    esui.lib.removeClass( this._getRow( index ), selectedClass );
                 }
                 
                 index ++;
@@ -1971,11 +1970,11 @@ esui.Table.prototype = {
         
         if (this.onselect(index)) {
             if ( 'number' == typeof selectedIndex ) {
-                baidu.removeClass( this._getRow( selectedIndex ), selectedClass );
+                esui.lib.removeClass( this._getRow( selectedIndex ), selectedClass );
             }
             
             this._selectedIndex = index;
-            baidu.addClass( this._getRow( index ), selectedClass );
+            esui.lib.addClass( this._getRow( index ), selectedClass );
         }
     },
     
@@ -1991,7 +1990,7 @@ esui.Table.prototype = {
             
         while ( len-- ) {
             th = ths[ len ];
-            baidu.removeClass( th.firstChild, this.__getClass( 'thcell_sort' ) );
+            esui.lib.removeClass( th.firstChild, this.__getClass( 'thcell_sort' ) );
         }    
     },
     
@@ -2017,9 +2016,9 @@ esui.Table.prototype = {
      */
     startEdit: function ( type, rowIndex, columnIndex ) {
         if ( this.editable ) {
-            var entrance    = baidu.g( this._getBodyCellId( rowIndex, columnIndex ) );
+            var entrance    = esui.lib.g( this._getBodyCellId( rowIndex, columnIndex ) );
             var tlOffset    = -5;
-            var pos         = baidu.dom.getPosition( entrance );
+            var pos         = esui.lib.getPosition( entrance );
             var field       = this._fields[ columnIndex ];
             
             this._currentEditor = esui.Table.EditorManager.startEdit( this, type, {
@@ -2056,11 +2055,11 @@ esui.Table.prototype = {
      */
     setCellText: function ( text, rowIndex, columnIndex, opt_isEncodeHtml ) {
         if ( opt_isEncodeHtml ) {
-            text = baidu.encodeHTML( text );
+            text = esui.lib.encodeHTML( text );
         }
 
         text += this._getEditEntryHtml( this._fields[ columnIndex ], rowIndex, columnIndex );
-        baidu.g( this._getBodyCellId( rowIndex, columnIndex ) ).firstChild.innerHTML = text;
+        esui.lib.g( this._getBodyCellId( rowIndex, columnIndex ) ).firstChild.innerHTML = text;
     },
 
     /**
@@ -2069,8 +2068,8 @@ esui.Table.prototype = {
      * @private
      */
     __dispose: function () {
-        var head = baidu.g( this.__getId('head') ),
-            mark = baidu.g( this.__getId('dragMark') );
+        var head = esui.lib.g( this.__getId('head') ),
+            mark = esui.lib.g( this.__getId('dragMark') );
 
         if ( head ) {
             head.onmousemove = null;
@@ -2092,19 +2091,19 @@ esui.Table.prototype = {
         
         // remove resize事件listener
         if ( this._resizeHandler ) {
-            baidu.un( window, 'resize', this._resizeHandler );
+            esui.lib.un( window, 'resize', this._resizeHandler );
             this._resizeHandler = null;
         }
 
         // remove scroll事件listener
         if ( this._topReseter ) {
-            baidu.un( window, 'scroll', this._topReseter );
+            esui.lib.un( window, 'scroll', this._topReseter );
             this._topReseter = null;
         }
     }
 };
 
-baidu.inherits( esui.Table, esui.Control );
+esui.lib.inherits( esui.Table, esui.Control );
 
 /**
  * 表格内容编辑功能的管理器
@@ -2373,13 +2372,13 @@ esui.Table.Editor.prototype   = {
     },
 
     setError: function ( error ) {
-        var errorEl = baidu.g( this.errorId );
+        var errorEl = esui.lib.g( this.errorId );
         errorEl.innerHTML = error;
-        baidu.show( errorEl );
+        errorEl.style.display = '';
     },
 
     unsetError: function () {
-        baidu.hide( this.errorId );
+        this.errorId.style.display = 'none';
     }
 };
 

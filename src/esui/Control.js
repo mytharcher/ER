@@ -12,8 +12,7 @@
 ///import esui.init;
 ///import esui.create;
 ///import esui.dispose;
-///import baidu.dom.addClass;
-///import baidu.dom.removeClass;
+///import esui.lib;
 
 /**
  * 控件基类
@@ -48,7 +47,7 @@ esui.Control.prototype = {
         if ( !this._isRendered ) {
             !main.id && ( main.id = this.__getId() );
             main.setAttribute( 'data-control', this.id );
-            baidu.addClass( main, this.__getClass() );
+            esui.lib.addClass( main, this.__getClass() );
             
             if ( this._autoState ) {
                 this.__initStateChanger();
@@ -118,7 +117,7 @@ esui.Control.prototype = {
      */
     addState: function ( state ) {
         this._state[ state ] = 1;
-        baidu.addClass( this.main, this.__getClass( state ) );
+        esui.lib.addClass( this.main, this.__getClass( state ) );
     },
     
     /**
@@ -129,7 +128,7 @@ esui.Control.prototype = {
      */
     removeState: function ( state ) {
         delete this._state[ state ];
-        baidu.removeClass( this.main, this.__getClass( state ) );
+        esui.lib.removeClass( this.main, this.__getClass( state ) );
     },
     
     /**

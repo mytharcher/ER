@@ -8,10 +8,7 @@
  */
 
 ///import esui.Popup;
-///import baidu.lang.inherits;
-///import baidu.dom.draggable;
-///import baidu.event.on;
-///import baidu.event.un;
+///import esui.lib;
 
 /**
  * 对话框控件
@@ -176,7 +173,7 @@ esui.Dialog.prototype = {
      * @return {HTMLElement}
      */
     getBody: function () {
-        return baidu.g( this.__getId( 'body' ) );
+        return esui.lib.g( this.__getId( 'body' ) );
     },
     
     /**
@@ -186,7 +183,7 @@ esui.Dialog.prototype = {
      * @return {HTMLElement}
      */
     getHead: function () {
-        return baidu.g( this.__getId( 'head' ) );
+        return esui.lib.g( this.__getId( 'head' ) );
     },
 
     /**
@@ -196,7 +193,7 @@ esui.Dialog.prototype = {
      * @return {HTMLElement}
      */
     getFoot: function () {
-        return baidu.g( this.__getId( 'foot' ) );
+        return esui.lib.g( this.__getId( 'foot' ) );
     },
     
     /**
@@ -205,7 +202,7 @@ esui.Dialog.prototype = {
      * @private
      */
     _headOver: function () {
-        baidu.addClass(
+        esui.lib.addClass(
             this.getHead(), 
             this.__getClass( 'head-hover' ) );
     },
@@ -216,13 +213,13 @@ esui.Dialog.prototype = {
      * @private
      */
     _headOut: function () {
-        baidu.removeClass(
+        esui.lib.removeClass(
             this.getHead(), 
             this.__getClass( 'head-hover' ) );
     }
 };
 
-baidu.inherits( esui.Dialog, esui.Popup );
+esui.lib.inherits( esui.Dialog, esui.Popup );
 
 esui.Dialog.TOP             = 100;
 esui.Dialog.WIDTH           = 400;

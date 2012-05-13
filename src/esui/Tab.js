@@ -8,7 +8,7 @@
  */
 
 ///import esui.Control;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * Tab标签控件
@@ -140,7 +140,7 @@ esui.Tab.prototype = {
         for ( i = 0; i < len; i++ ) {
             panel = tabs[ i ].panel;
             if ( panel ) {
-                baidu.g( panel ).style.display = (i == activeIndex ? '' : 'none');
+                esui.lib.g( panel ).style.display = (i == activeIndex ? '' : 'none');
             }
         }
     },
@@ -218,4 +218,4 @@ esui.Tab.prototype = {
     }
 };
 
-baidu.inherits( esui.Tab, esui.Control );
+esui.lib.inherits( esui.Tab, esui.Control );

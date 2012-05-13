@@ -9,8 +9,7 @@
 
 
 ///import esui.Control;
-///import baidu.string.encodeHTML;
-///import baidu.lang.inherits
+///import esui.lib;
 
 /**
  * 链接控件
@@ -71,7 +70,7 @@ esui.Link.prototype = {
      */
     setText: function ( text ) {
         !text && ( text = '' );
-        this.setContent( baidu.encodeHTML( text ) );
+        this.setContent( esui.lib.encodeHTML( text ) );
     },
     
     /**
@@ -132,5 +131,5 @@ esui.Link.prototype = {
     }
 };
 
-baidu.inherits( esui.Link, esui.Control );
+esui.lib.inherits( esui.Link, esui.Control );
 

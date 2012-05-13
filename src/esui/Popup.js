@@ -10,10 +10,7 @@
 ///import esui.Control;
 ///import esui.Layer;
 ///import esui.Mask;
-///import baidu.lang.inherits;
-///import baidu.dom.draggable;
-///import baidu.event.on;
-///import baidu.event.un;
+///import esui.lib;
 
 /**
  * 对话框控件
@@ -68,14 +65,14 @@ esui.Popup.prototype = {
 
         // 浮动层自动定位功能初始化
         if ( this.autoPosition ) {
-            baidu.on( window, 'resize', this._resizeHandler );
+            esui.lib.on( window, 'resize', this._resizeHandler );
         }
         
         this._resizeHandler();
 
         // 拖拽功能初始化
         if ( this.draggable ) {
-            baidu.dom.draggable( main, {handler:this.getHead()} );
+            esui.lib.draggable( main, {handler:this.getHead()} );
         }        
         
         // 如果mask不是object，则会隐式装箱
@@ -94,7 +91,7 @@ esui.Popup.prototype = {
     hide: function () {
         if ( this._isShow ) {
             if ( this.autoPosition ) {
-                baidu.un( window, 'resize', this._resizeHandler );
+                esui.lib.un( window, 'resize', this._resizeHandler );
             }
             
             this.getLayer().hide();
@@ -121,7 +118,7 @@ esui.Popup.prototype = {
      * @param {string} html 要设置的文字，支持html
      */
     setTitle: function ( html ) {
-        var el = baidu.g( this.__getId( 'title' ) );
+        var el = esui.lib.g( this.__getId( 'title' ) );
         if ( el ) {
             el.innerHTML = html;
         }
@@ -250,7 +247,7 @@ esui.Popup.prototype = {
      */
     __dispose: function () {
         if ( this.autoPosition ) {
-            baidu.un( window, 'resize', this._resizeHandler );
+            esui.lib.un( window, 'resize', this._resizeHandler );
         }
 
         this._resizeHandler = null;
@@ -258,4 +255,4 @@ esui.Popup.prototype = {
     }
 };
 
-baidu.inherits( esui.Popup, esui.Control );
+esui.lib.inherits( esui.Popup, esui.Control );

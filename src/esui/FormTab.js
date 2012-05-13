@@ -9,7 +9,7 @@
 
 
 ///import esui.Control;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * 表单Tab控件
@@ -137,7 +137,7 @@ esui.FormTab.prototype = {
             tab     = tabs[ i ];
             radio   = tab.radio;
             panel   = tab.panel;
-            panel   = panel && baidu.g( panel );
+            panel   = panel && esui.lib.g( panel );
 
             if ( radio && panel ) {
                 radio = esui.util.get( radio );
@@ -153,4 +153,4 @@ esui.FormTab.prototype = {
     }
 };
 
-baidu.inherits( esui.FormTab, esui.Control );
+esui.lib.inherits( esui.FormTab, esui.Control );

@@ -8,9 +8,7 @@
  */
 
 ///import esui;
-///import baidu.dom.g;
-///import baidu.event.on;
-///import baidu.event.un;
+///import esui.lib;
 
 /**
  * 页面遮盖控件
@@ -73,13 +71,13 @@ esui.Mask = (function() {
      */
     function getMask( level ) {
         var id = idPrefix + level;
-        var mask = baidu.g( id );
+        var mask = esui.lib.g( id );
 
         if ( !mask ) {
             init( level );
         }
 
-        return baidu.g( id );
+        return esui.lib.g( id );
     }
     
     var resizeHandlerMap = {};
@@ -105,7 +103,7 @@ esui.Mask = (function() {
 
             var resizeHandler = getResizeHandler( level );
             resizeHandlerMap[ level ] = resizeHandler;
-            baidu.on( window, 'resize', resizeHandler );
+            esui.lib.on( window, 'resize', resizeHandler );
         },
 
         /**
@@ -118,7 +116,7 @@ esui.Mask = (function() {
                 mask.style.display = 'none';
 
                 var resizeHandler = resizeHandlerMap[ level ];
-                baidu.un( window, 'resize', resizeHandler );
+                esui.lib.un( window, 'resize', resizeHandler );
             }
         }
     };

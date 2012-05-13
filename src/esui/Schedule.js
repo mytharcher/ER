@@ -8,10 +8,7 @@
  */
  
 ///import esui.InputControl;
-///import baidu.lang.inherits;
-///import baidu.dom.hasClass;
-///import baidu.dom.addClass;
-///import baidu.dom.removeClass;
+///import esui.lib;
 
 /**
  * 日程控件
@@ -58,7 +55,7 @@ esui.Schedule.SHORTCUT = function () {
         var checkbox;
 
         for ( ; begin < end; begin++ ) {
-            checkbox = baidu.g( this.__getId( 'lineState' + begin ) );
+            checkbox = esui.lib.g( this.__getId( 'lineState' + begin ) );
             checkbox.checked = !!dayStates[ begin ];
             this._dayClick( checkbox, true );
         }
@@ -111,12 +108,12 @@ esui.Schedule.prototype = {
         }
 
         disabled = this.getState( stateName );
-        shortcut = baidu.g( this.__getId('shortcut') );
-        bodyHead = baidu.g( this.__getId('BodyHead') );
+        shortcut = esui.lib.g( this.__getId('shortcut') );
+        bodyHead = esui.lib.g( this.__getId('BodyHead') );
         bodyHead.style.display = shortcut.style.display = disabled ? 'none' : '';
         
         for ( i = 0; i < 7; i++ ) {
-            baidu.g( this.__getId('lineState' + i) ).disabled = disabled;
+            esui.lib.g( this.__getId('lineState' + i) ).disabled = disabled;
         }
     },
     
@@ -418,7 +415,7 @@ esui.Schedule.prototype = {
         }
         
         // html写入
-        baidu.g( this.__getId( 'body' ) ).innerHTML = html.join('');
+        esui.lib.g( this.__getId( 'body' ) ).innerHTML = html.join('');
     },
     
     /**
@@ -431,9 +428,9 @@ esui.Schedule.prototype = {
     _timeOverOut: function ( dom, isOver ) {
         var clazz = this.__getClass( 'time-hover' );
         if ( isOver ) {
-            baidu.addClass( dom, clazz );
+            esui.lib.addClass( dom, clazz );
         } else {
-            baidu.removeClass( dom, clazz );
+            esui.lib.removeClass( dom, clazz );
         }
     },
     
@@ -447,9 +444,9 @@ esui.Schedule.prototype = {
     _timeHeadOverOut: function ( dom, isOver ) {
         var clazz = this.__getClass( 'timehead-hover' );
         if ( isOver ) {
-            baidu.addClass( dom, clazz );
+            esui.lib.addClass( dom, clazz );
         } else {
-            baidu.removeClass( dom, clazz );
+            esui.lib.removeClass( dom, clazz );
         }
     },
     
@@ -466,7 +463,7 @@ esui.Schedule.prototype = {
         
         var day  = parseInt( dom.getAttribute( 'day' ), 10 ),
             time = parseInt( dom.getAttribute( 'time' ), 10 ),
-            isSelected = !baidu.dom.hasClass(
+            isSelected = !esui.lib.hasClass(
                             dom, 
                             this.__getClass( 'time-selected' ));
         
@@ -480,14 +477,14 @@ esui.Schedule.prototype = {
      * @param {HTMLElement} dom 头部的dom元素
      */
     _timeHeadClick: function ( dom ) {
-        var isSelected = !baidu.dom.hasClass(
+        var isSelected = !esui.lib.hasClass(
                             dom, 
                             this.__getClass( 'timehead-active' ) ),
             time = parseInt( dom.getAttribute( 'time' ), 10 ),
             div;
         
         for ( i = 0; i < 7; i++ ) {
-            div = baidu.g( this.__getId('time_' + i + '_' + time) );
+            div = esui.lib.g( this.__getId('time_' + i + '_' + time) );
             this._selectTime(
                 parseInt( div.getAttribute('day'), 10 ), 
                 time, 
@@ -541,8 +538,8 @@ esui.Schedule.prototype = {
         var headStates  = [];
         var activeHeadClass = me.__getClass( 'timehead-active' );
         var selectedClass   = me.__getClass( 'time-selected' );
-        var head    = baidu.g( me.__getId( 'BodyHead' ) ).getElementsByTagName( 'div' );
-        var divs    = baidu.g( me.__getId( 'body' ) ).getElementsByTagName( 'div' );
+        var head    = esui.lib.g( me.__getId( 'BodyHead' ) ).getElementsByTagName( 'div' );
+        var divs    = esui.lib.g( me.__getId( 'body' ) ).getElementsByTagName( 'div' );
         var divLen  = divs.length;
         var div;
         var divMatch;
@@ -559,7 +556,7 @@ esui.Schedule.prototype = {
         
         // 遍历头部状态
         for ( i = 0; i < 7; i++ ) {
-            lineEl      = baidu.g( me.__getId( 'line' + i ) );
+            lineEl      = esui.lib.g( me.__getId( 'line' + i ) );
             lineDivs    = lineEl.getElementsByTagName( 'div' );
             j           = lineDivs.length;
 
@@ -582,9 +579,9 @@ esui.Schedule.prototype = {
             divMatch = /TimeHead([0-9]+)$/.exec( div.id );
             if ( divMatch && divMatch.length == 2 ) {
                 if ( headStates[ parseInt( divMatch[ 1 ], 10 ) ] ) {
-                    baidu.addClass( div, activeHeadClass );
+                    esui.lib.addClass( div, activeHeadClass );
                 } else {
-                    baidu.removeClass( div, activeHeadClass );
+                    esui.lib.removeClass( div, activeHeadClass );
                 }
             }
         }
@@ -596,9 +593,9 @@ esui.Schedule.prototype = {
             if ( divMatch && divMatch.length == 3 ) {
                 time = valueAsArr[ parseInt( divMatch[ 1 ], 10 ) ][ parseInt( divMatch[ 2 ], 10 ) ];
                 if ( time && time != '0' ) {
-                    baidu.addClass( div, selectedClass );
+                    esui.lib.addClass( div, selectedClass );
                 } else {
-                    baidu.removeClass( div, selectedClass );
+                    esui.lib.removeClass( div, selectedClass );
                 }
             }
         }
@@ -616,7 +613,7 @@ esui.Schedule.prototype = {
                 }
             }
             
-            baidu.g( me.__getId( 'lineState' + i ) ).checked = lineActive;
+            esui.lib.g( me.__getId( 'lineState' + i ) ).checked = lineActive;
         }
     },
     
@@ -650,4 +647,4 @@ esui.Schedule.prototype = {
     }
 }
 
-baidu.inherits( esui.Schedule, esui.InputControl );
+esui.lib.inherits( esui.Schedule, esui.InputControl );

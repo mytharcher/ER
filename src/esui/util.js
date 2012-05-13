@@ -8,7 +8,7 @@
  */
 
 ///import esui.config;
-///import baidu.event.on;
+///import esui.lib;
     
 /**
  * UI组件功能库
@@ -322,6 +322,6 @@ esui.util = function () {
 }();
 
 // 窗口关闭时，释放所有控件
-baidu.on( window, 'unload', function () {
+esui.lib.on( window, 'unload', function () {
     esui.util.dispose();
 } );

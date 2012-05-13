@@ -7,7 +7,7 @@
  * author:  erik
  */
 
-///import baidu;
+///import esui.lib;
 ///import esui.util;
 ///import esui.Control;
 ///import esui.InputControl;
@@ -249,7 +249,7 @@ esui.AjaxForm.prototype = {
     submitForm: function () {
         var me = this,
             form = this.main;
-        baidu.ajax.request(form.action, {
+        esui.lib.ajax(form.action, {
             method: form.method,
             data: this.getQueryString(this.dataEncoder),
             onsuccess: this._handlerSubmitSuccess,
@@ -289,4 +289,4 @@ esui.AjaxForm.prototype = {
     onsubmitfailure: new Function()
 };
 
-baidu.inherits(esui.AjaxForm, esui.Control);
+esui.lib.inherits(esui.AjaxForm, esui.Control);

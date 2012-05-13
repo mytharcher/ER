@@ -8,11 +8,7 @@
  */
 
 ///import esui.InputControl;
-///import baidu.lang.inherits;
-///import baidu.dom.addClass;
-///import baidu.dom.removeClass;
-///import baidu.event.on;
-///import baidu.event.un;
+///import esui.lib;
 
 /**
  * 文本输入框组件
@@ -200,7 +196,7 @@ esui.TextInput.prototype = {
     setPlacing: function (place) {
         var virClass    = this.__getClass( 'virtual' );
         this._placing = place | 0;
-        baidu[place ? 'addClass' : 'removeClass']( this.main, virClass );
+        esui.lib[place ? 'addClass' : 'removeClass']( this.main, virClass );
     },
     
     
@@ -228,10 +224,10 @@ esui.TextInput.prototype = {
             this._changeHandler = changeHandler;
         }
         
-        if ( baidu.ie ) {
+        if ( esui.lib.ie ) {
             main.onpropertychange = changeHandler;
         } else {
-            baidu.on( main, 'input', changeHandler );
+            esui.lib.on( main, 'input', changeHandler );
         }
     },
     
@@ -244,10 +240,10 @@ esui.TextInput.prototype = {
         var changeHandler = this._changeHandler;
         var main = this.main;
 
-        if ( baidu.ie ) {
+        if ( esui.lib.ie ) {
             main.onpropertychange = null;
         } else {
-            changeHandler && baidu.un( main, 'input', changeHandler );
+            changeHandler && esui.lib.un( main, 'input', changeHandler );
         }
     },
     
@@ -288,7 +284,7 @@ esui.TextInput.prototype = {
         return function () {
             var main = me.main;
             
-            baidu.removeClass( main, me.__getClass( 'virtual' ) );
+            esui.lib.removeClass( main, me.__getClass( 'virtual' ) );
             if ( me._placing ) {
                 me._placing = 1;
                 main.value = '';
@@ -355,7 +351,7 @@ esui.TextInput.prototype = {
     _getChangeHandler: function() {
         var me = this;
         return function ( e ) {
-            if ( baidu.ie && window.event.propertyName == 'value' || !baidu.ie) {
+            if ( esui.lib.ie && window.event.propertyName == 'value' || !esui.lib.ie) {
                 me.oninput();
             }
         };
@@ -457,4 +453,4 @@ esui.TextInput.prototype = {
     }
 };
 
-baidu.inherits( esui.TextInput, esui.InputControl );
+esui.lib.inherits( esui.TextInput, esui.InputControl );

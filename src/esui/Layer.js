@@ -58,7 +58,7 @@ esui.Layer.prototype = {
         switch ( this.autoHide.toLowerCase() ) {
         case 'click':
             this._clickHandler = this._getClickHider();
-            baidu.on( document, 'click', this._clickHandler );
+            esui.lib.on( document, 'click', this._clickHandler );
             break;
         case 'out':
             main.onmouseout = this._getOutHandler();
@@ -124,7 +124,7 @@ esui.Layer.prototype = {
                 return;
             }
 
-            var tar = baidu.event.getTarget( e );
+            var tar = e.target || e.srcElement;;
             while ( tar && tar != document.body ) {
                 if ( tar == me.main ) {
                     return;
@@ -234,7 +234,7 @@ esui.Layer.prototype = {
         var main = this.main;
 
         if ( this._clickHandler ) {
-            baidu.un( document, 'click', this._clickHandler );
+            esui.lib.un( document, 'click', this._clickHandler );
             this._clickHandler = null;
         }
         
@@ -246,4 +246,4 @@ esui.Layer.prototype = {
     }
 };
 
-baidu.inherits( esui.Layer, esui.Control );
+esui.lib.inherits( esui.Layer, esui.Control );

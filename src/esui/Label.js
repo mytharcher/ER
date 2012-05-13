@@ -8,7 +8,7 @@
  */
 
 ///import esui.Control;
-///import baidu.lang.inherits;
+///import esui.lib;
 
 /**
  * 标签显示控件
@@ -37,7 +37,7 @@ esui.Label.prototype = {
         esui.Control.prototype.render.call( me );
         
         if ( this.text ) {
-            this.content = baidu.encodeHTML( this.text );
+            this.content = esui.lib.encodeHTML( this.text );
         }
 
         this.setContent( this.content );
@@ -63,7 +63,7 @@ esui.Label.prototype = {
      */
     setText: function ( text ) {
         text = text || '';
-        this.setContent( baidu.encodeHTML( text ) );
+        this.setContent( esui.lib.encodeHTML( text ) );
     },
     
     /**
@@ -88,4 +88,4 @@ esui.Label.prototype = {
     }
 };
 
-baidu.inherits( esui.Label, esui.Control );
+esui.lib.inherits( esui.Label, esui.Control );

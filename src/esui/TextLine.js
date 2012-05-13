@@ -9,8 +9,7 @@
 
 ///import esui.InputControl;
 ///import esui.TextInput;
-///import baidu.lang.inherits;
-///import baidu.string.trim;
+///import esui.lib;
 
 /**
  * 带行号的文本输入框控件
@@ -70,7 +69,7 @@ esui.TextLine.prototype = {
      */
     showNumber: function () {
         this._numberHidden = false;
-        baidu.show( this._numberEl );
+        this._numberEl.style.display = '';
 
         this._resetLineWidth();
         this._resetScroll();
@@ -82,7 +81,7 @@ esui.TextLine.prototype = {
      */
     hideNumber: function () {
         this._numberHidden = true;
-        baidu.hide( this._numberEl );
+        this._numberEl.style.display = 'none';
         
         this._resetLineWidth();
     },
@@ -217,10 +216,10 @@ esui.TextLine.prototype = {
         textCtrl.main.onmouseover = null;
         textCtrl.main.onmouseout = null;
 
-        me._numberEl = baidu.g( numberId );
+        me._numberEl = esui.lib.g( numberId );
         me._numberEl.style.height = me.height + "px";
 
-        me._numberInnEl = baidu.g( numberInnId );
+        me._numberInnEl = esui.lib.g( numberInnId );
     },
     
     /**
@@ -247,7 +246,7 @@ esui.TextLine.prototype = {
             
             // chrome下节点太多性能会慢：“1<br>2”是3个节点
             // IE下设置pre的innerHTML中，\n不会换行，很奇怪
-            if ( baidu.ie ) {
+            if ( esui.lib.ie ) {
                 me._numberEl.innerHTML = html.join( "<br>" );
             } else {
                 me._numberEl.firstChild.innerHTML = html.join( "\n" );
@@ -356,7 +355,7 @@ esui.TextLine.prototype = {
      */
     getValue: function() {
         var text = this._getTextCtrl();
-        return baidu.trim( text.getValue().replace( /\r/g, '' ) );
+        return esui.lib.trim( text.getValue().replace( /\r/g, '' ) );
     },
      
     /**
@@ -375,7 +374,7 @@ esui.TextLine.prototype = {
         
 
         for ( i = 0; i < len; i++ ) {
-            value = baidu.trim( items[ i ] );
+            value = esui.lib.trim( items[ i ] );
             if ( value.length === 0 || container[ value ] ) {
                 continue;
             }
@@ -405,4 +404,4 @@ esui.TextLine.prototype = {
     }
 }
 
-baidu.inherits( esui.TextLine, esui.InputControl );
+esui.lib.inherits( esui.TextLine, esui.InputControl );

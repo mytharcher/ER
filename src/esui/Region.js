@@ -9,8 +9,7 @@
 
 ///import esui.InputControl;
 ///import esui.Select;
-///import baidu.lang.inherits;
-///import baidu.object.clone;
+///import esui.lib;
 
 /**
  * 地域选择控件
@@ -315,7 +314,7 @@ esui.Region.prototype = {
      * @return {HTMLInputElement}
      */
     _getOption: function ( id ) {
-        return baidu.g( this.__getId( 'option_' + id ) );
+        return esui.lib.g( this.__getId( 'option_' + id ) );
     },
     
     /**
@@ -339,7 +338,7 @@ esui.Region.prototype = {
             }
 
             for ( i = 0; i < len; i++ ) {
-                item = baidu.object.clone( data[ i ] );
+                item = esui.lib.clone( data[ i ] );
                 item.parent = parent;
                 this._dataMap[ item.id ] = item;
                 walker.call( this, item.children, item );
@@ -413,7 +412,7 @@ esui.Region.prototype = {
     }
 } 
 
-baidu.inherits( esui.Region, esui.InputControl );
+esui.lib.inherits( esui.Region, esui.InputControl );
 
 
 /**
