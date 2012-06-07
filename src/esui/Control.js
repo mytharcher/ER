@@ -319,11 +319,7 @@ esui.Control.prototype = {
             }
         }
         
-        return esui.util.format(
-                "{0}.{1}({2});",
-                this.__getStrRef(),
-                fn,
-                params.join(',') );
+        return [this.__getStrRef(), '.', fn, '(', params.join(','), ');'].join('');
     },
     
     /**
