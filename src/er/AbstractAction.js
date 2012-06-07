@@ -7,12 +7,12 @@
  * author:  erik
  */
 
+///import er.lib;
 ///import er.IAction;
 ///import er.context;
 ///import er.Model;
 ///import er.View;
 ///import er._util;
-///import er.lib;
 
 er.AbstractAction = function () {
 

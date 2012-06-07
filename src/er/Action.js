@@ -7,9 +7,9 @@
  * author:  erik
  */
 
+///import er.lib;
 ///import er.AbstractAction;
 ///import er._util;
-///import er.lib;
 
 er.Action = function () {
     

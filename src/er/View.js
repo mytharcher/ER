@@ -7,9 +7,9 @@
  * author:  erik
  */
 
+///import er.lib;
 ///import er.Model;
 ///import er.template;
-///import er.lib;
 
 er.View = function () {
     var ext_ = {};

@@ -7,12 +7,12 @@
  * author:  erik
  */
 
+///import er.lib;
 ///import er.router;
 ///import er.Module;
 ///import er.locator;
 ///import er.permission;
 ///import er.init;
-///import er.lib.loadScript;
     
 /**
  * 控制器

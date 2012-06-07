@@ -7,9 +7,9 @@
  * author:  erik, mytharcher
  */
 
+///import er.lib;
 ///import er.config;
 ///import er.init;
-///import er.lib;
 
 /**
  * 简易的模板解析器
