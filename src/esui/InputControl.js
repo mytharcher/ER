@@ -227,6 +227,12 @@ esui.InputControl.prototype = {
         }
     },
 
+    hideValidity: function () {
+        var dom = this.__getValidMsgDom();
+        dom.innerHTML = '';
+        dom.style.display = 'none';
+    },
+
     /**
      * 获取显示验证信息的容器
      * 
