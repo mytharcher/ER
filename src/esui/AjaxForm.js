@@ -31,6 +31,7 @@ esui.AjaxForm.prototype = {
         
         if (!me._isRendered) {
             main.onsubmit = this._getHandlerSubmit();
+            main.onreset = this._getHandlerReset();
             
             me._handlerSubmitSuccess = this._getHandlerSubmitSuccess();
             me._handlerSubmitFailure = this._getHandlerSubmitFailure();
@@ -194,11 +195,13 @@ esui.AjaxForm.prototype = {
     _getFieldDataIterator: function (field, ret) {
         if (!field.isDisabled()) {
             var name = field.name;
-            if (!ret[name]) {
-                ret[name] = [];
-            }
-            if (!(field instanceof esui.BoxControl) || field.isChecked()) {
-                ret[name].push(field.getValue());
+            if (name) {
+                if (!ret[name]) {
+                    ret[name] = [];
+                }
+                if (!(field instanceof esui.BoxControl) || field.isChecked()) {
+                    ret[name].push(field.getValue());
+                }
             }
         }
     },
@@ -230,7 +233,7 @@ esui.AjaxForm.prototype = {
      */
     readyToSubmit: function () {
         var valid = this.validate();
-        if (valid) {
+        if (valid && me.onbeforesubmit() !== false) {
             this.submitForm();
             this.resetFormError();
         }
@@ -240,7 +243,21 @@ esui.AjaxForm.prototype = {
      * 恢复到验证之前的信息状态
      */
     resetFormError: function () {
-        
+        this._valid = true;
+        this.forEachField(this._resetValidityIterator, this);
+    },
+
+
+    _resetValidityIterator: function (field) {
+        field.hideValidity();
+    },
+
+    resetFields: function () {
+        this.forEachField(this._resetFieldIterator, this);
+    },
+
+    _resetFieldIterator: function (field) {
+        field.render();
     },
     
     /**
@@ -260,7 +277,7 @@ esui.AjaxForm.prototype = {
     _getHandlerSubmit: function () {
         var me = this;
         return function (ev) {
-            if (!me.disabled && me.onbeforesubmit() !== false) {
+            if (!me.disabled) {
                 me.readyToSubmit();
             }
             
@@ -281,12 +298,25 @@ esui.AjaxForm.prototype = {
             me.onsubmitfailure(xhr);
         };
     },
+
+    _getHandlerReset: function () {
+        var me = this;
+        return function () {
+            if (me.onreset() !== false) {
+                me.resetFormError();
+                me.resetFields();
+            }
+            return false;
+        }
+    },
     
     onfieldinvalid: new Function(),
     
     onbeforesubmit: new Function(),
     onsubmitsuccess: new Function(),
-    onsubmitfailure: new Function()
+    onsubmitfailure: new Function(),
+
+    onreset: new Function()
 };
 
 esui.lib.inherits(esui.AjaxForm, esui.Control);
