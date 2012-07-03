@@ -113,7 +113,7 @@ esui.TextInput.prototype = {
      */
     getValue: function () {
         var value = this.main.value;
-        if ( this._placing ) {
+        if ( this.needPlacing() ) {
             return '';
         }
 
