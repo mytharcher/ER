@@ -93,7 +93,7 @@ esui.Pager.prototype = {
             total     = me.total,
             startNumber = this.startNumber,
             last      = total + startNumber - 1,
-            page      = me.page + startNumber, // 恶心
+            page      = me.page, // 恶心
             itemClass = me.__getClass( 'item' ),
             disClass  = me.__getClass( 'disabled' ),
             prevClass = me.__getClass( 'prev' ),
@@ -107,20 +107,21 @@ esui.Pager.prototype = {
         }
                 
         // 计算起始页
-        if ( page < me.showCount - 1 ) {
-            begin = 0;
-        } else if ( page > total - me.showCount ) {
-            begin = total - me.showCount;
-        } else {
-            begin = page - Math.floor( me.showCount / 2 );
+        // 如果页码还不到最大显示页码数（即开始几页），如最大显示5个页码，当前页码3
+        if ( page - startNumber < me.showCount - 1 ) {
+            begin = startNumber;
+        } else if ( page - startNumber > total - me.showCount ) { // 最后几页
+            begin = total - me.showCount + startNumber;
+        } else { // 中间几页
+            begin = page - Math.floor( me.showCount / 2 ) + startNumber;
         }
 
-        if ( begin < 0 ) {
-            begin = 0
+        if ( begin < startNumber ) {
+            begin = startNumber;
         }
         
         // 绘制前一页的link
-        if (page > 0) {
+        if (page > startNumber) {
             html.push( 
                 me._getItemHtml(
                     me.prevText,
@@ -132,32 +133,25 @@ esui.Pager.prototype = {
         }
         
         // 绘制前缀
-        if ( begin > 0 ) {
+        if ( begin > startNumber ) {
             html.push(
                 me._getItemHtml(
                     1,
                     itemClass,
-                    this.__getStrCall( '_setPage', 0 )
+                    this.__getStrCall( '_setPage', startNumber )
                 ),
                 omitWord );
         }
 
         // 绘制中间的序号
-        for ( i = 0; i < me.showCount && begin + i < total; i++ ) {
-            if ( begin + i != page ) {
+        for ( i = 0; i < me.showCount && begin + i - startNumber < total; i++ ) {
+            var isCur = begin + i == page;
             html.push(
                 me._getItemHtml(
-                    1 + begin + i,
-                    itemClass,
-                    me.__getStrCall( '_setPage', begin + i )
+                    begin + i + 1 - startNumber,
+                    itemClass + (isCur ? ' ' + me.__getClass( 'selected' ) : ''),
+                    isCur ? '' : me.__getStrCall( '_setPage', begin + i )
                 ) );
-            } else {
-                html.push(
-                    me._getInfoHtml(
-                        1 + begin + i, 
-                        itemClass + ' ' + me.__getClass( 'selected' )
-                    ) );
-            }
         }
         
         // 绘制后缀
