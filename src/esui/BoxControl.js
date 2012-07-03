@@ -135,7 +135,7 @@ esui.BoxControl.prototype = {
             main = me.main,
             data = me.datasource,
             title,
-            label,
+            label = me._label,
             value;
         
         esui.InputControl.prototype.render.call( me );
@@ -147,7 +147,7 @@ esui.BoxControl.prototype = {
         }
 
         // 插入点击相关的label元素
-        if ( !me._label ) {
+        if ( !label ) {
             label = document.createElement( 'label' );
             label.className = me.__getClass( 'label' );
             esui.lib.setAttribute( label, 'for', main.id );
