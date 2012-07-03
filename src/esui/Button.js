@@ -117,8 +117,8 @@ esui.Button.prototype = {
     _getHandlerClick: function() {
         var me = this;
         return function ( e ) {
-            if ( !me.isDisabled() ) {
-                me.onclick();
+            if ( me.isDisabled() || false === me.onclick() ) {
+                baidu.event.preventDefault(e || window.event);
             }
         };
     },
