@@ -113,7 +113,7 @@ esui.Pager.prototype = {
         } else if ( page - startNumber > total - me.showCount ) { // 最后几页
             begin = total - me.showCount + startNumber;
         } else { // 中间几页
-            begin = page - Math.floor( me.showCount / 2 ) + startNumber;
+            begin = page - Math.floor( me.showCount / 2 );
         }
 
         if ( begin < startNumber ) {
