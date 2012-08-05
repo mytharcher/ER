@@ -30,6 +30,8 @@ esui.AjaxForm.prototype = {
         var main = me.main;
         
         if (!me._isRendered) {
+            main.action = this.action || main.action;
+
             main.onsubmit = this._getHandlerSubmit();
             main.onreset = this._getHandlerReset();
             
@@ -166,7 +168,7 @@ esui.AjaxForm.prototype = {
                 filter.call(field, data);
             } else {
                 if (field instanceof esui.BoxControl) {
-                    field.getGroup().selectByValue(dataItem);
+                    field.getGroup().selectByValues(dataItem);
                 } else {
                     field.setValue(dataItem);
                 }
@@ -233,7 +235,7 @@ esui.AjaxForm.prototype = {
      */
     readyToSubmit: function () {
         var valid = this.validate();
-        if (valid && me.onbeforesubmit() !== false) {
+        if (valid && this.onbeforesubmit() !== false) {
             this.submitForm();
             this.resetFormError();
         }
