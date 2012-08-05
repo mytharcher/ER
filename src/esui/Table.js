@@ -56,7 +56,7 @@ esui.Table = function ( options ) {
     //
     // 但是在chrome19以上修复了此问题
     // 并且在safari5.1.4上测试未发现问题
-    // if ( baidu.browser.isWebkit ) {
+    // if ( esui.lib.isWebkit ) {
     //     this.rowWidthOffset = 0;
     // }
 
@@ -1537,7 +1537,7 @@ esui.Table.prototype = {
         entry.setAttribute( 'title', me.subEntryCloseTip );
         entry.setAttribute( 'data-subrowopened', '1' );
         
-        me._getSubrowId( index ).style.display = '';
+        esui.lib.g(me._getSubrowId( index )).style.display = '';
         
         me.subrowMutex && ( me._subrowIndex = index );
     },
