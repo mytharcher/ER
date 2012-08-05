@@ -44,12 +44,6 @@ esui.Popup = function ( options ) {
 
 esui.Popup.prototype = {
     /**
-     * 对话框主体和尾部的html模板
-     * @private
-     */
-    _tplBF: '<div class="{1}" id="{0}">{2}</div>',
-    
-    /**
      * 显示对话框
      * 
      * @public
@@ -112,20 +106,6 @@ esui.Popup.prototype = {
     },
 
     /**
-     * 设置标题文字
-     * 
-     * @public
-     * @param {string} html 要设置的文字，支持html
-     */
-    setTitle: function ( html ) {
-        var el = esui.lib.g( this.__getId( 'title' ) );
-        if ( el ) {
-            el.innerHTML = html;
-        }
-        this.title = html;
-    },
-
-    /**
      * 设置内容
      *
      * @public
@@ -156,13 +136,16 @@ esui.Popup.prototype = {
                 main    = layer.main,
                 left    = me.left,
                 top     = me.top,
-                doc     = document.body.parentNode;
+                body    = document.body
+                doc     = body.parentNode;
             
             if ( !left ) {
-                left = (doc.clientWidth - main.offsetWidth) / 2 + doc.scrollLeft;
+                left = (doc.clientWidth - main.offsetWidth) / 2
+                    + Math.max(doc.scrollLeft, body.scrollLeft);
             }
             if ( !top ) {
-                top = (doc.clientHeight - main.offsetHeight) / 2 + doc.scrollTop;
+                top = (doc.clientHeight - main.offsetHeight) / 2
+                    + Math.max(doc.scrollTop, body.scrollTop);
             }
             
             if ( left < 0 ) {
@@ -174,20 +157,6 @@ esui.Popup.prototype = {
             }
             
             layer.show( left, top );
-        };
-    },
-    
-    /**
-     * 获取关闭按钮的点击handler
-     *
-     * @private
-     * @return {Function}
-     */
-    _getCloseHandler: function () {
-        var me = this;
-        return function () {
-            me.onhide();
-            me.hide();
         };
     },
     
@@ -209,7 +178,10 @@ esui.Popup.prototype = {
         
         layer = me.createLayer(document.body);
         
-        this.setContent(this.content || '');
+        // 拖拽功能初始化
+        if ( this.draggable ) {
+            baidu.dom.draggable( layer.main, {handler:layer.main} );
+        }
     },
     
     createLayer: function (there) {
@@ -218,7 +190,8 @@ esui.Popup.prototype = {
             id      : me.__getId('layer'),
             retype  : me._type,
             skin    : me.skin + (me.dragable ? ' dragable' : ''),
-            width   : me.width
+            width   : me.width,
+            main    : me.main
         } );
         layer.appendTo(there);
         return layer;
