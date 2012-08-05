@@ -55,6 +55,26 @@ test("merge", function() {
     er.template.merge( el, 'mergeTest' );
     equals(el.innerHTML, 'hello ER!', 'merge，简单的${name}替换。');
 
+    er.template.parse('<!-- target:mergeTest1_1 -->hello ${person.name}!');
+    er.context.set( 'person', {name:'ER'} );
+    er.template.merge( el, 'mergeTest1_1' );
+    equals(el.innerHTML, 'hello ER!', 'merge，嵌套${person.name}替换。');
+
+    er.template.parse('<!-- target:mergeTest1_2 -->hello ${person["name"]}!');
+    er.context.set( 'person', {name:'ER'} );
+    er.template.merge( el, 'mergeTest1_2' );
+    equals(el.innerHTML, 'hello ER!', 'merge，嵌套${person["name"]}替换。');
+
+    er.template.parse('<!-- target:mergeTest1_3 -->hello ${person["name"]}!');
+    er.context.set( 'car', {driver: {name:'ER'} });
+    er.template.merge( el, 'mergeTest1_3' );
+    equals(el.innerHTML, 'hello ER!', 'merge，多级嵌套${car.driver["name"]}替换。');
+
+    er.template.parse('<!-- target:mergeTest1_4 -->hello ${num}!');
+    er.context.set( 'num', 0 );
+    er.template.merge( el, 'mergeTest1_4' );
+    equals(el.innerHTML, 'hello 0!', 'merge，值为bool false的替换。');
+
     er.template.parse('<!-- target:mergeTest2 -->hello ${myName|html}!');
     er.context.set( 'myName', '<b>ER</b>' );
     er.template.merge( el, 'mergeTest2' );
@@ -81,6 +101,69 @@ test("merge", function() {
     er.template.parse('<!-- target:mergeTest5 -->hello ${myModule.name:lang|html}!');
     er.template.merge( el, 'mergeTest5' );
     equals(el.innerHTML, 'hello &lt;b&gt;ER&lt;/b&gt; from myModule.lang.name!', 'merge，混合类型和过滤器替换${myModule.name:lang|html}。');
+
+    er.template.parse('<!-- target:mergeTest6 --><!-- for: ${myList} as ${item} -->${item}|<!-- /for -->');
+    er.context.set( 'myList', [1,2,3,4,5] );
+    er.template.merge( el, 'mergeTest6' );
+    equals(el.innerHTML, '1|2|3|4|5|', 'merge，for遍历数组');
+
+    er.template.parse('<!-- target:mergeTest6_2 --><!-- for: ${myList} as ${item}, ${idx} --><!--if:${idx}>0-->|<!--/if-->${item},${idx}<!-- /for -->');
+    er.context.set( 'myList', [1,2,3,4,5] );
+    er.template.merge( el, 'mergeTest6_2' );
+    equals(el.innerHTML, '1,0|2,1|3,2|4,3|5,4', 'merge，for遍历数组，带数组索引');
+
+    er.template.parse('<!-- target:mergeTest6_3 --><!-- import: mergeTest6_2-->');
+    er.context.set( 'myList', [1,2,3,4,5] );
+    er.template.merge( el, 'mergeTest6_3' );
+    equals(el.innerHTML, '1,0|2,1|3,2|4,3|5,4', 'merge，for遍历数组，带数组索引');
+
+    er.template.parse('<!-- target:mergeTest7 --><!-- if: ${num} > 0 -->${num}<!--elif: ${num} == 0-->zero<!--else-->invalid<!-- /if -->');
+    er.context.set( 'num', 1 );
+    er.template.merge( el, 'mergeTest7' );
+    equals(el.innerHTML, '1', 'merge，进入if分支');
+    er.context.set( 'num', 0 );
+    er.template.merge( el, 'mergeTest7' );
+    equals(el.innerHTML, 'zero', 'merge，进入elif分支');
+    er.context.set( 'num', -1 );
+    er.template.merge( el, 'mergeTest7' );
+    equals(el.innerHTML, 'invalid', 'merge，进入else分支');
+
+    er.template.parse('<!-- target:mergeTest8 --><!-- if: ${num} || 1 -->1<!--/if-->');
+    er.context.set( 'num', 0 );
+    er.template.merge( el, 'mergeTest8' );
+    equals(el.innerHTML, '1', 'merge "if" case，${num} || 1 expression');
+
+    er.template.parse('<!-- target:mergeTest8_2 --><!-- if: ${num} && 1 -->1<!--/if-->');
+    er.context.set( 'num', 'test' );
+    er.template.merge( el, 'mergeTest8_2' );
+    equals(el.innerHTML, '1', 'merge "if" case，${num} && 1 expression');
+
+    er.template.parse('<!-- target:mergeTest8_3 --><!-- if: !${unknown} -->1<!--/if-->');
+    er.template.merge( el, 'mergeTest8_3' );
+    equals(el.innerHTML, '1', 'merge "if" case，!${unknown} expression');
+
+    er.template.parse('<!-- target:mergeTest8_4 --><!-- if: ${num} == ${str} -->1<!--/if-->');
+    er.context.set( 'num', 1 );
+    er.context.set( 'str', '1' );
+    er.template.merge( el, 'mergeTest8_4' );
+    equals(el.innerHTML, '1', 'merge "if" case，${num} == ${str} expression');
+
+    er.template.parse('<!-- target:mergeTest8_5 --><!-- if: ${num} === ${str} -->1<!--else-->2<!--/if-->');
+    er.template.merge( el, 'mergeTest8_5' );
+    equals(el.innerHTML, '2', 'merge "if" case，${num} === ${str} expression');
+
+    er.template.parse('<!-- target:mergeTest8_6 --><!-- if: !( 0 && 0 ) -->1<!--else-->2<!--/if-->');
+    er.template.merge( el, 'mergeTest8_6' );
+    equals(el.innerHTML, '1', 'merge "if" case，!( 0 && 0 ) expression');
+
+    er.template.parse('<!-- target:mergeTest8_7 --><!-- if: !0 && 0 -->1<!--else-->2<!--/if-->');
+    er.template.merge( el, 'mergeTest8_7' );
+    equals(el.innerHTML, '2', 'merge "if" case，!0 && 0 expression');
+
+    lang.ifTest = 'iftest';
+    er.template.parse('<!-- target:mergeTest8_8 --><!-- if: ${ifTest:lang} == "iftest" -->1<!--else-->2<!--/if-->');
+    er.template.merge( el, 'mergeTest8_8' );
+    equals(el.innerHTML, '1', 'merge "if" case，use ${ifTest:lang}');
 
     el.innerHTML = '';
     document.body.removeChild( el );

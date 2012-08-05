@@ -447,12 +447,14 @@ esui.Select.prototype = {
      */
     _repaint: function () {
         var selected = this.datasource[ this.selectedIndex ],
-            word = this.staticText || ( selected ? selected.name : this.emptyText ),
-            wordHTML = this.staticText || ( selected ? selected.name : this.emptyLabel ),
+            word = this.staticText || ( selected ? selected.name : this.emptyLabel ),
+            titleTip = this.staticText || ( selected ? selected.name : this.emptyText ),
             el = this._getCur();
             
-        el.title = word;
-        el.innerHTML = '<nobr>' + wordHTML + '</nobr>';
+        if ( this.titleTip ) {
+            el.title = titleTip;    
+        }
+        el.innerHTML = '<nobr>' + word + '</nobr>';
         
         this._repaintLayer();
     },
@@ -486,7 +488,7 @@ esui.Select.prototype = {
      * @param {HTMLElement} item 选项
      */
     _itemClickHandler: function ( item ) {
-        var index = item.getAttribute( 'index' );
+        var index = parseInt( item.getAttribute( 'index' ), 10 );
         var disabled = item.getAttribute( 'dis' );
 
         if ( disabled == 1 ) {
@@ -494,7 +496,7 @@ esui.Select.prototype = {
         }
 
         this.hideLayer();
-        this.setSelectedIndex( parseInt( index, 10 ), true );
+        this.setSelectedIndex( index, index != this.selectedIndex );
     },
 
     /**

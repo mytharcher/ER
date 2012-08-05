@@ -77,6 +77,8 @@ er.locator = function () {
         }
 
         currentLocation = loc;
+
+        isChange && er.locator.onredirect();
         return isChange;
     }
 
@@ -109,9 +111,6 @@ er.locator = function () {
         if ( isLocChanged || opt.enforce ) {
             loc = currentLocation;
 
-            // 触发onredirect事件
-            er.locator.onredirect();
-            
             // 当location未变化，强制刷新时，直接route
             if ( !isLocChanged ) {
                 er.router( loc );
@@ -132,6 +131,7 @@ er.locator = function () {
         if ( !loc ) {
             redirect( '' );
         } else if ( loc !== currentLocation ) {
+            updateLocation( loc );
             doRoute( loc );
         }
     }
