@@ -96,12 +96,6 @@ esui.lib.getPosition = baidu.dom.getPosition;
 
 
 
-///import baidu.page.getWidth;
-
-esui.lib.getPageWidth = baidu.page.getWidth;
-
-
-
 ///import baidu.dom.addClass;
 
 esui.lib.addClass = baidu.dom.addClass;
@@ -134,15 +128,23 @@ esui.lib.draggable = baidu.dom.draggable;
 
 
 
+///import baidu.page.getViewWidth;
+
+esui.lib.getPageViewWidth = baidu.page.getViewWidth;
+
 ///import baidu.page.getViewHeight;
 
-esui.lib.getPageVewHeight = baidu.page.getViewHeight;
+esui.lib.getPageViewHeight = baidu.page.getViewHeight;
 
 
 
 ///import baidu.page.getScrollTop;
 
-esui.getPageScrollTop = baidu.page.getScrollTop;
+esui.lib.getPageScrollTop = baidu.page.getScrollTop;
+
+///import baidu.page.getScrollLeft;
+
+esui.lib.getPageScrollLeft = baidu.page.getScrollLeft;
 
 
 
