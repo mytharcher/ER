@@ -309,7 +309,7 @@ esui.AjaxForm.prototype = {
                 me.resetFields();
             }
             return false;
-        }
+        };
     },
     
     onfieldinvalid: new Function(),
