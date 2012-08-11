@@ -7,9 +7,9 @@
  * author:  erik, zhaolei, linzhifeng
  */
 
+///import esui.lib;
 ///import esui.InputControl;
 ///import esui.Layer;
-///import baidu.lang.inherits;
 
 /**
  * 下拉选择框控件
@@ -301,16 +301,16 @@ esui.Select.prototype = {
     showLayer: function() {
         var me = this,
             main                = me.main,
-            mainPos             = baidu.dom.getPosition( main ),
+            mainPos             = esui.lib.getPosition( main ),
             layer               = me.getLayer(),
             layerMain           = layer.main,
             layerOffsetHeight   = layerMain.offsetHeight,
             mainOffsetHeight    = main.offsetHeight,
-            pageVHeight         = baidu.page.getViewHeight(),
+            pageVHeight         = esui.lib.getPageViewHeight(),
             layerVHeight        = mainPos.top
                                     + mainOffsetHeight 
                                     + layerOffsetHeight 
-                                    - baidu.page.getScrollTop(),
+                                    - esui.lib.getPageScrollTop(),
             layerTop;
 
         if ( pageVHeight > layerVHeight ) {
@@ -362,7 +362,7 @@ esui.Select.prototype = {
      * @return {HTMLElement}
      */
     _getCur: function() {
-        return baidu.g( this.__getId( 'text' ) );
+        return esui.lib.g( this.__getId( 'text' ) );
     },
     
     /**
@@ -472,9 +472,9 @@ esui.Select.prototype = {
             
         while ( walker ) {
             if ( walker.getAttribute( 'index' ) == index ) {
-                baidu.addClass( walker, selectedClass );
+                esui.lib.addClass( walker, selectedClass );
             } else {
-                baidu.removeClass( walker, selectedClass );
+                esui.lib.removeClass( walker, selectedClass );
             }
 
             walker = walker.nextSibling;
@@ -511,7 +511,7 @@ esui.Select.prototype = {
         }
         
         var index = item.getAttribute( 'index' );
-        baidu.addClass( 
+        esui.lib.addClass(
             this.__getId( 'item' ) + index, 
             this.__getClass( 'item-hover' ) );
     },
@@ -524,7 +524,7 @@ esui.Select.prototype = {
      */
     _itemOutHandler: function ( item ) {
         var index = item.getAttribute( 'index' );
-        baidu.removeClass(
+        esui.lib.removeClass(
             this.__getId( 'item' ) + index, 
             this.__getClass( 'item-hover' ) );
     },
@@ -540,4 +540,4 @@ esui.Select.prototype = {
     }
 };
 
-baidu.inherits( esui.Select, esui.InputControl );
+esui.lib.inherits( esui.Select, esui.InputControl );
