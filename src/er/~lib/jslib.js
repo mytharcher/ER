@@ -23,7 +23,7 @@ er.lib.loadScript = function (url, onload) {
 
 ///import js.client.Browser;
 
-er.lib.firefox = js.Browser.Firefox;
+er.lib.firefox = js.client.Browser.Firefox;
 
 er.lib.ie = js.client.Browser.IE;
 

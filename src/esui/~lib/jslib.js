@@ -21,7 +21,7 @@ esui.lib.loadScript = function (url, onload) {
 
 ///import js.client.Browser;
 
-esui.lib.firefox = js.Browser.Firefox;
+esui.lib.firefox = js.client.Browser.Firefox;
 
 esui.lib.ie = js.client.Browser.IE;
 
