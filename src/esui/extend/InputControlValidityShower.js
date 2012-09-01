@@ -24,7 +24,7 @@ esui.InputControlValidityShower = {
             } else {
                 origin.call(this, validity);
             }
-        }
+        };
     })(esui.InputControl.prototype.showValidity),
 
     hideValidity: (function(origin){
@@ -35,7 +35,7 @@ esui.InputControlValidityShower = {
             } else {
                 origin.call(this);
             }
-        }
+        };
     })(esui.InputControl.prototype.hideValidity),
     
     disable: function () {
