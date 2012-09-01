@@ -38,6 +38,12 @@ er.lib.g = baidu.dom.g;
 
 
 
+///import baidu.string.trim;
+
+er.lib.trim = baidu.string.trim;
+
+
+
 ///import baidu.string.format;
 
 er.lib.format = baidu.string.format;
