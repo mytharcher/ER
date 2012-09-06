@@ -1502,7 +1502,7 @@ esui.Table.prototype = {
             entry.setAttribute( 'title', me.subEntryOpenTip );
             entry.setAttribute( 'data-subrowopened', '' );
             
-            me._getSubrowId( index ).style.display = 'none';
+            esui.lib.g(me._getSubrowId( index )).style.display = 'none';
             return true;
         }
         
