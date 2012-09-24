@@ -168,7 +168,7 @@ esui.AjaxForm.prototype = {
                 filter.call(field, data);
             } else {
                 if (field instanceof esui.BoxControl) {
-                    field.getGroup().selectByValues(dataItem);
+                    field.getGroup().selectByValues(dataItem.toString().split(','));
                 } else {
                     field.setValue(dataItem);
                 }
