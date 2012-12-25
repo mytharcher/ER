@@ -1,3 +1,7 @@
+///import esui.lib;
+///import esui.validator.Rule;
+
+
 /**
  * 十六进制RGB颜色串验证规则
  * 
@@ -38,5 +42,5 @@ esui.validator.HexRGBColorRule.prototype = {
     }
 };
 
-baidu.inherits( esui.validator.HexRGBColorRule, esui.validator.Rule );
+esui.lib.inherits( esui.validator.HexRGBColorRule, esui.validator.Rule );
 esui.validator.Rule.register( 'hexRGBColor', esui.validator.HexRGBColorRule );

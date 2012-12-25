@@ -180,7 +180,7 @@ esui.Popup.prototype = {
         
         // 拖拽功能初始化
         if ( this.draggable ) {
-            baidu.dom.draggable( layer.main, {handler:layer.main} );
+            esui.lib.draggable( layer.main, {handler:layer.main} );
         }
     },
     

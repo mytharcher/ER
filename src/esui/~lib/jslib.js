@@ -85,7 +85,7 @@ esui.lib.formatDate = function (source, pattern) {
         pattern = pattern.replace(patternPart, result);
     }
     
-    var pad     = baidu.number.pad,
+    var pad     = esui.lib.padNumber,
         year    = source.getFullYear(),
         month   = source.getMonth() + 1,
         date2   = source.getDate(),
@@ -110,6 +110,20 @@ esui.lib.formatDate = function (source, pattern) {
     replacer(/s/g, seconds);
 
     return pattern;
+};
+
+
+
+esui.lib.padNumber = function (source, length) {
+    var pre = "",
+        negative = (source < 0),
+        string = String(Math.abs(source));
+
+    if (string.length < length) {
+        pre = (new Array(length - string.length + 1)).join('0');
+    }
+
+    return (negative ?  "-" : "") + pre + string;
 };
 
 

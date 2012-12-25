@@ -118,7 +118,7 @@ esui.Button.prototype = {
         var me = this;
         return function ( e ) {
             if ( me.isDisabled() || false === me.onclick() ) {
-                baidu.event.preventDefault(e || window.event);
+                esui.lib.preventDefaultEvent(e || window.event);
             }
         };
     },

@@ -7,11 +7,8 @@
  * author:  erik
  */
 
+///import esui.lib;
 ///import esui.Control;
-///import baidu.lang.inherits;
-///import baidu.event.on;
-///import baidu.event.un;
-///import baidu.event.getTarget;
 
 /**
  * 浮动面板层控件

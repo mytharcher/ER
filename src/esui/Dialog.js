@@ -45,7 +45,7 @@ esui.Dialog.prototype = {
      * @param {string} html 要设置的文字，支持html
      */
     setTitle: function ( html ) {
-        var el = baidu.g( this.__getId( 'title' ) );
+        var el = esui.lib.g( this.__getId( 'title' ) );
         if ( el ) {
             el.innerHTML = html;
         }
@@ -148,7 +148,7 @@ esui.Dialog.prototype = {
             this.title = this.title || head.innerHTML;
         }
         
-        baidu.addClass( head, this.__getClass( 'head' ) );
+        esui.lib.addClass( head, this.__getClass( 'head' ) );
         head.id = this.__getId( 'head' );
         head.innerHTML = esui.util.format(
             me._tplHead,
@@ -186,7 +186,7 @@ esui.Dialog.prototype = {
             this.getLayer().main.appendChild( body );
         }
         
-        baidu.addClass( body, this.__getClass( 'body' ) );
+        esui.lib.addClass( body, this.__getClass( 'body' ) );
         body.id = this.__getId( 'body' );
 
         if ( this.content ) {
@@ -215,7 +215,7 @@ esui.Dialog.prototype = {
             layer.main.appendChild( foot );
         }
         
-        baidu.addClass( foot, this.__getClass( 'foot' ) );
+        esui.lib.addClass( foot, this.__getClass( 'foot' ) );
         foot.id = this.__getId( 'foot' );
 
         if ( this.footContent ) {
