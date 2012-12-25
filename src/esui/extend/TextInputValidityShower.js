@@ -1,4 +1,4 @@
-///import baidu;
+///import esui.lib;
 ///import esui.TextInput;
 
 /**

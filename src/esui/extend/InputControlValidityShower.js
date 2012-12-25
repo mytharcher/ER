@@ -8,7 +8,7 @@
  * date:     2011-08-18
  */
 
-///import baidu;
+///import esui.lib;
 ///import esui.InputControl;
 
 /**
