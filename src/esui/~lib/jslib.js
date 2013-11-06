@@ -4,7 +4,9 @@
 
 esui.lib.inherits = js.util.Class.inherit;
 
-esui.lib.extend = js.util.Class.mix;
+esui.lib.extend = function (target, source) {
+	return js.util.Class.mix(target, source, true);
+};
 
 esui.lib.clone = js.util.Class.clone;
 
@@ -77,53 +79,53 @@ esui.lib.inArray = function (array, item) {
 
 
 esui.lib.formatDate = function (source, pattern) {
-    if ('string' != typeof pattern) {
-        return source.toString();
-    }
+	if ('string' != typeof pattern) {
+		return source.toString();
+	}
 
-    function replacer(patternPart, result) {
-        pattern = pattern.replace(patternPart, result);
-    }
-    
-    var pad     = esui.lib.padNumber,
-        year    = source.getFullYear(),
-        month   = source.getMonth() + 1,
-        date2   = source.getDate(),
-        hours   = source.getHours(),
-        minutes = source.getMinutes(),
-        seconds = source.getSeconds();
+	function replacer(patternPart, result) {
+		pattern = pattern.replace(patternPart, result);
+	}
+	
+	var pad     = esui.lib.padNumber,
+		year    = source.getFullYear(),
+		month   = source.getMonth() + 1,
+		date2   = source.getDate(),
+		hours   = source.getHours(),
+		minutes = source.getMinutes(),
+		seconds = source.getSeconds();
 
-    replacer(/yyyy/g, pad(year, 4));
-    replacer(/yy/g, pad(parseInt(year.toString().slice(2), 10), 2));
-    replacer(/MM/g, pad(month, 2));
-    replacer(/M/g, month);
-    replacer(/dd/g, pad(date2, 2));
-    replacer(/d/g, date2);
+	replacer(/yyyy/g, pad(year, 4));
+	replacer(/yy/g, pad(parseInt(year.toString().slice(2), 10), 2));
+	replacer(/MM/g, pad(month, 2));
+	replacer(/M/g, month);
+	replacer(/dd/g, pad(date2, 2));
+	replacer(/d/g, date2);
 
-    replacer(/HH/g, pad(hours, 2));
-    replacer(/H/g, hours);
-    replacer(/hh/g, pad(hours % 12, 2));
-    replacer(/h/g, hours % 12);
-    replacer(/mm/g, pad(minutes, 2));
-    replacer(/m/g, minutes);
-    replacer(/ss/g, pad(seconds, 2));
-    replacer(/s/g, seconds);
+	replacer(/HH/g, pad(hours, 2));
+	replacer(/H/g, hours);
+	replacer(/hh/g, pad(hours % 12, 2));
+	replacer(/h/g, hours % 12);
+	replacer(/mm/g, pad(minutes, 2));
+	replacer(/m/g, minutes);
+	replacer(/ss/g, pad(seconds, 2));
+	replacer(/s/g, seconds);
 
-    return pattern;
+	return pattern;
 };
 
 
 
 esui.lib.padNumber = function (source, length) {
-    var pre = "",
-        negative = (source < 0),
-        string = String(Math.abs(source));
+	var pre = "",
+		negative = (source < 0),
+		string = String(Math.abs(source));
 
-    if (string.length < length) {
-        pre = (new Array(length - string.length + 1)).join('0');
-    }
+	if (string.length < length) {
+		pre = (new Array(length - string.length + 1)).join('0');
+	}
 
-    return (negative ?  "-" : "") + pre + string;
+	return (negative ?  "-" : "") + pre + string;
 };
 
 
@@ -131,18 +133,18 @@ esui.lib.padNumber = function (source, length) {
 ///import js.dom.BoxModel;
 
 esui.lib.getPosition = function (elem) {
-    return js.dom.BoxModel.getPosition(elem, document.body);
+	return js.dom.BoxModel.getPosition(elem, document.body);
 };
 
 
 
 esui.lib.getPageWidth = function () {
-    var doc = document,
-        body = doc.body,
-        html = doc.documentElement,
-        client = doc.compatMode == 'BackCompat' ? body : doc.documentElement;
+	var doc = document,
+		body = doc.body,
+		html = doc.documentElement,
+		client = doc.compatMode == 'BackCompat' ? body : doc.documentElement;
 
-    return Math.max(html.scrollWidth, body.scrollWidth, client.clientWidth);
+	return Math.max(html.scrollWidth, body.scrollWidth, client.clientWidth);
 };
 
 
@@ -174,23 +176,23 @@ esui.lib.draggable = js.dom.Drag.attach;
 ///import js.dom.Stage.getDocumentElement;
 
 esui.lib.getPageViewHeight = function () {
-    return js.dom.Stage.getDocumentElement().clientHeight;
+	return js.dom.Stage.getDocumentElement().clientHeight;
 };
 
 esui.lib.getPageViewWidth = function () {
-    return js.dom.Stage.getDocumentElement().clientWidth;
+	return js.dom.Stage.getDocumentElement().clientWidth;
 };
 
 
 
 esui.lib.getPageScrollTop = function () {
-    var d = document;
-    return window.pageYOffset || d.documentElement.scrollTop || d.body.scrollTop;
+	var d = document;
+	return window.pageYOffset || d.documentElement.scrollTop || d.body.scrollTop;
 };
 
 esui.lib.getPageScrollLeft = function () {
-    var d = document;
-    return window.pageXOffset || d.documentElement.scrollLeft || d.body.scrollLeft;
+	var d = document;
+	return window.pageXOffset || d.documentElement.scrollLeft || d.body.scrollLeft;
 };
 
 
@@ -208,11 +210,11 @@ esui.lib.elementContains = js.dom.Relation.contains;
 ///import js.dom.MouseTracker;
 
 esui.lib.getMousePosition = function () {
-    var Tracker = js.dom.MouseTracker;
-    return {
-        x : esui.lib.getPageScrollLeft() + Tracker.x,
-        y : esui.lib.getPageScrollTop() + Tracker.y
-    };
+	var Tracker = js.dom.MouseTracker;
+	return {
+		x : esui.lib.getPageScrollLeft() + Tracker.x,
+		y : esui.lib.getPageScrollTop() + Tracker.y
+	};
 };
 
 
@@ -228,7 +230,7 @@ esui.lib.getStyle = js.dom.Style.get;
 
 
 esui.lib.preventDefaultEvent = function (ev) {
-    ev.preventDefault ? ev.preventDefault : (ev.returnValue = false);
+	ev.preventDefault ? ev.preventDefault : (ev.returnValue = false);
 };
 
 
@@ -236,7 +238,7 @@ esui.lib.preventDefaultEvent = function (ev) {
 ///import js.client.Features.~stringTrim;
 
 esui.lib.trim = function (str) {
-    return str.trim();
+	return str.trim();
 };
 
 

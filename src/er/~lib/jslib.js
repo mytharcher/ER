@@ -6,7 +6,9 @@
 
 er.lib.inherits = js.util.Class.inherit;
 
-er.lib.extend = js.util.Class.mix;
+er.lib.extend = function (target, source) {
+	return js.util.Class.mix(target, source, true);
+};
 
 er.lib.clone = js.util.Class.clone;
 
@@ -53,3 +55,9 @@ er.lib.ajax = function (url, options) {
 	options.url = url;
 	return js.net.Ajax.request(options);
 };
+
+
+
+///import js.util.Namespace;
+
+er.lib.namespace = js.util.Namespace.get;

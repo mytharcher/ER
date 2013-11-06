@@ -65,3 +65,45 @@ er.lib.encodeHTML = baidu.string.encodeHTML;
 ///import baidu.ajax.request;
 
 er.lib.ajax = baidu.ajax.request;
+
+
+
+er.lib.namespace = function (nsStr, base, object, undef) {
+	var isCreate = typeof object != 'undefined';
+	
+	var ns = window;
+	
+	if (nsStr) {
+		switch(typeof(base)) {
+		case 'object':
+			ns = base;
+			break;
+		case 'string':
+			ns = arguments.callee(base);
+			break;
+//				case 'undefined':
+//					return (new Function('return ' + nsStr + ';'))();
+		default:
+			break;
+		}
+		if (ns) {
+			nsStr = nsStr.split('.');
+			for (var i = 0, l = nsStr.length; i < l; i++) {
+				var word = nsStr[i];
+				if (!ns[word]) {
+					if (isCreate) {
+						ns[word] = i < l - 1 ? {} : object;
+					} else {
+						ns = undef;
+						break;
+					}
+				}
+				ns = ns[word];
+			}
+		}
+	} else {
+		ns = undef;
+	}
+	
+	return ns;
+};

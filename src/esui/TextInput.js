@@ -388,6 +388,7 @@ esui.TextInput.prototype = {
             case 'text':
             case 'password':
             case 'hidden':
+            case 'email':
                 mode = tagType;
                 break;
             }

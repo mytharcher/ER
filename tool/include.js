@@ -1,5 +1,5 @@
 var __included__ = {};
-var __src_path__ = '/er/src';
+var __src_path__ = '/src';
 
 function include( pack ) {
     if ( __included__[ pack ] ) {

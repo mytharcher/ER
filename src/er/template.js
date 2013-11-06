@@ -188,7 +188,7 @@ er.template = function () {
 
     Scope.prototype = {
         get: function ( name ) {
-            var value = this.context[ name ];
+            var value = er.lib.namespace(name, this.context);
             if ( !er._util.hasValue( value ) && this.parent ) {
                 return this.parent.get( name );
             }
@@ -275,6 +275,11 @@ er.template = function () {
         var node;
         var propList;
         var propLen;
+        var commentMatcher;
+        var tagMatcher;
+        var propMatcher;
+        var forMatcher;
+        var ifMatcher;
 
         // text节点内容缓冲区，用于合并多text
         var textBuf = new ArrayBuffer;
@@ -331,16 +336,17 @@ er.template = function () {
             if ( strLen == 2 || i > 0 ) {
                 if ( strLen == 2 ) {
                     commentText = str[ 0 ];
-                    if ( COMMENT_RULE.test( commentText ) ) {
+                    commentMatcher = commentText.match(COMMENT_RULE);
+                    if ( commentMatcher ) {
                         // 将缓冲区中的text节点内容写入
                         flushTextBuf();
                         
                         // 节点类型分析
-                        nodeType = RegExp.$2.toLowerCase();
-                        nodeContent = RegExp.$3;
+                        nodeType = commentMatcher[2].toLowerCase();
+                        nodeContent = commentMatcher[3];
                         node = { type: TYPE[ nodeType.toUpperCase() ] };
 
-                        if ( RegExp.$1 ) {
+                        if ( commentMatcher[1] ) {
                             // 闭合节点解析
                             node.endTag = 1;
                             nodeStream.push( node );
@@ -351,16 +357,18 @@ er.template = function () {
                             case 'master':
                             case 'import':
                             case 'target':
-                                if ( TAG_RULE.test( nodeContent ) ) {
+                                tagMatcher = nodeContent.match(TAG_RULE);
+                                if ( tagMatcher ) {
                                     // 初始化id
-                                    node.id = RegExp.$1;
+                                    node.id = tagMatcher[1];
                                 
                                     // 初始化属性
-                                    propList = RegExp.$2.split( /\s*,\s*/ );
+                                    propList = (tagMatcher[2] || '').split( /\s*,\s*/ );
                                     propLen = propList.length;
                                     while ( propLen-- ) {
-                                        if ( PROP_RULE.test( propList[ propLen ] ) ) {
-                                            node[ RegExp.$1 ] = RegExp.$2;
+                                        propMatcher = propList[ propLen ].match(PROP_RULE);
+                                        if ( propMatcher ) {
+                                            node[ propMatcher[1] ] = propMatcher[2];
                                         }
                                     }
                                 } else {
@@ -370,10 +378,11 @@ er.template = function () {
                                 break;
 
                             case 'for':
-                                if ( FOR_RULE.test( nodeContent ) ) {
-                                    node.list  = RegExp.$1;
-                                    node.item  = RegExp.$2;
-                                    node.index = RegExp.$4;
+                                forMatcher = nodeContent.match(FOR_RULE);
+                                if ( forMatcher ) {
+                                    node.list  = forMatcher[1];
+                                    node.item  = forMatcher[2];
+                                    node.index = forMatcher[4];
                                 } else {
                                     throwInvalid( nodeType, commentText );
                                 }
@@ -382,8 +391,9 @@ er.template = function () {
 
                             case 'if':
                             case 'elif':
-                                if ( IF_RULE.test( RegExp.$3 ) ) {
-                                    node.expr = condExpr.parse( RegExp.$1 );
+                                ifMatcher = commentMatcher[3].match(IF_RULE);
+                                if ( ifMatcher ) {
+                                    node.expr = condExpr.parse( ifMatcher[1] );
                                 } else {
                                     throwInvalid( nodeType, commentText );
                                 }
@@ -1164,6 +1174,7 @@ er.template = function () {
         var value    = '';
         var i, len;
         var variable, propName, propLen;
+        var propMatcher;
 
         varName = varName.replace( typeRule, '' );
         if ( match && match.length > 1 ) {
@@ -1180,8 +1191,9 @@ er.template = function () {
 
                 propName = varName[ i ].replace( /\]$/, '' );
                 propLen  = propName.length;
-                if ( /^(['"])/.test( propName ) 
-                     && propName.lastIndexOf( RegExp.$1 ) == --propLen
+                propMatcher = propName.match(/^(['"])/);
+                if ( propMatcher
+                     && propName.lastIndexOf( propMatcher[1] ) == --propLen
                 ) {
                     propName = propName.slice( 1, propLen );
                 }
@@ -1344,8 +1356,8 @@ er.template = function () {
     function replaceVariable( text, scope ) {
         return text.replace(
                 /\$\{([.:a-z0-9\[\]'"_]+)\s*(\|[a-z]+)?\s*\}/ig,
-                function ( $0, $1, $2 ) {
-                    return getVariableValue( scope, $1, $2  );
+                function ( matcher, varName, filter ) {
+                    return getVariableValue( scope, varName, filter  );
                 });
     }
 
