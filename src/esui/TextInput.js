@@ -18,18 +18,15 @@
 esui.TextInput = function ( options ) {
     // 标识鼠标事件触发自动状态转换
     this._autoState = 1;
-
     esui.InputControl.call( this, options );
     
     // 初始化value
     this.value = this.value || '';
-
     // 初始化mode
     if ( this.mode && this.mode != 'textarea' && this.mode != 'password' && this.mode != 'hidden') {
         this.mode = 'text';
     }
 };
-
 esui.TextInput.prototype = {
     /**
      * 设置输入控件的title提示
@@ -50,7 +47,6 @@ esui.TextInput.prototype = {
         this.main.disabled = true;
         esui.InputControl.prototype.disable.call( this );
     },
-
     /**
      * 将文本框设置为可用
      * 
@@ -60,7 +56,6 @@ esui.TextInput.prototype = {
         this.main.disabled = false;
         esui.InputControl.prototype.enable.call( this );
     },
-
     /**
      * 设置控件为只读
      * 
@@ -104,7 +99,6 @@ esui.TextInput.prototype = {
     select: function () {
         this.main.select();
     },
-
     /**
      * 获取文本输入框的值
      * 
@@ -113,10 +107,6 @@ esui.TextInput.prototype = {
      */
     getValue: function () {
         var value = this.main.value;
-        if ( this.needPlacing() ) {
-            return '';
-        }
-
         return value;
     },
     
@@ -128,24 +118,19 @@ esui.TextInput.prototype = {
      */
     setValue: function ( value ) { 
         value = (value !== null && typeof value != 'undefined') ? (value + '') : '';
-
         var main        = this.main;
-        var placeholder = this.placeholder;
         
         // 移除输入事件的处理，设置后再重新挂载
         // ie下setValue会触发propertychange事件
         this._removeInputListener();
         this._removeBlurChangeListener();
         
-        var needPlacing = !value && this.needPlacing();
-        this.setPlacing(needPlacing);
-        main.value = needPlacing ? placeholder : value;
+        main.value = value;
         
         // 重新挂载输入事件的处理
         this._addInputListener();
         this._addBlurChangeListener();
     },
-
     
     /**
      * 渲染控件
@@ -159,55 +144,27 @@ esui.TextInput.prototype = {
         
         if ( !me._isRendered ) {
             esui.InputControl.prototype.render.call( me );
-
             // 绑定事件
-            main.onkeypress = me._getPressHandler();
             me._addInputListener();
             
             // 移除press状态的自动切换器
             main.onmousedown = null;
             main.onmouseup = null;
-
             // 挂载获焦和失焦事件处理
             main.onfocus = me._getFocusHandler();
             main.onblur = me._getBlurHandler();
             
             me._addBlurChangeListener();
-
             me._isRendered = 1;
         }
-
         // 设置readonly和disabled状态
         me.setReadOnly( !!me.readOnly );
         me.setDisabled( !!me.disabled );
-
         // 绘制宽高
         me.setWidth( me.width );
         me.setHeight( me.height );
-
         // 刷新输入框的value
         me.setValue( me.value );
-    },
-    
-    /**
-     * 设置是否使用替代提示文本
-     * @param {Boolean} place
-     */
-    setPlacing: function (place) {
-        var virClass    = this.__getClass( 'virtual' );
-        this._placing = place | 0;
-        esui.lib[place ? 'addClass' : 'removeClass']( this.main, virClass );
-    },
-    
-    
-    /**
-     * 判断是否需要替代文本
-     * @return {Boolean}
-     */
-    needPlacing: function () {
-        var placeholder = this.placeholder,
-            value = this.main.value;
-        return placeholder && (!value || value == placeholder);
     },
     
     /**
@@ -218,7 +175,6 @@ esui.TextInput.prototype = {
     _addInputListener: function () {
         var main = this.main;
         var changeHandler = this._changeHandler;
-
         if ( !changeHandler ) {
             changeHandler = this._getChangeHandler();
             this._changeHandler = changeHandler;
@@ -239,7 +195,6 @@ esui.TextInput.prototype = {
     _removeInputListener: function () {
         var changeHandler = this._changeHandler;
         var main = this.main;
-
         if ( esui.lib.ie ) {
             main.onpropertychange = null;
         } else {
@@ -270,36 +225,7 @@ esui.TextInput.prototype = {
         this.main.onchange = null;
     },
     
-    onfocus: new Function(),
-
-    /**
-     * 获取获焦事件处理函数
-     * 
-     * @private
-     * @return {Function}
-     */
-    _getFocusHandler: function () {
-        var me = this;
-            
-        return function () {
-            var main = me.main;
-            
-            esui.lib.removeClass( main, me.__getClass( 'virtual' ) );
-            if ( me._placing ) {
-                me._placing = 1;
-                main.value = '';
-            }
-
-            if ( me.autoSelect ) {
-                main.select();
-            }
-
-            me.onfocus();
-        };
-    },
-    
     onblur: new Function(),
-
     /**
      * 获取失焦事件处理函数
      * 
@@ -310,32 +236,17 @@ esui.TextInput.prototype = {
         var me = this;
             
         return function () {
-            me.setPlacing(me.needPlacing());
             me.onblur();
         };
     },
-    
-    onenter: new Function(),
 
-    /**
-     * 获取键盘敲击的事件handler
-     * 
-     * @private
-     * @return {Function}
-     */
-    _getPressHandler: function () {
+    onfocus: new Function(),
+
+    _getFocusHandler: function () {
         var me = this;
-        return function ( e ) {
-            e = e || window.event;
-            var keyCode = e.keyCode || e.which;
             
-            if ( me._type != 'text' ) {
-                return;
-            }
-            
-            if ( keyCode == 13 ) {
-                return me.onenter();
-            }
+        return function () {
+            me.onfocus();
         };
     },
     
@@ -376,7 +287,6 @@ esui.TextInput.prototype = {
         var main    = me.main;
         var tagName = main.tagName;
         var tagType = main.getAttribute( 'type' );
-
         // 判断输入框的mode
         var mode = '';
         switch ( tagName ) {
@@ -394,21 +304,14 @@ esui.TextInput.prototype = {
             }
             break;
         }
-
         if ( !mode ) {
             throw new Error( "esui.TextInput: invalid main element!" );
         }
-
         me.mode = me.mode || mode;
-
         // 类型声明，用于生成控件子dom的id和class
         me._type = me.mode == 'textarea' ? 'textarea' : 'text';
-
         me.value = me.value || main.value;
-        me.placeholder = me.placeholder || main.getAttribute( 'placeholder' );
-        main.setAttribute( 'placeholder', '' );
     },
-
     /**
      * 释放控件
      * 
@@ -421,10 +324,8 @@ esui.TextInput.prototype = {
         main.onchange = null;
         main.onfocus = null;
         main.onblur = null;
-
         this._removeInputListener();
         this._changeHandler = null;
-
         esui.InputControl.prototype.__dispose.call( this );
     },
     
@@ -438,7 +339,6 @@ esui.TextInput.prototype = {
         var creater = esui.InputControl.prototype.__createInput;
         var mode    = this.mode;
         mode        = mode || 'text';
-
         if ( mode == 'text' || mode == 'password' ) {
             return creater.call( this, {
                 tagName : 'input',
