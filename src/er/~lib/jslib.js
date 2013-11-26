@@ -53,6 +53,10 @@ er.lib.encodeHTML = js.text.Encoder.encodeHTML;
 
 er.lib.ajax = function (url, options) {
 	options.url = url;
+	var _onsuccess = options.onsuccess;
+	options.onsuccess = function (response, request) {
+		_onsuccess.call(this, request, response);
+	};
 	return js.net.Ajax.request(options);
 };
 

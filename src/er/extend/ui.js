@@ -55,7 +55,7 @@ er.extend.ui = function () {
             this._dataControl = dataControl;
             this._controlData = controlData;
             this._controlMap = uiExtend.adapter.init(
-                baidu.g( this.target ), 
+                er.lib.g( this.target ), 
                 this.UI_PROP, 
                 attrReplacer
             );
