@@ -79,6 +79,8 @@ esui.Mask = (function() {
 
         return esui.lib.g( id );
     }
+
+    init(0);
     
     var resizeHandlerMap = {};
     return {
