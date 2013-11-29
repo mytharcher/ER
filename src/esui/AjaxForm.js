@@ -261,6 +261,11 @@ esui.AjaxForm.prototype = {
     _resetFieldIterator: function (field) {
         field.render();
     },
+
+    reset: function () {
+        this.resetFields();
+        this.resetFormError();
+    },
     
     /**
      * 提交表单，处理Ajax相关
@@ -305,8 +310,7 @@ esui.AjaxForm.prototype = {
         var me = this;
         return function () {
             if (me.onreset() !== false) {
-                me.resetFormError();
-                me.resetFields();
+                me.reset();
             }
             return false;
         };
