@@ -20,7 +20,6 @@
 esui.ValidityShower = function(options){
     esui.Control.call(this, options);
 };
-
 esui.lib.extend(esui.ValidityShower.prototype, {
     _type: 'ValidityShower',
     
@@ -31,7 +30,7 @@ esui.lib.extend(esui.ValidityShower.prototype, {
      */
     render: function () {
         if ( !this._isRendered ) {
-            esui.lib.addClass(this.main, this.__getClass(esui.ValidityShower.CLASS_STATUS_NORMAL));
+            esui.lib.addClass(this.main, esui.ValidityShower.CLASS_STATUS_NORMAL);
         }
         
         esui.Control.prototype.render.call(this);
@@ -51,8 +50,7 @@ esui.lib.extend(esui.ValidityShower.prototype, {
             elemSuccess     = this._getSuccessBlock(),
             elemFailure     = this._getFailureBlock();
         
-        esui.lib.removeClass(elemWrap, this.__getClass(myClass.CLASS_STATUS_NORMAL));
-
+        esui.lib.removeClass(elemWrap, myClass.CLASS_STATUS_NORMAL);
         
         if (isValid) {
             if (elemSuccess) {
@@ -94,11 +92,10 @@ esui.lib.extend(esui.ValidityShower.prototype, {
             elemSuccess     = this._getSuccessBlock(),
             elemFailure     = this._getFailureBlock();
         
-        esui.lib.removeClass(elemWrap, this.__getClass(myClass.CLASS_STATUS_SUCCESS));
-        esui.lib.removeClass(elemWrap, this.__getClass(myClass.CLASS_STATUS_FAILURE));
+        esui.lib.removeClass(elemWrap, myClass.CLASS_STATUS_SUCCESS);
+        esui.lib.removeClass(elemWrap, myClass.CLASS_STATUS_FAILURE);
         
-        esui.lib.addClass(elemWrap, this.__getClass(myClass.CLASS_STATUS_NORMAL));
-
+        esui.lib.addClass(elemWrap, myClass.CLASS_STATUS_NORMAL);
         if (elemSuccess && !this._isSpecialBlock(elemSuccess)) {
             elemSuccess.innerHTML = '';
         }
@@ -106,7 +103,6 @@ esui.lib.extend(esui.ValidityShower.prototype, {
             elemFailure.innerHTML = '';
         }
     },
-
     _isSpecialBlock: function (node) {
         return (',' + this.constructor.SPECAIL_NODE_NAME + ',').indexOf(',' + node.nodeName + ',') > -1;
     },
@@ -128,9 +124,7 @@ esui.lib.extend(esui.ValidityShower.prototype, {
         return this._getBlockByClass(this.__getClass(esui.ValidityShower.CLASS_BLOCK_FAILURE));
     }
 });
-
 esui.lib.inherits(esui.ValidityShower, esui.Control);
-
 esui.lib.extend(esui.ValidityShower, {
     CLASS_BLOCK_INFO: 'info',
     CLASS_BLOCK_SUCCESS: 'success',
@@ -138,7 +132,6 @@ esui.lib.extend(esui.ValidityShower, {
     CLASS_STATUS_NORMAL: 'status-normal',
     CLASS_STATUS_SUCCESS: 'success',
     CLASS_STATUS_FAILURE: 'error',
-
     SPECAIL_NODE_NAME: 'IMG,INPUT,TABLE,THEAD,TBODY,TFOOT,TR'
 });
 
