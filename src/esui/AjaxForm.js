@@ -227,7 +227,7 @@ esui.AjaxForm.prototype = {
             }
         }
         
-        return query.join('&')
+        return query.join('&');
     },
     
     /**
