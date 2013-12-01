@@ -275,11 +275,6 @@ er.template = function () {
         var node;
         var propList;
         var propLen;
-        var commentMatcher;
-        var tagMatcher;
-        var propMatcher;
-        var forMatcher;
-        var ifMatcher;
 
         // text节点内容缓冲区，用于合并多text
         var textBuf = new ArrayBuffer;
@@ -336,17 +331,16 @@ er.template = function () {
             if ( strLen == 2 || i > 0 ) {
                 if ( strLen == 2 ) {
                     commentText = str[ 0 ];
-                    commentMatcher = commentText.match(COMMENT_RULE);
-                    if ( commentMatcher ) {
+                    if ( COMMENT_RULE.test( commentText ) ) {
                         // 将缓冲区中的text节点内容写入
                         flushTextBuf();
                         
                         // 节点类型分析
-                        nodeType = commentMatcher[2].toLowerCase();
-                        nodeContent = commentMatcher[3];
+                        nodeType = RegExp.$2.toLowerCase();
+                        nodeContent = RegExp.$3;
                         node = { type: TYPE[ nodeType.toUpperCase() ] };
 
-                        if ( commentMatcher[1] ) {
+                        if ( RegExp.$1 ) {
                             // 闭合节点解析
                             node.endTag = 1;
                             nodeStream.push( node );
@@ -357,18 +351,16 @@ er.template = function () {
                             case 'master':
                             case 'import':
                             case 'target':
-                                tagMatcher = nodeContent.match(TAG_RULE);
-                                if ( tagMatcher ) {
+                                if ( TAG_RULE.test( nodeContent ) ) {
                                     // 初始化id
-                                    node.id = tagMatcher[1];
+                                    node.id = RegExp.$1;
                                 
                                     // 初始化属性
-                                    propList = (tagMatcher[2] || '').split( /\s*,\s*/ );
+                                    propList = RegExp.$2.split( /\s*,\s*/ );
                                     propLen = propList.length;
                                     while ( propLen-- ) {
-                                        propMatcher = propList[ propLen ].match(PROP_RULE);
-                                        if ( propMatcher ) {
-                                            node[ propMatcher[1] ] = propMatcher[2];
+                                        if ( PROP_RULE.test( propList[ propLen ] ) ) {
+                                            node[ RegExp.$1 ] = RegExp.$2;
                                         }
                                     }
                                 } else {
@@ -378,11 +370,10 @@ er.template = function () {
                                 break;
 
                             case 'for':
-                                forMatcher = nodeContent.match(FOR_RULE);
-                                if ( forMatcher ) {
-                                    node.list  = forMatcher[1];
-                                    node.item  = forMatcher[2];
-                                    node.index = forMatcher[4];
+                                if ( FOR_RULE.test( nodeContent ) ) {
+                                    node.list  = RegExp.$1;
+                                    node.item  = RegExp.$2;
+                                    node.index = RegExp.$4;
                                 } else {
                                     throwInvalid( nodeType, commentText );
                                 }
@@ -391,9 +382,8 @@ er.template = function () {
 
                             case 'if':
                             case 'elif':
-                                ifMatcher = commentMatcher[3].match(IF_RULE);
-                                if ( ifMatcher ) {
-                                    node.expr = condExpr.parse( ifMatcher[1] );
+                                if ( IF_RULE.test( RegExp.$3 ) ) {
+                                    node.expr = condExpr.parse( RegExp.$1 );
                                 } else {
                                     throwInvalid( nodeType, commentText );
                                 }
@@ -1170,40 +1160,17 @@ er.template = function () {
      */
     function getVariableValue( scope, varName, opt_filterName ) {
         var typeRule = /:([a-z]+)$/i;
-        var match    = varName.match( typeRule );
-        var value    = '';
-        var i, len;
-        var variable, propName, propLen;
-        var propMatcher;
-
+        var match    = name.match( typeRule );
+        var value;
         varName = varName.replace( typeRule, '' );
         if ( match && match.length > 1 ) {
             value = getVariableValueByType( varName, match[1] );
         } else {
-            varName  = varName.split( /[\.\[]/ );
-            variable = scope.get( varName[ 0 ] );
-            varName.shift();
+            value = scope.get(varName);
+        }
 
-            for ( i = 0, len = varName.length; i < len; i++ ) {
-                if ( !er._util.hasValue( variable ) ) {
-                    break;
-                }
-
-                propName = varName[ i ].replace( /\]$/, '' );
-                propLen  = propName.length;
-                propMatcher = propName.match(/^(['"])/);
-                if ( propMatcher
-                     && propName.lastIndexOf( propMatcher[1] ) == --propLen
-                ) {
-                    propName = propName.slice( 1, propLen );
-                }
-
-                variable = variable[ propName ];
-            }
-
-            if ( er._util.hasValue( variable ) ) {
-                value = variable;
-            }
+        if ( value == null ) {
+            value = '';
         }
         
         // 过滤处理
@@ -1356,8 +1323,8 @@ er.template = function () {
     function replaceVariable( text, scope ) {
         return text.replace(
                 /\$\{([.:a-z0-9\[\]'"_]+)\s*(\|[a-z]+)?\s*\}/ig,
-                function ( matcher, varName, filter ) {
-                    return getVariableValue( scope, varName, filter  );
+                function ( $0, $1, $2 ) {
+                    return getVariableValue( scope, $1, $2  );
                 });
     }
 
