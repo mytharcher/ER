@@ -1361,10 +1361,18 @@ er.template = function () {
                 forList  = scope.get( stat.list );
                 forItem  = stat.item;
                 forIndex = stat.index;
-                for ( forI = 0, forLen = forList.length; forI < forLen; forI++ ) {
-                    forScope.set( forItem, forList[ forI ] );
-                    forIndex && forScope.set( forIndex, forI );
-                    result.push( exec( stat, forScope ) );
+                if (forList instanceof Array) {
+                    for ( forI = 0, forLen = forList.length; forI < forLen; forI++ ) {
+                        forScope.set( forItem, forList[ forI ] );
+                        forIndex && forScope.set( forIndex, forI );
+                        result.push( exec( stat, forScope ) );
+                    }
+                } else {
+                    for ( forI in forList ) {
+                        forScope.set( forItem, forList[ forI ] );
+                        forIndex && forScope.set( forIndex, forI );
+                        result.push( exec( stat, forScope ) );
+                    }
                 }
                 break;
 
