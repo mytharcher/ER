@@ -38,6 +38,10 @@ esui.AjaxForm.prototype = {
             me._handlerSubmitSuccess = this._getHandlerSubmitSuccess();
             me._handlerSubmitFailure = this._getHandlerSubmitFailure();
         }
+
+        me.datasource && setTimeout(function () {
+            me.setFormData(me.datasource);
+        }, 0);
         
         // 设置disabled
         me.setDisabled( me.disabled );
@@ -255,7 +259,8 @@ esui.AjaxForm.prototype = {
     },
 
     resetFields: function () {
-        this.forEachField(this._resetFieldIterator, this);
+        this.datasource ? this.setFormData(this.datasource) :
+            this.forEachField(this._resetFieldIterator, this);
     },
 
     _resetFieldIterator: function (field) {
