@@ -35,7 +35,11 @@ er.lib.ie = js.client.Browser.IE;
 
 er.lib.g = js.dom.Stage.get;
 
+///import js.client.Features.~stringTrim;
 
+er.lib.trim = function (str) {
+	return str.trim();
+};
 
 ///import js.text.Template;
 
