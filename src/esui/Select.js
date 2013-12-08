@@ -28,6 +28,8 @@ esui.Select = function ( options ) {
     // 参数初始化
     this.__initOption( 'maxItem', null, 'MAX_ITEM' );
     this.__initOption( 'emptyText', null, 'EMPTY_TEXT' );
+    this.__initOption( 'keyName', null, 'KEY_NAME' );
+    this.__initOption( 'valueName', null, 'VALUE_NAME' );
     this.emptyLabel = esui.util.format(
         this._tplLabel,  
         this.__getClass('text-def'), 
@@ -38,6 +40,8 @@ esui.Select = function ( options ) {
 
 esui.Select.EMPTY_TEXT = '请选择'; // 选项为空时主区域显示文字
 esui.Select.MAX_ITEM   = 8;        // 浮动层最大选项设置，超出则浮动层出现滚动条
+esui.Select.KEY_NAME   = 'name';
+esui.Select.VALUE_NAME   = 'value';
 
 esui.Select.prototype = {
     /**
@@ -232,11 +236,11 @@ esui.Select.prototype = {
             }
             
             // 初始化选中样式
-            if ( item.value == me.value ) {
-                itemClass += ' ' + me.__getClass( 'item-selected' )
+            if ( item[me.valueName] == me.value ) {
+                itemClass += ' ' + me.__getClass( 'item-selected' );
             }
             if ( me.titleTip ) {
-                titleTip = 'title="' + item.name + iconHtml + '"';
+                titleTip = 'title="' + item[me.keyName] + iconHtml + '"';
             }
             
             html.push(
@@ -244,9 +248,9 @@ esui.Select.prototype = {
                     me.__getId( 'item' ) + i,
                     itemClass,
                     i,
-                    item.value,
+                    item[me.valueName],
                     dis,
-                    item.name,
+                    item[me.keyName],
                     strRef + '._itemOverHandler(this)',
                     strRef + '._itemOutHandler(this)',
                     strRef + '._itemClickHandler(this)',
@@ -421,7 +425,7 @@ esui.Select.prototype = {
         if ( !selected ) {
             value = null;
         } else {
-            value = selected.value;
+            value = selected[this.valueName];
         }
         
         if (
@@ -446,8 +450,8 @@ esui.Select.prototype = {
      */
     _repaint: function () {
         var selected = this.datasource[ this.selectedIndex ],
-            word = this.staticText || ( selected ? selected.name : this.emptyLabel ),
-            titleTip = this.staticText || ( selected ? selected.name : this.emptyText ),
+            word = this.staticText || ( selected ? selected[this.keyName] : this.emptyLabel ),
+            titleTip = this.staticText || ( selected ? selected[this.keyName] : this.emptyText ),
             el = this._getCur();
             
         if ( this.titleTip ) {
