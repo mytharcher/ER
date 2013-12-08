@@ -17,7 +17,7 @@
  */
 esui.Radio = function ( options ) {
     // 类型声明，用于生成控件子dom的id和class
-    this._type      = 'radiobox';
+    this._type      = 'radio';
 
     esui.BoxControl.call( this, options );
 };
