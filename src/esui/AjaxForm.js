@@ -188,6 +188,11 @@ esui.AjaxForm.prototype = {
     getFormData: function () {
         var data = {};
         this.forEachField(this._getFieldDataIterator, this, data);
+        Object.keys(data).forEach(function (item) {
+            if (data[item] instanceof Array && data[item].length == 1) {
+                data[item] = data[item][0];
+            }
+        });
         return data;
     },
     
@@ -225,9 +230,13 @@ esui.AjaxForm.prototype = {
         
         for (var name in data) {
             var dataItem = data[name];
-            for (var i = 0, len = dataItem.length; i < len; i++) {
-                var value = typeof encoder == 'function' ? encoder(dataItem[i]) : dataItem[i];
-                query.push(name + '=' + value);
+            if (dataItem instanceof Array) {
+                for (var i = 0, len = dataItem.length; i < len; i++) {
+                    var value = typeof encoder == 'function' ? encoder(dataItem[i]) : dataItem[i];
+                    query.push(name + '=' + value);
+                }
+            } else {
+                query.push(name + '=' + (typeof encoder == 'function' ? encoder(dataItem) : dataItem));
             }
         }
         
