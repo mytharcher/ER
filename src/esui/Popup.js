@@ -28,9 +28,6 @@ esui.Popup = function ( options ) {
 
     // 初始化自动定位参数
     this.__initOption('autoPosition', null, 'AUTO_POSITION');
-    
-    // 初始化可拖拽参数
-    this.__initOption('draggable', null, 'DRAGGABLE');
 
     // 初始化宽度
     this.__initOption('width', null, 'WIDTH');
@@ -63,11 +60,6 @@ esui.Popup.prototype = {
         }
         
         this._resizeHandler();
-
-        // 拖拽功能初始化
-        if ( this.draggable ) {
-            esui.lib.draggable( main, {handler:this.getHead()} );
-        }        
         
         // 如果mask不是object，则会隐式装箱
         // 装箱后的Object不具有level和type属性
@@ -177,11 +169,6 @@ esui.Popup.prototype = {
         }
         
         layer = me.createLayer(document.body);
-        
-        // 拖拽功能初始化
-        if ( this.draggable ) {
-            esui.lib.draggable( layer.main, {handler:layer.main} );
-        }
     },
     
     createLayer: function (there) {
@@ -189,7 +176,7 @@ esui.Popup.prototype = {
         var layer = me._controlMap.layer = esui.util.create( 'Layer', {
             id      : me.__getId('layer'),
             retype  : me._type,
-            skin    : me.skin + (me.dragable ? ' dragable' : ''),
+            skin    : me.skin + (me.draggable ? ' draggable' : ''),
             width   : me.width,
             main    : me.main
         } );

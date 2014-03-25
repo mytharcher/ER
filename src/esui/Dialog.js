@@ -21,6 +21,9 @@ esui.Dialog = function ( options ) {
     
     esui.Popup.call( this, options );
     
+    // 初始化可拖拽参数
+    this.__initOption('draggable', null, 'DRAGGABLE');
+    
     // 初始化关闭按钮参数
     this.__initOption('closeButton', null, 'CLOSE_BUTTON');
 };
@@ -99,6 +102,11 @@ esui.Dialog.prototype = {
 
         // 初始化dialog结构
         me._initStruct();
+        
+        // 拖拽功能初始化
+        if ( this.draggable ) {
+            esui.lib.draggable( layer.main, {handler:layer.main} );
+        }
     },
     
     /** 
