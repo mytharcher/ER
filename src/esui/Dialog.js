@@ -100,12 +100,16 @@ esui.Dialog.prototype = {
 
         esui.Popup.prototype.render.call(me);
 
+        layer = me.getLayer();
+
         // 初始化dialog结构
         me._initStruct();
         
         // 拖拽功能初始化
         if ( this.draggable ) {
-            esui.lib.draggable( layer.main, {handler:layer.main} );
+            setTimeout(function () {
+                esui.lib.draggable( layer.main, {handler:me.getHead() || layer.main} );
+            }, 0);
         }
     },
     
