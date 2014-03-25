@@ -133,7 +133,7 @@ esui.lib.padNumber = function (source, length) {
 ///import js.dom.BoxModel;
 
 esui.lib.getPosition = function (elem) {
-	return js.dom.BoxModel.getPosition(elem, document.body);
+    return js.dom.BoxModel.getPosition(elem, refer || esui.config.viewContextRoot || document.body);
 };
 
 
@@ -185,14 +185,16 @@ esui.lib.getPageViewWidth = function () {
 
 
 
-esui.lib.getPageScrollTop = function () {
+esui.lib.getPageScrollTop = function (refer) {
 	var d = document;
-	return window.pageYOffset || d.documentElement.scrollTop || d.body.scrollTop;
+	return refer ? refer.scrollTop :
+		window.pageYOffset || d.documentElement.scrollTop || d.body.scrollTop;
 };
 
-esui.lib.getPageScrollLeft = function () {
+esui.lib.getPageScrollLeft = function (refer) {
 	var d = document;
-	return window.pageXOffset || d.documentElement.scrollLeft || d.body.scrollLeft;
+	return refer ? refer.scrollLeft :
+		window.pageXOffset || d.documentElement.scrollLeft || d.body.scrollLeft;
 };
 
 
