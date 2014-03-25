@@ -17,8 +17,6 @@
  * @param {Object} options 参数
  */
 esui.Select = function ( options ) {
-    // 类型声明，用于生成控件子dom的id和class
-    this._type = 'select';
    
     // 标识鼠标事件触发自动状态转换
     this._autoState = 1;
@@ -28,8 +26,9 @@ esui.Select = function ( options ) {
     // 参数初始化
     this.__initOption( 'maxItem', null, 'MAX_ITEM' );
     this.__initOption( 'emptyText', null, 'EMPTY_TEXT' );
-    this.__initOption( 'keyName', null, 'KEY_NAME' );
+    this.__initOption( 'textName', null, 'TEXT_NAME' );
     this.__initOption( 'valueName', null, 'VALUE_NAME' );
+    this.__initOption( 'itemHeight', null, 'ITEM_HEIGHT' );
     this.emptyLabel = esui.util.format(
         this._tplLabel,  
         this.__getClass('text-def'), 
@@ -38,12 +37,15 @@ esui.Select = function ( options ) {
     this.datasource = this.datasource || [];
 };
 
-esui.Select.EMPTY_TEXT = '请选择'; // 选项为空时主区域显示文字
-esui.Select.MAX_ITEM   = 8;        // 浮动层最大选项设置，超出则浮动层出现滚动条
-esui.Select.KEY_NAME   = 'name';
-esui.Select.VALUE_NAME   = 'value';
+esui.Select.EMPTY_TEXT  = '请选择'; // 选项为空时主区域显示文字
+esui.Select.MAX_ITEM    = 8;        // 浮动层最大选项设置，超出则浮动层出现滚动条
+esui.Select.TEXT_NAME   = 'name';
+esui.Select.VALUE_NAME  = 'value';
+esui.Select.ITEM_HEIGHT = 20;
 
 esui.Select.prototype = {
+    // 类型声明，用于生成控件子dom的id和class
+    _type: 'select',
     /**
      * 设置控件为禁用
      * 
@@ -85,7 +87,7 @@ esui.Select.prototype = {
         }
         
         // 绘制浮动层
-        me._renderLayer();
+        me._renderLayer(me.datasource);
         
         me.width && ( main.style.width = me.width + 'px' );
         if ( !me.value && esui.util.hasValue( me.selectedIndex ) ) {
@@ -127,7 +129,7 @@ esui.Select.prototype = {
      *
      * @private
      */
-    _renderLayer: function() {
+    _renderLayer: function(datasource) {
         var me      = this,
             layerId = me.__getId( 'layer' ),
             layer   = me.getLayer(),
@@ -145,7 +147,7 @@ esui.Select.prototype = {
                     partName: 'layer',
                     skin    : me.skin
                 } );
-            layer.appendTo();
+            layer.appendTo(me.viewContextRoot || document.body);
             me._controlMap[ 'layer' ] = layer;
             layer.onhide = me._getLayerHideHandler();
         }
@@ -154,17 +156,16 @@ esui.Select.prototype = {
         layerMain = layer.main;
         layerMain.style.width   = 'auto';
         layerMain.style.height  = 'auto';
-        layerMain.innerHTML     = me._getLayerHtml();
+        layerMain.innerHTML     = me._getLayerHtml(datasource);
         layerMainWidth          = layerMain.offsetWidth;
 
         if ( len > maxItem ) {
-            itemHeight = layerMain.firstChild.offsetHeight;
-            layerMain.style.height = maxItem * ( itemHeight + 1 ) + 'px';
+            layerMain.style.maxHeight = ( maxItem * me.itemHeight ) + 'px';
             layerMainWidth += 17;
         }
 
-        if ( layerMainWidth < me.width ) {
-            layer.setWidth( me.width );
+        if ( layerMainWidth < me.main.offsetWidth ) {
+            layer.setWidth( me.main.offsetWidth );
         } else {
             layer.setWidth( layerMainWidth );
         }
@@ -196,9 +197,8 @@ esui.Select.prototype = {
      * 
      * @return {string}
      */
-    _getLayerHtml: function () {
+    _getLayerHtml: function (datasource) {
         var me          = this,
-            datasource  = me.datasource,
             i           = 0,
             len         = datasource.length,
             html        = [],
@@ -240,7 +240,7 @@ esui.Select.prototype = {
                 itemClass += ' ' + me.__getClass( 'item-selected' );
             }
             if ( me.titleTip ) {
-                titleTip = 'title="' + item[me.keyName] + iconHtml + '"';
+                titleTip = 'title="' + item[me.textName] + iconHtml + '"';
             }
             
             html.push(
@@ -250,7 +250,7 @@ esui.Select.prototype = {
                     i,
                     item[me.valueName],
                     dis,
-                    item[me.keyName],
+                    item[me.textName],
                     strRef + '._itemOverHandler(this)',
                     strRef + '._itemOutHandler(this)',
                     strRef + '._itemClickHandler(this)',
@@ -305,7 +305,7 @@ esui.Select.prototype = {
     showLayer: function() {
         var me = this,
             main                = me.main,
-            mainPos             = esui.lib.getPosition( main ),
+            mainPos             = esui.lib.getPosition( main, me.viewContextRoot ),
             layer               = me.getLayer(),
             layerMain           = layer.main,
             layerOffsetHeight   = layerMain.offsetHeight,
@@ -314,7 +314,7 @@ esui.Select.prototype = {
             layerVHeight        = mainPos.top
                                     + mainOffsetHeight 
                                     + layerOffsetHeight 
-                                    - esui.lib.getPageScrollTop(),
+                                    - esui.lib.getPageScrollTop(me.viewContextRoot),
             layerTop;
 
         if ( pageVHeight > layerVHeight ) {
@@ -450,8 +450,8 @@ esui.Select.prototype = {
      */
     _repaint: function () {
         var selected = this.datasource[ this.selectedIndex ],
-            word = this.staticText || ( selected ? selected[this.keyName] : this.emptyLabel ),
-            titleTip = this.staticText || ( selected ? selected[this.keyName] : this.emptyText ),
+            word = this.staticText || ( selected ? selected[this.textName] : this.emptyLabel ),
+            titleTip = this.staticText || ( selected ? selected[this.textName] : this.emptyText ),
             el = this._getCur();
             
         if ( this.titleTip ) {
