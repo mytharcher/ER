@@ -273,7 +273,12 @@ esui.AjaxForm.prototype = {
     },
 
     _resetFieldIterator: function (field) {
-        field.render();
+        if (field instanceof esui.BoxControl) {
+            var dataItem = this.datasource[field.name] || [];
+            field.getGroup().selectByValues(dataItem.toString().split(','));
+        } else {
+            field.render();
+        }
     },
 
     reset: function () {
