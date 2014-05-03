@@ -41,9 +41,9 @@ esui.lib.format = js.text.Template.format;
 
 
 
-///import js.text.Encoder.encodeHTML;
+///import js.text.Escaper.encodeHTML;
 
-esui.lib.encodeHTML = js.text.Encoder.encodeHTML;
+esui.lib.encodeHTML = js.text.Escaper.encodeHTML;
 
 
 
