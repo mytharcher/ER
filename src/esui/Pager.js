@@ -76,11 +76,11 @@ esui.Pager.prototype = {
     /**
      * @ignore
      */
-    _tplMain: '<ul>{0}</ul>',
+    _tplMain: '<ul>#{0}</ul>',
     /**
      * @ignore
      */
-    _tplItem: '<li onclick="{2}" onmouseover="{3}" onmouseout="{4}" class="{1}">{0}</li>',
+    _tplItem: '<li onclick="#{2}" onmouseover="#{3}" onmouseout="#{4}" class="#{1}">#{0}</li>',
     
     /**
      * 绘制页码区
