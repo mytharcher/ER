@@ -30,8 +30,6 @@
  */
 
 ///import er.lib;
-///import er.config;
-///import er.init;
 
 /**
  * 简易的模板解析器
@@ -1456,7 +1454,7 @@ er.template = function () {
             len     = list instanceof Array && list.length,
             tplBuf  = [],
             i       = 0;
-            
+
         if ( len && !isLoaded ) {
             isLoaded = 1;
             loadTemplate();
@@ -1485,7 +1483,7 @@ er.template = function () {
             
             if ( i >= len ) {
                 er.template.parse( tplBuf.join( '\n' ) );
-                er.init.start();
+                done();
             } else {
                 loadTemplate();
             }
@@ -1548,3 +1546,6 @@ er.template = function () {
         merge: merge
     };
 }();
+
+///import er._util;
+///import er.context;

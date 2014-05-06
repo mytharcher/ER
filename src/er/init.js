@@ -26,7 +26,7 @@ er.init = function () {
     er.template.load( er.locator.listen );
 };
 
-///import er.router;
-///import er.locator;
 ///import er.controller;
+///import er.locator;
+///import er.router;
 ///import er.template;
