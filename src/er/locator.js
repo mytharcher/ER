@@ -24,13 +24,14 @@
  */
 er.locator = function () {
     var currentLocation,
-        IFRAME_CONTENT  = "<html><head></head><body><input type=\"text\" id=\"save\">"
-            + "<script type=\"text/javascript\">"
-            + "var loc = \"#{0}\";"
-            + "document.getElementById('save').value = loc;"
-            + "parent.er.locator._updateHash(loc);"
-            + "parent.er.router(loc);"
-            + "</script></body></html>";
+        IFRAME_CONTENT  = '<html><head></head><body><input type="text" id="save">'
+            + '<script type="text/javascript">'
+            + 'var loc = "#{0}";'
+            + 'if (parent.er.router(loc)) {'
+            + 'document.getElementById("save").value = loc;'
+            + 'parent.er.locator._updateHash(loc);'
+            + '}'
+            + '</script></body></html>';
     
     /**
      * 获取location信息
@@ -137,13 +138,6 @@ er.locator = function () {
     }
 
     function doRoute( loc ) {
-        // 权限判断以及转向
-        var loc302 = authorize( loc );
-        if ( loc302 ) {
-            redirect( loc302 );
-            return;
-        }
-
         // ie下使用中间iframe作为中转控制
         // 其他浏览器直接调用控制器方法
         if ( er.lib.ie && er.lib.ie < 8 ) {
@@ -233,51 +227,16 @@ er.locator = function () {
 
         document.body.appendChild(iframe);
     }
-    
-    var authorizers = [];
-
-    /**
-     * 增加权限验证器
-     *
-     * @public
-     * @param {Function} authorizer 验证器，验证失败时验证器返回转向地址
-     */
-    function addAuthorizer( authorizer ) {
-        if ( 'function' == typeof authorizer ) {
-            authorizers.push( authorizer );
-        }
-    }
-    
-    /**
-     * 权限验证
-     *
-     * @inner
-     * @return {string} 验证失败时验证器返回转向地址
-     */
-    function authorize( currLoc ) {
-        var i = 0;
-        var len = authorizers.length;
-        var loc;
-
-        for ( ; i < len; i++ ) {
-            loc = authorizers[ i ]( currLoc );
-            if ( loc ) {
-                return loc;
-            }
-        }
-    }
-    
-    // 注册初始化函数
-    er.init.addIniter( init, 2 );
 
     // 返回暴露的方法
     return {
+        // 初始化启动方法
+        'listen'            : init,
         'redirect'          : redirect,
         'reload'            : reload,
         'getLocation'       : getLocation,
         '_updateHash'       : updateLocation,
-        'onredirect'        : new Function(),
-        'addAuthorizer'     : addAuthorizer
+        'onredirect'        : new Function()
     };
 }();
 

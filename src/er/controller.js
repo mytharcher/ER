@@ -23,7 +23,6 @@
 er.controller = function () {
     var contextContainer = {},
         configContainer  = {},
-        locationRule     = /^([\/a-zA-Z0-9_-]+)(?:~(.*))?$/,
         mainActionContext,
         currentPath,
         currentLocation,
@@ -79,9 +78,7 @@ er.controller = function () {
         */
         
         if ( !path ) {
-            locationRule.test( loc );
-            path = RegExp.$1;
-            query = RegExp.$2;
+            return;
         }
 
         var arg = {  // 组合所需的argument对象
@@ -232,26 +229,16 @@ er.controller = function () {
             }
         }
 
-        // 添加route规则
-        er.router.add( locationRule, er.controller.forward );
-
-        // 添加权限验证器
-        er.locator.addAuthorizer( _authJudge );
     }
     
     /**
      * 权限验证函数，验证失败时返回自动转向地址
      *
      * @inner
-     * @param {string} loc location
+     * @param {string} path 已解析完成的路径
      * @return {string} 
      */
-    function _authJudge( loc ) {
-        if ( !locationRule.test( loc ) ) {
-            return null;
-        }
-
-        var path = RegExp.$1;
+    function checkAuth( loc, path, query ) {
         var actionConfig = getActionConfigByPath( path );
         if ( !actionConfig ) {
             throw new Error('ER: the path "' + path + '" cannot bind to action.');
@@ -426,12 +413,11 @@ er.controller = function () {
 
         return '';
     }
-    
-    // 注册初始化函数
-    er.init.addIniter( init, 1 );
 
     return {
+        init            : init,
         forward         : forward,
+        checkAuth       : checkAuth,
         _enable         : enable,
         loadSub         : loadSub,
         loadSubByPath   : loadSubByPath,

@@ -8,85 +8,24 @@
  */
 
 ///import er;
-///import er._util;
+///import er.router;
+///import er.locator;
+///import er.contorller;
+///import er.template;
 
 /**
  * 初始化ER框架
  */
 er.init = function () {
-    /**
-     * 初始化函数
-     *
-     * @inner
-     */
-    function init() {
-        _continue();
-    }
+    // 添加默认route规则，形如：/path/to/location~key=value
+    er.router.add( /^([\/\w-]+)(?:~(.*))?$/, er.controller.forward );
 
-    var initers = [];
-    var phase = 'ready';
-    var currIndex = 0;
+    // 添加权限验证器
+    er.router.addAuthorizer( er.controller.checkAuth );
 
-    function _continue() {
-        var initer;
-        
-        switch ( phase ) {
-        case 'ready':
-        case 'run':
-            if ( currIndex < initers.length ) { 
-                phase = 'run';
-                initer = initers[ currIndex++ ];
-                (typeof initer == 'function') && initer();
-                _continue();
-            } else {
-                phase = 'inited';
-                typeof er.oninit == 'function' && er.oninit();
-            }
-            break;
-        }
-    }
+    // 初始化controller配置（模块和Action路径）
+    er.controller.init();
 
-    /**
-     * 添加初始化函数
-     *
-     * @public 
-     * @param {Function} initer 初始化函数
-     * @param {number} opt_index 初始化次序
-     */
-    init.addIniter = function ( initer, opt_index ) {
-        if ( typeof opt_index == 'number' ) {
-            if ( initers[ opt_index ] ) {
-                initers.splice( opt_index, 0, initer );
-            } else {
-                initers[ opt_index ] = initer;
-            }
-        } else {
-            initers.push( initer );
-        }
-    };
-
-    /**
-     * 停止初始化
-     *
-     * @public
-     */
-    init.stop = function () {
-        if ( phase == 'run' ) {
-            phase = 'stop';
-        }
-    };
-
-    /**
-     * 启动初始化
-     *
-     * @public
-     */
-    init.start = function () {
-        if ( phase == 'stop' ) {
-            phase = 'run';
-            _continue();
-        }
-    };
-
-    return init;
-}();
+    // 加载模板并启动
+    er.template.load( er.locator.listen );
+};
