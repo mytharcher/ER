@@ -273,6 +273,7 @@ er.template = function () {
         var node;
         var propList;
         var propLen;
+        var matcher, propMatcher, tagMatcher, forMatcher, ifMatcher;
 
         // text节点内容缓冲区，用于合并多text
         var textBuf = new ArrayBuffer;
@@ -329,16 +330,17 @@ er.template = function () {
             if ( strLen == 2 || i > 0 ) {
                 if ( strLen == 2 ) {
                     commentText = str[ 0 ];
-                    if ( COMMENT_RULE.test( commentText ) ) {
+                    matcher = commentText.match( COMMENT_RULE );
+                    if ( matcher ) {
                         // 将缓冲区中的text节点内容写入
                         flushTextBuf();
                         
                         // 节点类型分析
-                        nodeType = RegExp.$2.toLowerCase();
-                        nodeContent = RegExp.$3;
+                        nodeType = matcher[2].toLowerCase();
+                        nodeContent = matcher[3];
                         node = { type: TYPE[ nodeType.toUpperCase() ] };
 
-                        if ( RegExp.$1 ) {
+                        if ( matcher[1] ) {
                             // 闭合节点解析
                             node.endTag = 1;
                             nodeStream.push( node );
@@ -351,14 +353,14 @@ er.template = function () {
                             case 'target':
                                 if ( TAG_RULE.test( nodeContent ) ) {
                                     // 初始化id
-                                    node.id = RegExp.$1;
+                                    node.id = tagMatcher[1];
                                 
                                     // 初始化属性
-                                    propList = RegExp.$2.split( /\s*,\s*/ );
+                                    propList = tagMatcher[2].split( /\s*,\s*/ );
                                     propLen = propList.length;
                                     while ( propLen-- ) {
-                                        if ( PROP_RULE.test( propList[ propLen ] ) ) {
-                                            node[ RegExp.$1 ] = RegExp.$2;
+                                        if ( propMatcher = propList[ propLen ].match( PROP_RULE ) ) {
+                                            node[ propMatcher[1] ] = propMatcher[2];
                                         }
                                     }
                                 } else {
@@ -368,10 +370,10 @@ er.template = function () {
                                 break;
 
                             case 'for':
-                                if ( FOR_RULE.test( nodeContent ) ) {
-                                    node.list  = RegExp.$1;
-                                    node.item  = RegExp.$2;
-                                    node.index = RegExp.$4;
+                                if ( forMatcher = nodeContent.match( FOR_RULE ) ) {
+                                    node.list  = forMatcher[1];
+                                    node.item  = forMatcher[2];
+                                    node.index = forMatcher[3];
                                 } else {
                                     throwInvalid( nodeType, commentText );
                                 }
@@ -380,8 +382,8 @@ er.template = function () {
 
                             case 'if':
                             case 'elif':
-                                if ( IF_RULE.test( RegExp.$3 ) ) {
-                                    node.expr = condExpr.parse( RegExp.$1 );
+                                if ( ifMatcher = matcher[3].match( IF_RULE ) ) {
+                                    node.expr = condExpr.parse( ifMatcher[1] );
                                 } else {
                                     throwInvalid( nodeType, commentText );
                                 }
@@ -1321,8 +1323,8 @@ er.template = function () {
     function replaceVariable( text, scope ) {
         return text.replace(
                 /\$\{([.:a-z0-9\[\]'"_]+)\s*(\|[a-z]+)?\s*\}/ig,
-                function ( $0, $1, $2 ) {
-                    return getVariableValue( scope, $1, $2  );
+                function ( matcher, name, filter ) {
+                    return getVariableValue( scope, name, filter  );
                 });
     }
 
