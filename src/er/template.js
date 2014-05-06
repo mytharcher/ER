@@ -351,7 +351,7 @@ er.template = function () {
                             case 'master':
                             case 'import':
                             case 'target':
-                                if ( TAG_RULE.test( nodeContent ) ) {
+                                if ( tagMatcher = nodeContent.match( TAG_RULE ) ) {
                                     // 初始化id
                                     node.id = tagMatcher[1];
                                 
