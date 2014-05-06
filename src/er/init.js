@@ -8,10 +8,6 @@
  */
 
 ///import er;
-///import er.router;
-///import er.locator;
-///import er.controller;
-///import er.template;
 
 /**
  * 初始化ER框架
@@ -29,3 +25,8 @@ er.init = function () {
     // 加载模板并启动
     er.template.load( er.locator.listen );
 };
+
+///import er.router;
+///import er.locator;
+///import er.controller;
+///import er.template;

@@ -7,9 +7,7 @@
  * author:  erik
  */
 
-///import er.lib;
-///import er.Module;
-///import er.permission;
+///import er;
     
 /**
  * 控制器
@@ -424,3 +422,6 @@ er.controller = function () {
     };
 }();
     
+///import er.lib;
+///import er.Module;
+///import er.permission;

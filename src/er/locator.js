@@ -7,9 +7,7 @@
  * author:  erik
  */
 
-///import er.lib;
-///import er._util;
-///import er.router;
+///import er;
 
 /**
  * Hash定位器
@@ -239,3 +237,7 @@ er.locator = function () {
     };
 }();
 
+
+///import er.lib;
+///import er._util;
+///import er.router;

@@ -8,7 +8,6 @@
  */
 
 ///import er;
-///import er.locator;
 
 er.router = function () {
     var routers = [];
@@ -111,3 +110,5 @@ er.router = function () {
 
     return router;
 }();
+
+///import er.locator;
