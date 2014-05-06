@@ -356,7 +356,7 @@ er.template = function () {
                                     node.id = tagMatcher[1];
                                 
                                     // 初始化属性
-                                    propList = tagMatcher[2].split( /\s*,\s*/ );
+                                    propList = (tagMatcher[2] || '').split( /\s*,\s*/ );
                                     propLen = propList.length;
                                     while ( propLen-- ) {
                                         if ( propMatcher = propList[ propLen ].match( PROP_RULE ) ) {
