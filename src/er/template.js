@@ -1451,9 +1451,7 @@ er.template = function () {
      *
      * @inner
      */
-    function load() {
-        er.init.stop();
-
+    function load(done) {
         var list    = er._util.getConfig( 'TEMPLATE_LIST' ),
             len     = list instanceof Array && list.length,
             tplBuf  = [],
@@ -1463,7 +1461,7 @@ er.template = function () {
             isLoaded = 1;
             loadTemplate();
         } else {
-            er.init.start();
+            done();
         }
         
         /**
@@ -1507,10 +1505,10 @@ er.template = function () {
         }
     }
 
-    er.init.addIniter( load, 0 );
-
     // 返回暴露的方法
     return {
+        load: load,
+        
         /**
          * 添加过滤器
          * 
