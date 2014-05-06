@@ -100,6 +100,7 @@ er.context = function () {
             var i, len;
             var variable, propName, propLen;
             var varName  = name.split( /[\.\[]/ );
+            var matcher;
             
             if ( 'string' == typeof contextId ) {
                 priv = privateContext[ contextId ];
@@ -118,8 +119,8 @@ er.context = function () {
 
                 propName = varName[ i ].replace( /\]$/, '' );
                 propLen  = propName.length;
-                if ( /^(['"])/.test( propName ) 
-                     && propName.lastIndexOf( RegExp.$1 ) == --propLen
+                if ( matcher = propName.match( /^(['"])/ ) 
+                     && propName.lastIndexOf( matcher[1] ) == --propLen
                 ) {
                     propName = propName.slice( 1, propLen );
                 }
