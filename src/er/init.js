@@ -10,7 +10,7 @@
 ///import er;
 ///import er.router;
 ///import er.locator;
-///import er.contorller;
+///import er.controller;
 ///import er.template;
 
 /**

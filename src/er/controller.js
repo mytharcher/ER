@@ -8,11 +8,8 @@
  */
 
 ///import er.lib;
-///import er.router;
 ///import er.Module;
-///import er.locator;
 ///import er.permission;
-///import er.init;
     
 /**
  * 控制器

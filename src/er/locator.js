@@ -10,7 +10,6 @@
 ///import er.lib;
 ///import er._util;
 ///import er.router;
-///import er.init;
 
 /**
  * Hash定位器
