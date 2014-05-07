@@ -233,7 +233,7 @@ er.controller = function () {
      * @param {string} path 已解析完成的路径
      * @return {string} 
      */
-    function checkAuth( loc, path, query ) {
+    function checkAuth( path ) {
         var actionConfig = getActionConfigByPath( path );
         if ( !actionConfig ) {
             throw new Error('ER: the path "' + path + '" cannot bind to action.');
