@@ -1,0 +1,98 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ESUI - Region</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div lang="en" class="book" title="ESUI - Region"><div class="titlepage"><div><div><h1 class="title"><a name="idm469199214224"></a>ESUI - Region</h1></div></div><hr></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>1. <a href="#idm469199205904">构造器静态参数配置</a></dt><dt>2. <a href="#idm469199197520">初始化参数</a></dt><dt>3. <a href="#idm469199186192">公共实例方法</a></dt><dt>4. <a href="#idm469199170800">事件</a></dt></dl></div><div class="section" title="1. 继承层级"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm469210285168"></a>1. 继承层级</h2></div></div></div><p>Region - InputControl - Control</p></div><div class="section" title="2. 说明"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm469210283904"></a>2. 说明</h2></div></div></div><p>Region用于地域选择。</p><p>Region支持单选和多选两种选择模式。</p><p>多选模式下，value的字符串格式为逗号分割的地域列表。</p><p>地域列表可通过静态参数配置，也可初始化时传入。地域列表是一个Array，列表中的每一项是一个可具有id、text、children属性的多重结构的数据。具体数据形式参照E-JSON标准中的数据场景：树。</p><pre class="programlisting">[
+    {
+        id: 'China',
+        text: '中国地区',
+        children: [
+            {
+                id: "North",
+                text: "华北地区",
+                children: [
+                    {id: "1", text: "北京"},
+                    {id: "3", text: "天津"},
+                    {id: "13", text: "河北"},
+                    {id: "26", text: "山西"},
+                    {id: "22", text: "内蒙古"}
+                ]
+            },
+            {
+                id: "NorthEast",
+                text: "东北地区",
+                children: [
+                    {id: "21", text: "辽宁"},
+                    {id: "18", text: "吉林"},
+                    {id: "15", text: "黑龙江"}
+                ]
+            },
+            {
+                id: "East",
+                text: "华东地区",
+                children: [
+                    {id: "2", text: "上海"},
+                    {id: "19", text: "江苏"},
+                    {id: "32", text: "浙江"},
+                    {id: "9", text: "安徽"},
+                    {id: "5", text: "福建"},
+                    {id: "20", text: "江西"},
+                    {id: "25", text: "山东"}
+                ]
+            },
+            {
+                id: "Middle",
+                text: "华中地区",
+                children: [
+                    {id: "14", text: "河南"},
+                    {id: "16", text: "湖北"},
+                    {id: "17", text: "湖南"}
+                ]
+            },
+            {
+                id: "South",
+                text: "华南地区",
+                children: [
+                    {id: "4", text: "广东"},
+                    {id: "8", text: "海南"},
+                    {id: "12", text: "广西"}
+                ]
+            },
+            {
+                id: "SouthWest",
+                text: "西南地区",
+                children: [
+                    {id: "33", text: "重庆"},
+                    {id: "28", text: "四川"},
+                    {id: "10", text: "贵州"},
+                    {id: "31", text: "云南"},
+                    {id: "29", text: "西藏"}
+                ]
+            },
+            {
+                id: "NorthWest",
+                text: "西北地区",
+                children: [
+                    {id: "27", text: "陕西"},
+                    {id: "11", text: "甘肃"},
+                    {id: "24", text: "青海"},
+                    {id: "23", text: "宁夏"},
+                    {id: "30", text: "新疆"}
+                ]
+            },
+            {
+                id: "Other",
+                text: "其他地区",
+                children: [
+                    {id: "34", text: "香港"},
+                    {id: "36", text: "澳门"},
+                    {id: "35", text: "台湾"}
+                ]
+            }
+        ]
+    },
+    {
+        id: 'Abroad',
+        text: '国外',
+        children: [
+            {id: '7', text: '日本'},
+            {id: '37', text: '其他国家'}
+        ]
+    }
+]</pre></div><div class="section" title="3. 构造器静态参数配置"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm469199205744"></a>3. 构造器静态参数配置</h2></div></div></div><div class="table"><a name="idm469199205904"></a><p class="title"><b>Table 1. 构造器静态参数配置</b></p><div class="table-contents"><table summary="构造器静态参数配置" border="1"><colgroup><col><col></colgroup><thead><tr><th align="left">名称</th><th align="left">描述</th></tr></thead><tbody><tr><td align="left">{Array} REGION_LIST</td><td align="left">地域列表。</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="4. 初始化参数"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm469199218016"></a>4. 初始化参数</h2></div></div></div><div class="table"><a name="idm469199197520"></a><p class="title"><b>Table 2. 初始化参数</b></p><div class="table-contents"><table summary="初始化参数" border="1"><colgroup><col><col></colgroup><thead><tr><th align="left">名称</th><th align="left">描述</th></tr></thead><tbody><tr><td align="left">{Array} datasource</td><td align="left">地域列表。</td></tr><tr><td align="left">{boolean} disabled</td><td align="left">控件的不可用状态。</td></tr><tr><td align="left">{HTMLElement} main</td><td align="left">控件主元素。</td></tr><tr><td align="left">{string} mode</td><td align="left">选择模式。multi|single。</td></tr><tr><td align="left">{string|Object} rule</td><td align="left">验证规则。</td></tr><tr><td align="left">{string} value</td><td align="left">当前选中的地域value。</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="5. 公共实例方法"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm469199186832"></a>5. 公共实例方法</h2></div></div></div><div class="table"><a name="idm469199186192"></a><p class="title"><b>Table 3. 公共实例方法</b></p><div class="table-contents"><table summary="公共实例方法" border="1"><colgroup><col><col></colgroup><thead><tr><th align="left">名称</th><th align="left">描述</th></tr></thead><tbody><tr><td align="left">{void} appendTo( {HTMLElement} wrap )</td><td align="left">将控件添加到页面的某个元素中。</td></tr><tr><td align="left">{boolean} checkValidity( {void} )</td><td align="left">验证控件，仅返回true/false。</td></tr><tr><td align="left">{void} disable( {void} )</td><td align="left">设置控件状态为禁用。</td></tr><tr><td align="left">{void} enable( {void} )</td><td align="left">设置控件状态为启用。</td></tr><tr><td align="left">{string} getValue( {void} )</td><td align="left">获取选中的地域。</td></tr><tr><td align="left">{boolean} isDisabled( {void} )</td><td align="left">获取控件可用状态。</td></tr><tr><td align="left">{void} render( {void} )</td><td align="left">绘制控件。</td></tr><tr><td align="left">{boolean} validate( {void} )</td><td align="left">验证控件，当值不合法时显示错误信息。</td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="6. 事件"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm469199171440"></a>6. 事件</h2></div></div></div><div class="table"><a name="idm469199170800"></a><p class="title"><b>Table 4. 事件</b></p><div class="table-contents"><table summary="事件" border="1"><colgroup><col><col></colgroup><thead><tr><th align="left">名称</th><th align="left">描述</th></tr></thead><tbody><tr><td align="left">{boolean} onchange: ( {string} value )</td><td align="left">当选中地域发生改变时触发。</td></tr><tr><td align="left">{void} onbeforevalidate( {validator.Validity} )</td><td align="left">验证开始前触发。</td></tr><tr><td align="left">{void} onaftervalidate( {validator.Validity} )</td><td align="left">验证结束后触发。</td></tr><tr><td align="left">{void} oninvalid( {validator.Validity} )</td><td align="left">验证控件值不合法时触发。</td></tr></tbody></table></div></div><br class="table-break"></div></div></body></html>
