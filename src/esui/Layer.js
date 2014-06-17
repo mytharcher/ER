@@ -188,6 +188,7 @@ esui.Layer.prototype = {
         
         this.main.style.left = this.left + 'px';
         this.main.style.top = this.top + 'px';
+        this.main.style.zIndex = esui.util.getNextHighestDepth();
 
         this._bindAutoHiding();
     },

@@ -20,6 +20,7 @@ esui.util = function () {
     var ctrlContainer = {};
     var componentMap  = {};
     var guid          = 0;
+    var highestDepth  = 0;
 
     return {
         /**
@@ -43,6 +44,7 @@ esui.util = function () {
             var attrs, attrStr, attrArr, attrArrLen;
             var attr, attrValue, attrItem, attrSegment, extraAttrMap;
             var i, len, key, el, uis = {};
+            var depth = 0;
             
             // 把dom元素存储到临时数组中
             // 控件渲染的过程会导致elements的改变
@@ -54,6 +56,12 @@ esui.util = function () {
             // <div ui="type:UIType;id:uiId;..."></div>
             for ( i = 0, len = realEls.length; i < len; i++ ) {
                 el = realEls[ i ];
+                // depth(z-index)管理
+                depth = (el.currentStyle ? el.currentStyle || el.style : document.defaultView.getComputedStyle(el, null)).zIndex;
+                if (Number(depth)) {
+                    highestDepth = Math.max(highestDepth, depth);
+                }
+
                 attrStr = el.getAttribute( uiAttr );
                 
                 if ( attrStr ) {
@@ -182,8 +190,6 @@ esui.util = function () {
         register: function ( name, component ) {
             componentMap[ name ] = component;
         },
-
-        validate : new Function(),
         
         /**
          * 寻找dom元素所对应的控件
@@ -317,6 +323,10 @@ esui.util = function () {
          */
         getGUID: function () {
             return '_innerui_' + ( guid++ );
+        },
+
+        getNextHighestDepth: function () {
+            return ++highestDepth;
         }
     };
 }();

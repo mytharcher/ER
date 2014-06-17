@@ -102,6 +102,7 @@ esui.Mask = (function() {
 
             mask.className = clazz.join( ' ' );
             mask.style.display = 'block';
+            mask.style.zIndex = esui.util.getNextHighestDepth();
 
             var resizeHandler = getResizeHandler( level );
             resizeHandlerMap[ level ] = resizeHandler;

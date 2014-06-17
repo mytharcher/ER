@@ -47,6 +47,11 @@ esui.Popup.prototype = {
      */
     show: function () {
         var mask = this.mask;
+        // 如果mask不是object，则会隐式装箱
+        // 装箱后的Object不具有level和type属性
+        // 相当于未传参数
+        mask && esui.Mask.show( mask.level, mask.type );
+
         var main;
         if ( !this.getLayer() ) {
             this.render();            
@@ -60,11 +65,6 @@ esui.Popup.prototype = {
         }
         
         this._resizeHandler();
-        
-        // 如果mask不是object，则会隐式装箱
-        // 装箱后的Object不具有level和type属性
-        // 相当于未传参数
-        mask && esui.Mask.show( mask.level, mask.type );
         
         this._isShow = true;
     },
