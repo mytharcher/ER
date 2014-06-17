@@ -155,7 +155,6 @@ esui.TextInput.prototype = {
             main.onblur = me._getBlurHandler();
             
             me._addBlurChangeListener();
-            me._isRendered = 1;
         }
         // 设置readonly和disabled状态
         me.setReadOnly( !!me.readOnly );
@@ -299,6 +298,12 @@ esui.TextInput.prototype = {
             case 'password':
             case 'hidden':
             case 'email':
+            case 'date':
+            case 'number':
+            case 'search':
+            case 'range':
+            case 'time':
+            case 'week':
                 mode = tagType;
                 break;
             }
@@ -339,7 +344,7 @@ esui.TextInput.prototype = {
         var creater = esui.InputControl.prototype.__createInput;
         var mode    = this.mode;
         mode        = mode || 'text';
-        if ( mode == 'text' || mode == 'password' ) {
+        if ( mode != 'textarea' ) {
             return creater.call( this, {
                 tagName : 'input',
                 name    : this.name,
