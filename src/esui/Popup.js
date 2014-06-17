@@ -178,7 +178,9 @@ esui.Popup.prototype = {
             retype  : me._type,
             skin    : me.skin + (me.draggable ? ' draggable' : ''),
             width   : me.width,
-            main    : me.main
+            main    : me.main,
+            autoHide: me.autoHide,
+            onhide  : me.hide.bind(me)
         } );
         layer.appendTo(there);
         return layer;
