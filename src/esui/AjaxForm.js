@@ -306,7 +306,7 @@ esui.AjaxForm.prototype = {
             if (!me.disabled) {
                 me.readyToSubmit();
             }
-            
+            ev.preventDefault();
             return false;
         };
     },
