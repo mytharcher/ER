@@ -104,6 +104,9 @@ esui.Layer.prototype = {
     _getClickHider: function () {
         var me = this;
         return function ( e ) {
+            if ( !me._isShow ) {
+                return;
+            }
             if ( me._isHidePrevent ) {
                 me._isHidePrevent = 0;
                 return;
@@ -190,7 +193,7 @@ esui.Layer.prototype = {
         this.main.style.top = this.top + 'px';
         this.main.style.zIndex = esui.util.getNextHighestDepth();
 
-        this._bindAutoHiding();
+        setTimeout(this._bindAutoHiding.bind(this), 0);
     },
 
     /**
