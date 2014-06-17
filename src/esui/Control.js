@@ -416,19 +416,5 @@ esui.Control.prototype = {
         'disabled', 
         'readonly', 
         'focus'
-    ],
-    
-    /**
-     * 验证控件的值是否合法
-     *
-     * @public
-     * @return {boolean}
-     */
-    validate: function () {
-        if ( !this.rule ) {
-            return !!1;
-        }
-        
-        return esui.util.validate( this, this.rule );
-    }
+    ]
 };  
