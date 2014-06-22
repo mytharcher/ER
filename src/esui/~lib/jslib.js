@@ -41,9 +41,9 @@ esui.lib.format = js.text.Template.format;
 
 
 
-///import js.text.Escaper.encodeHTML;
+///import js.text.Escaper.escapeHTML;
 
-esui.lib.encodeHTML = js.text.Escaper.encodeHTML;
+esui.lib.encodeHTML = js.text.Escaper.escapeHTML;
 
 
 
@@ -132,7 +132,7 @@ esui.lib.padNumber = function (source, length) {
 
 ///import js.dom.BoxModel;
 
-esui.lib.getPosition = function (elem) {
+esui.lib.getPosition = function (elem, refer) {
     return js.dom.BoxModel.getPosition(elem, refer || esui.config.viewContextRoot || document.body);
 };
 
