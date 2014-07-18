@@ -232,7 +232,7 @@ esui.lib.getStyle = js.dom.Style.get;
 
 
 esui.lib.preventDefaultEvent = function (ev) {
-	ev.preventDefault ? ev.preventDefault : (ev.returnValue = false);
+	ev.preventDefault ? ev.preventDefault() : (ev.returnValue = false);
 };
 
 
