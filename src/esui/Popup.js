@@ -176,7 +176,7 @@ esui.Popup.prototype = {
         var layer = me._controlMap.layer = esui.util.create( 'Layer', {
             id      : me.__getId('layer'),
             retype  : me._type,
-            skin    : me.skin + (me.draggable ? ' draggable' : ''),
+            skin    : me.skin ? me.skin + (me.draggable ? ' draggable' : '') : '',
             width   : me.width,
             main    : me.main,
             autoHide: me.autoHide,
