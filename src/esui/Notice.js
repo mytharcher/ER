@@ -47,7 +47,7 @@ esui.Notice.prototype = {
 
 esui.lib.inherits(esui.Notice, esui.Control);
 
-esui.Notice.LAST_TIME = '3000';
+esui.Notice.LAST_TIME = 3000;
 
 esui.util.register('Notice', esui.Notice);
 
@@ -55,7 +55,7 @@ esui.Notice.show = function (message, status) {
 	var me = esui.Notice;
 	if (!me.instance) {
 		me.instance = new me();
-		me.appendTo();
+		me.instance.appendTo();
 	}
 	me.instance.show(message, status);
 };
