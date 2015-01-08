@@ -120,8 +120,9 @@ esui.Layer.prototype = {
                 tar = tar.parentNode;
             }
             
-            me.onhide();
-            me.hide();
+            if (me.onhide() !== false) {
+                me.hide();
+            }
         };
     },
 
