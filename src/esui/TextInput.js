@@ -304,6 +304,7 @@ esui.TextInput.prototype = {
             case 'range':
             case 'time':
             case 'week':
+            case 'color':
                 mode = tagType;
                 break;
             }
