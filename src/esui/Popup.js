@@ -18,8 +18,6 @@
  * @param {Object} options 控件初始化参数
  */
 esui.Popup = function ( options ) {
-    // 类型声明，用于生成控件子dom的id和class
-    this._type = this._type || 'popup';
     
     // 标识鼠标事件触发自动状态转换
     this._autoState = 0;
@@ -36,10 +34,17 @@ esui.Popup = function ( options ) {
     this.__initOption('top', null, 'TOP');
     this.top = parseInt( this.top, 10 );
 
+    // 初始化距离左侧的高度
+    this.__initOption('left', null, 'LEFT');
+    this.left = parseInt( this.left, 10 );
+
     this._resizeHandler = this._getResizeHandler();
 };
 
 esui.Popup.prototype = {
+    // 类型声明，用于生成控件子dom的id和class
+    _type: 'popup',
+    
     /**
      * 显示对话框
      * 
@@ -54,7 +59,7 @@ esui.Popup.prototype = {
 
         var main;
         if ( !this.getLayer() ) {
-            this.render();            
+            this.render();
         }
 
         main = this.getLayer().main;
@@ -107,10 +112,10 @@ esui.Popup.prototype = {
         this.content = content;
         var main = this.getLayer().main;
         if (main) {
-	        main.innerHTML = content;
-	        // 改变内容后再次自适应位置
-	        setTimeout(this._resizeHandler, 0);
-	    }
+            main.innerHTML = content;
+            // 改变内容后再次自适应位置
+            setTimeout(this._resizeHandler, 0);
+        }
     },
 
     
