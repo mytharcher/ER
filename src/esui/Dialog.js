@@ -16,8 +16,6 @@
  * @param {Object} options 控件初始化参数
  */
 esui.Dialog = function ( options ) {
-    // 类型声明，用于生成控件子dom的id和class
-    this._type = 'dialog';
     
     esui.Popup.call( this, options );
     
@@ -29,6 +27,9 @@ esui.Dialog = function ( options ) {
 };
 
 esui.Dialog.prototype = {
+    // 类型声明，用于生成控件子dom的id和class
+    _type: 'dialog',
+    
     /**
      * 对话框头部的html模板
      * @private
