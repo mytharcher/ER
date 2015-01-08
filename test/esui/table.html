@@ -14,16 +14,6 @@ html{overflow-y:scroll;}
 <!-- __debug__
 <link rel="stylesheet" href="../../release/$((esuicss)).css" type="text/css" />
 __debug__ -->
-
-<script type="text/javascript" src="../../tool/tangram-1.3.9.js"></script>
-<script type="text/javascript" src="../../tool/include.js"></script><!-- __debug__ -->
-<!-- __debug__
-     <script type="text/javascript" src="../../release/$((esui))"></script>
-     __debug__ -->
-<script>// __debug__
-// 引入控件// __debug__
-include( 'esui.Table' );// __debug__
-</script><!-- __debug__ -->
 </head>
 
 <body>
@@ -46,6 +36,16 @@ include( 'esui.Table' );// __debug__
 	<h3>可编辑并带注脚的表格</h3>
 	<div ui="type:Table;id:myTable8;editable:1;columnResizable:1"></div>
 </div>
+
+<script type="text/javascript" src="../../tool/tangram-1.3.9.js"></script>
+<script type="text/javascript" src="../../tool/include.js"></script><!-- __debug__ -->
+<!-- __debug__
+     <script type="text/javascript" src="../../release/$((esui))"></script>
+     __debug__ -->
+<script>// __debug__
+// 引入控件// __debug__
+include( 'esui.extend.Table' );// __debug__
+</script><!-- __debug__ -->
 <script>
 var data = [
         {id:1, name: 'erik', sex: 1},
