@@ -123,7 +123,7 @@ esui.util = function () {
          * @return {esui.Control}
          */
         get: function ( id ) {
-            return ctrlContainer[ id ] || null;
+            return id && ctrlContainer[ id ] || null;
         },
 
         /**
