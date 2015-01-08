@@ -62,10 +62,11 @@ esui.Control.prototype = {
      *
      * @public
      * @param {HTMLElement} wrap
+     * @param {HTMLElement} position
      */
-    appendTo: function ( wrap ) {
+    appendTo: function ( wrap, position ) {
         wrap = wrap || document.body;
-        wrap.appendChild( this.main );
+        wrap.insertBefore( this.main, position || null );
         this.render();
     },
 
@@ -239,7 +240,7 @@ esui.Control.prototype = {
      * @return {HTMLElement}
      */
     __createMain: function () {
-        return document.createElement( 'div' );
+        return document.createElement( this.mainTag || 'div' );
     },
 
     /**
