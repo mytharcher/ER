@@ -25,15 +25,16 @@ esui.Notice.prototype = {
 		}
 	},
 
-	show: function (message, status) {
+	show: function (message, status, lastTime) {
+		lastTime = lastTime || this.lastTime;
 		clearTimeout(this.interval);
 		this.main.innerHTML = message;
 		esui.lib.removeClass(this.main, this.status);
 		esui.lib.addClass(this.main, this.status = status);
 		esui.lib.addClass(this.main, this.__getClass('active'));
 		this.main.style.left = ((document.body.offsetWidth - this.main.offsetWidth) / 2) + 'px';
-		if (this.lastTime > 0) {
-			this.interval = setTimeout(this.hide.bind(this), this.lastTime);
+		if (lastTime > 0) {
+			this.interval = setTimeout(this.hide.bind(this), lastTime);
 		}
 	},
 
