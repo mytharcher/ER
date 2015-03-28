@@ -373,7 +373,7 @@ er.template = function () {
                                 if ( forMatcher = nodeContent.match( FOR_RULE ) ) {
                                     node.list  = forMatcher[1];
                                     node.item  = forMatcher[2];
-                                    node.index = forMatcher[3];
+                                    node.index = forMatcher[4];
                                 } else {
                                     throwInvalid( nodeType, commentText );
                                 }
