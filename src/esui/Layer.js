@@ -46,7 +46,7 @@ esui.Layer.prototype = {
             this._mouseoverHandler = this._getOverHandler();
         }
 
-        main.style.position = 'absolute';
+        main.style.position = this.position || 'absolute';
         main.style.left     = this._HIDE_POS;
         main.style.top      = this._HIDE_POS;
         this.zIndex && ( main.style.zIndex = this.zIndex );
