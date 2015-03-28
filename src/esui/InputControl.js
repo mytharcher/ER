@@ -117,18 +117,11 @@ esui.InputControl.prototype = {
         var name    = options.name;
         var type    = options.type;
         var creater = tagName;
-        var input;
-
-        name && ( creater = '<' + tagName + ' name="' + this.name + '">' );
-        input = document.createElement( creater ); 
-
-        // 非IE浏览器不认createElement( '<input name=...' )
-        if ( !input ) {
-            input = document.createElement( tagName );
-            name && ( input.name = name );
-        }
+        var input   = document.createElement( tagName );
+        name && ( input.name = name );
 
         type && ( input.type = type );
+        
         return input;
     },
 
