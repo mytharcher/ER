@@ -68,6 +68,7 @@ esui.Control.prototype = {
         wrap = wrap || document.body;
         wrap.insertBefore( this.main, position || null );
         this.render();
+        return this;
     },
 
     /**
