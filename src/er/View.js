@@ -76,7 +76,8 @@ er.View = function () {
          */
         render: function () {
             var target = er.lib.g( this.target );
-            target.className = target.className.replace(/\broute\-[\w-]+\b/, 'route' + this.path.replace(/\//g, '-'));
+            target.className = target.className.replace(/\broute\-[\w-]+\b/, '')
+                .replace(/\s*$/, ' route' + this.path.replace(/\//g, '-'));
             er.template.merge( target, this.template, this.model.getGUID() );
         },
         
