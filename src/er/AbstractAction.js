@@ -99,7 +99,8 @@ er.AbstractAction = function () {
                 this.view.construct( {
                     target      : arg.domId,
                     template    : templateName,
-                    model       : this.model
+                    model       : this.model,
+                    path        : arg.path
                 } );
             }
 

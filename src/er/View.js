@@ -35,6 +35,7 @@ er.View = function () {
                 this.setTarget( options.target );
                 this.setTemplate( options.template );
                 this.setModel( options.model );
+                this.path = options.path;
             }
         },
         
@@ -75,6 +76,7 @@ er.View = function () {
          */
         render: function () {
             var target = er.lib.g( this.target );
+            target.className = target.className.replace(/\broute\-[\w-]+\b/, 'route' + this.path.replace(/\//g, '-'));
             er.template.merge( target, this.template, this.model.getGUID() );
         },
         
