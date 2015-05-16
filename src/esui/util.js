@@ -42,7 +42,7 @@ esui.util = function () {
             var uiAttr = esui.config.UI_ATTRIBUTE || 'ui';
             var realEls = [];
             var attrs, attrStr, attrArr, attrArrLen;
-            var attr, attrValue, attrItem, attrSegment, extraAttrMap;
+            var attr, attrValue, attrItem, extraAttrMap, colonIndex;
             var i, len, key, el, uis = {};
             var depth = 0;
             
@@ -78,9 +78,9 @@ esui.util = function () {
                         } 
                         
                         // 获取属性
-                        attrSegment = attrItem.split( /\s*:/ );
-                        attr        = attrSegment[ 0 ];
-                        attrValue   = attrSegment[ 1 ];
+                        colonIndex  = attrItem.indexOf(':');
+                        attr        = attrItem.substr(0, colonIndex).trim();
+                        attrValue   = attrItem.substr(colonIndex).trim();
                         attrs[attr] = attrValue;
                     }
                     
