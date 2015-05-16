@@ -7,8 +7,6 @@
  * author:  erik
  */
 
-///import er.config;
-
 er._util = function () { 
     /**
      * 获取配置信息
@@ -82,3 +80,5 @@ er._util = function () {
         getConfig   : getConfig
     };
 }();
+
+///import er.config;

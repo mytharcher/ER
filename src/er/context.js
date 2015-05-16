@@ -97,22 +97,42 @@ er.context = function () {
             var contextId = opt_arg.contextId;
             var value;
             var priv;
-                
+            var i, len;
+            var variable, propName, propLen;
+            var varName  = name.split( /[\.\[]/ );
+            var matcher;
+            
             if ( 'string' == typeof contextId ) {
                 priv = privateContext[ contextId ];
-                value = priv && priv[ name ];
+                value = priv && priv[ varName[0] ];
             }
             
-            if ( er._util.hasValue( value ) ) {
-                return value;
+            if ( !er._util.hasValue( value ) ) {
+                value = publicContext[ varName[0] ];
             }
-            
-            value = publicContext[ name ];
-            if ( er._util.hasValue( value ) ) {
-                return value;
+            varName.shift();
+
+            for ( i = 0, len = varName.length; i < len; i++ ) {
+                if ( !er._util.hasValue( value ) ) {
+                    break;
+                }
+
+                propName = varName[ i ].replace( /\]$/, '' );
+                propLen  = propName.length;
+                if ( matcher = propName.match( /^(['"])/ ) 
+                     && propName.lastIndexOf( matcher[1] ) == --propLen
+                ) {
+                    propName = propName.slice( 1, propLen );
+                }
+
+                value = value[ propName ];
             }
-    
-            return null;
+
+            if ( !er._util.hasValue( value ) ) {
+                value = null;
+            }
+
+            return value;
         },
 
         /**

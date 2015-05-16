@@ -47,9 +47,9 @@ er.lib.format = js.text.Template.format;
 
 
 
-///import js.text.Encoder.encodeHTML;
+///import js.text.Escaper.encodeHTML;
 
-er.lib.encodeHTML = js.text.Encoder.encodeHTML;
+er.lib.encodeHTML = js.text.Escaper.encodeHTML;
 
 
 

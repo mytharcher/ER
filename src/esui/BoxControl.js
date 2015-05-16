@@ -152,15 +152,16 @@ esui.BoxControl.prototype = {
             label.className = me.__getClass( 'label' );
             esui.lib.setAttribute( label, 'for', main.id );
 
+            // 初始化label的内容
+            title = me.title || main.title || me.getValue();
+            label.innerHTML = esui.lib.encodeHTML( title );
+
             esui.lib.insertAfter( label, main );
+            label.insertBefore(main, label.firstChild);
             me._label = label;
         } else {
             label = me._label;
         }
-
-        // 初始化label的内容
-        title = me.title || main.title || me.getValue();
-        label.innerHTML = esui.lib.encodeHTML( title );
         
         // 初始化disabled
         me.setDisabled ( !!me.disabled );

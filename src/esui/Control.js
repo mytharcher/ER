@@ -62,11 +62,13 @@ esui.Control.prototype = {
      *
      * @public
      * @param {HTMLElement} wrap
+     * @param {HTMLElement} position
      */
-    appendTo: function ( wrap ) {
+    appendTo: function ( wrap, position ) {
         wrap = wrap || document.body;
-        wrap.appendChild( this.main );
+        wrap.insertBefore( this.main, position || null );
         this.render();
+        return this;
     },
 
     /**
@@ -239,7 +241,7 @@ esui.Control.prototype = {
      * @return {HTMLElement}
      */
     __createMain: function () {
-        return document.createElement( 'div' );
+        return document.createElement( this.mainTag || 'div' );
     },
 
     /**
@@ -416,19 +418,5 @@ esui.Control.prototype = {
         'disabled', 
         'readonly', 
         'focus'
-    ],
-    
-    /**
-     * 验证控件的值是否合法
-     *
-     * @public
-     * @return {boolean}
-     */
-    validate: function () {
-        if ( !this.rule ) {
-            return !!1;
-        }
-        
-        return esui.util.validate( this, this.rule );
-    }
+    ]
 };  

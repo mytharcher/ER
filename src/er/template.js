@@ -30,8 +30,6 @@
  */
 
 ///import er.lib;
-///import er.config;
-///import er.init;
 
 /**
  * 简易的模板解析器
@@ -229,7 +227,7 @@ er.template = function () {
     var FOR_RULE = /^\s*:\s*\$\{([0-9a-z_.\[\]]+)\}\s+as\s+\$\{([0-9a-z_]+)\}\s*(,\s*\$\{([0-9a-z_]+)\})?\s*$/i;
     
     // IF和ELIF标签规则
-    var IF_RULE = /^\s*:([>=<!0-9a-z$\{\}\[\]\(\):\s'"\.\|&_]+)\s*$/i;
+    var IF_RULE = /^\s*:([>=<!\w$\{\}\[\]\(\):\s'"\.\|&-]+)\s*$/i;
 
     // 普通命令标签规则
     var TAG_RULE = /^\s*:\s*([a-z0-9_]+)\s*(?:\(([^)]+)\))?\s*$/i;
@@ -275,11 +273,7 @@ er.template = function () {
         var node;
         var propList;
         var propLen;
-        var commentMatcher;
-        var tagMatcher;
-        var propMatcher;
-        var forMatcher;
-        var ifMatcher;
+        var matcher, propMatcher, tagMatcher, forMatcher, ifMatcher;
 
         // text节点内容缓冲区，用于合并多text
         var textBuf = new ArrayBuffer;
@@ -336,17 +330,17 @@ er.template = function () {
             if ( strLen == 2 || i > 0 ) {
                 if ( strLen == 2 ) {
                     commentText = str[ 0 ];
-                    commentMatcher = commentText.match(COMMENT_RULE);
-                    if ( commentMatcher ) {
+                    matcher = commentText.match( COMMENT_RULE );
+                    if ( matcher ) {
                         // 将缓冲区中的text节点内容写入
                         flushTextBuf();
                         
                         // 节点类型分析
-                        nodeType = commentMatcher[2].toLowerCase();
-                        nodeContent = commentMatcher[3];
+                        nodeType = matcher[2].toLowerCase();
+                        nodeContent = matcher[3];
                         node = { type: TYPE[ nodeType.toUpperCase() ] };
 
-                        if ( commentMatcher[1] ) {
+                        if ( matcher[1] ) {
                             // 闭合节点解析
                             node.endTag = 1;
                             nodeStream.push( node );
@@ -357,8 +351,7 @@ er.template = function () {
                             case 'master':
                             case 'import':
                             case 'target':
-                                tagMatcher = nodeContent.match(TAG_RULE);
-                                if ( tagMatcher ) {
+                                if ( tagMatcher = nodeContent.match( TAG_RULE ) ) {
                                     // 初始化id
                                     node.id = tagMatcher[1];
                                 
@@ -366,8 +359,7 @@ er.template = function () {
                                     propList = (tagMatcher[2] || '').split( /\s*,\s*/ );
                                     propLen = propList.length;
                                     while ( propLen-- ) {
-                                        propMatcher = propList[ propLen ].match(PROP_RULE);
-                                        if ( propMatcher ) {
+                                        if ( propMatcher = propList[ propLen ].match( PROP_RULE ) ) {
                                             node[ propMatcher[1] ] = propMatcher[2];
                                         }
                                     }
@@ -378,8 +370,7 @@ er.template = function () {
                                 break;
 
                             case 'for':
-                                forMatcher = nodeContent.match(FOR_RULE);
-                                if ( forMatcher ) {
+                                if ( forMatcher = nodeContent.match( FOR_RULE ) ) {
                                     node.list  = forMatcher[1];
                                     node.item  = forMatcher[2];
                                     node.index = forMatcher[4];
@@ -391,8 +382,7 @@ er.template = function () {
 
                             case 'if':
                             case 'elif':
-                                ifMatcher = commentMatcher[3].match(IF_RULE);
-                                if ( ifMatcher ) {
+                                if ( ifMatcher = matcher[3].match( IF_RULE ) ) {
                                     node.expr = condExpr.parse( ifMatcher[1] );
                                 } else {
                                     throwInvalid( nodeType, commentText );
@@ -1165,51 +1155,37 @@ er.template = function () {
      * @inner
      * @param {string} scope 
      * @param {string} varName 变量名
-     * @param {string} opt_filterName 过滤器名
+     * @param {string} filterStr 过滤器名
      * @return {string}
      */
-    function getVariableValue( scope, varName, opt_filterName ) {
+    function getVariableValue( scope, varName, filterStr ) {
         var typeRule = /:([a-z]+)$/i;
-        var match    = varName.match( typeRule );
-        var value    = '';
-        var i, len;
-        var variable, propName, propLen;
-        var propMatcher;
-
+        var match    = name.match( typeRule );
+        var value;
         varName = varName.replace( typeRule, '' );
         if ( match && match.length > 1 ) {
             value = getVariableValueByType( varName, match[1] );
         } else {
-            varName  = varName.split( /[\.\[]/ );
-            variable = scope.get( varName[ 0 ] );
-            varName.shift();
+            value = scope.get(varName);
+        }
 
-            for ( i = 0, len = varName.length; i < len; i++ ) {
-                if ( !er._util.hasValue( variable ) ) {
-                    break;
-                }
-
-                propName = varName[ i ].replace( /\]$/, '' );
-                propLen  = propName.length;
-                propMatcher = propName.match(/^(['"])/);
-                if ( propMatcher
-                     && propName.lastIndexOf( propMatcher[1] ) == --propLen
-                ) {
-                    propName = propName.slice( 1, propLen );
-                }
-
-                variable = variable[ propName ];
-            }
-
-            if ( er._util.hasValue( variable ) ) {
-                value = variable;
-            }
+        if ( value == null ) {
+            value = '';
         }
         
         // 过滤处理
-        if ( opt_filterName ) {
-            opt_filterName = filterContainer[ opt_filterName.substr( 1 ) ];
-            opt_filterName && ( value = opt_filterName( value ) );
+        if ( filterStr ) {
+            var filters = filterStr.replace(/^\s*\|\s*/, '').split(/\s*\|\s*/);
+            filters.forEach(function (filter) {
+                filter = filter.split(':');
+                var filterName = filter.shift();
+                var filterParams = filter.length ? filter.join(':').split(',') : [];
+                var filterFn = filterContainer[filterName];
+                if (filterFn) {
+                    filterParams.unshift(value);
+                    value = filterFn.apply(null, filterParams);
+                }
+            });
         }
 
         return value;
@@ -1355,9 +1331,9 @@ er.template = function () {
      */
     function replaceVariable( text, scope ) {
         return text.replace(
-                /\$\{([.:a-z0-9\[\]'"_]+)\s*(\|[a-z]+)?\s*\}/ig,
-                function ( matcher, varName, filter ) {
-                    return getVariableValue( scope, varName, filter  );
+                /\$\{([.:a-z0-9\[\]'"_]+)\s*(\|\s*[^\|\}]+)*\s*\}/ig,
+                function ( matcher, name, filters ) {
+                    return getVariableValue( scope, name, filters  );
                 });
     }
 
@@ -1394,10 +1370,18 @@ er.template = function () {
                 forList  = scope.get( stat.list );
                 forItem  = stat.item;
                 forIndex = stat.index;
-                for ( forI = 0, forLen = forList.length; forI < forLen; forI++ ) {
-                    forScope.set( forItem, forList[ forI ] );
-                    forIndex && forScope.set( forIndex, forI );
-                    result.push( exec( stat, forScope ) );
+                if (forList instanceof Array) {
+                    for ( forI = 0, forLen = forList.length; forI < forLen; forI++ ) {
+                        forScope.set( forItem, forList[ forI ] );
+                        forIndex && forScope.set( forIndex, forI );
+                        result.push( exec( stat, forScope ) );
+                    }
+                } else {
+                    for ( forI in forList ) {
+                        forScope.set( forItem, forList[ forI ] );
+                        forIndex && forScope.set( forIndex, forI );
+                        result.push( exec( stat, forScope ) );
+                    }
                 }
                 break;
 
@@ -1476,19 +1460,17 @@ er.template = function () {
      *
      * @inner
      */
-    function load() {
-        er.init.stop();
-
+    function load(done) {
         var list    = er._util.getConfig( 'TEMPLATE_LIST' ),
             len     = list instanceof Array && list.length,
             tplBuf  = [],
             i       = 0;
-            
+
         if ( len && !isLoaded ) {
             isLoaded = 1;
             loadTemplate();
         } else {
-            er.init.start();
+            done();
         }
         
         /**
@@ -1512,7 +1494,7 @@ er.template = function () {
             
             if ( i >= len ) {
                 er.template.parse( tplBuf.join( '\n' ) );
-                er.init.start();
+                done();
             } else {
                 loadTemplate();
             }
@@ -1532,10 +1514,10 @@ er.template = function () {
         }
     }
 
-    er.init.addIniter( load, 0 );
-
     // 返回暴露的方法
     return {
+        load: load,
+        
         /**
          * 添加过滤器
          * 
@@ -1575,3 +1557,6 @@ er.template = function () {
         merge: merge
     };
 }();
+
+///import er._util;
+///import er.context;

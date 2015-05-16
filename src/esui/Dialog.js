@@ -16,16 +16,20 @@
  * @param {Object} options 控件初始化参数
  */
 esui.Dialog = function ( options ) {
-    // 类型声明，用于生成控件子dom的id和class
-    this._type = 'dialog';
     
     esui.Popup.call( this, options );
+    
+    // 初始化可拖拽参数
+    this.__initOption('draggable', null, 'DRAGGABLE');
     
     // 初始化关闭按钮参数
     this.__initOption('closeButton', null, 'CLOSE_BUTTON');
 };
 
 esui.Dialog.prototype = {
+    // 类型声明，用于生成控件子dom的id和class
+    _type: 'dialog',
+    
     /**
      * 对话框头部的html模板
      * @private
@@ -97,8 +101,17 @@ esui.Dialog.prototype = {
 
         esui.Popup.prototype.render.call(me);
 
+        layer = me.getLayer();
+
         // 初始化dialog结构
         me._initStruct();
+        
+        // 拖拽功能初始化
+        if ( this.draggable ) {
+            setTimeout(function () {
+                esui.lib.draggable( layer.main, {handler:me.getHead() || layer.main} );
+            }, 0);
+        }
     },
     
     /** 

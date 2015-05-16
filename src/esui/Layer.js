@@ -38,32 +38,20 @@ esui.Layer.prototype = {
      */
     render: function () {
         var main = this.main;
-        esui.Control.prototype.render.call( this );
+        if (!this._isRendered) {
+            esui.Control.prototype.render.call( this );
 
-        main.style.position = 'absolute';
+            this._clickHandler = this._getClickHider();
+            this._mouseoutHandler = this._getOutHandler();
+            this._mouseoverHandler = this._getOverHandler();
+        }
+
+        main.style.position = this.position || 'absolute';
         main.style.left     = this._HIDE_POS;
         main.style.top      = this._HIDE_POS;
         this.zIndex && ( main.style.zIndex = this.zIndex );
         this.width  && ( main.style.width  = this.width + 'px' );
         this.height && ( main.style.height = this.height + 'px' );
-        
-        // 初始化autohide行为
-        if ( this._autoHideInited ) {
-            return;
-        }
-
-        switch ( this.autoHide.toLowerCase() ) {
-        case 'click':
-            this._clickHandler = this._getClickHider();
-            esui.lib.on( document, 'click', this._clickHandler );
-            break;
-        case 'out':
-            main.onmouseout = this._getOutHandler();
-            main.onmouseover = this._getOverHandler();
-            break;
-        }
-
-        this._autoHideInited = 1;
     },
     
     /**
@@ -116,6 +104,9 @@ esui.Layer.prototype = {
     _getClickHider: function () {
         var me = this;
         return function ( e ) {
+            if ( !me._isShow ) {
+                return;
+            }
             if ( me._isHidePrevent ) {
                 me._isHidePrevent = 0;
                 return;
@@ -129,8 +120,9 @@ esui.Layer.prototype = {
                 tar = tar.parentNode;
             }
             
-            me.onhide();
-            me.hide();
+            if (me.onhide() !== false) {
+                me.hide();
+            }
         };
     },
 
@@ -193,12 +185,16 @@ esui.Layer.prototype = {
      * @public
      */
     show: function ( left, top ) {
+        var main = this.main;
         this._isShow = 1;
         this.left = left || this.left;
         this.top = top || this.top;
         
         this.main.style.left = this.left + 'px';
         this.main.style.top = this.top + 'px';
+        this.main.style.zIndex = esui.util.getNextHighestDepth();
+
+        setTimeout(this._bindAutoHiding.bind(this), 0);
     },
 
     /**
@@ -207,9 +203,20 @@ esui.Layer.prototype = {
      * @public
      */
     hide: function () {
+        var main = this.main;
         this._isShow = 0;
         this.main.style.left = this._HIDE_POS;
         this.main.style.top = this._HIDE_POS;
+
+        switch ( this.autoHide.toLowerCase() ) {
+        case 'click':
+            esui.lib.un( document, 'click', this._clickHandler );
+            break;
+        case 'out':
+            main.onmouseout = null;
+            main.onmouseover = null;
+            break;
+        }
     },
     
     /**
@@ -221,6 +228,18 @@ esui.Layer.prototype = {
     isShow: function () {
         return !!this._isShow;
     },
+
+    _bindAutoHiding: function () {
+        switch ( this.autoHide.toLowerCase() ) {
+        case 'click':
+            esui.lib.on( document, 'click', this._clickHandler );
+            break;
+        case 'out':
+            this.main.onmouseout = this._mouseoutHandler;
+            this.main.onmouseover = this._mouseoverHandler;
+            break;
+        }
+    },
     
     /**
      * 释放控件
@@ -231,8 +250,13 @@ esui.Layer.prototype = {
         var main = this.main;
 
         if ( this._clickHandler ) {
-            esui.lib.un( document, 'click', this._clickHandler );
             this._clickHandler = null;
+        }
+        if ( this._mouseoutHandler ) {
+            this._mouseoutHandler = null;
+        }
+        if ( this._mouseoverHandler ) {
+            this._mouseoverHandler = null;
         }
         
         this.onhide = null;

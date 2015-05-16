@@ -45,7 +45,7 @@ esui.Tab.prototype = {
         me._renderTabs();
     },
 
-    _tplItem    : '<li class="{1}"{2}><em>{0}</em>{3}</li>',
+    _tplItem    : '<li class="{1}"{2}><a>{0}</a>{3}</li>',
     _tplAdd     : '<li class="add" onclick="{0}">+</li>',
     _tplClose   : '<span onclick="{0}"></span>',
     
@@ -102,7 +102,7 @@ esui.Tab.prototype = {
             
             // 构建tab的样式与行为
             if ( i == me.activeIndex ) {
-                currClass += ' ' + me.__getClass( 'item-active' );
+                currClass += ' active';
             } else {
                 clickHandler = ' onclick="' 
                                 + me.__getStrCall( '_select', i )
@@ -121,7 +121,7 @@ esui.Tab.prototype = {
         }
 
         // 填充tab的html
-        main.innerHTML = '<ul>' + html.join('') + '</ul>';
+        main.innerHTML = '<ul class="nav nav-tabs">' + html.join('') + '</ul>';
         me._resetPanel();
     },
     

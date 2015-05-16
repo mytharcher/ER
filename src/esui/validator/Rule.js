@@ -21,7 +21,7 @@ esui.validator.Rule = function () {
         this.name           = options.name;
         this.check          = options.check;
         this.errorMessage   = options.errorMessage;
-    };
+    }
 
     Rule.prototype = {
         /**
@@ -47,7 +47,7 @@ esui.validator.Rule = function () {
             var message = '';
 
             if ( !isValid ) {
-                message = this.errorMessage.replace( /\x24\{([a-z0-9_-]+)\}/g, function ( matcher, word ) {
+                message = this.errorMessage.replace( /\x24\{([\w-]+)\}/ig, function ( matcher, word ) {
                     return control[ word ] || '';
                 } );
             }

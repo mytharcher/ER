@@ -18,8 +18,6 @@
  * @param {Object} options 控件初始化参数
  */
 esui.Popup = function ( options ) {
-    // 类型声明，用于生成控件子dom的id和class
-    this._type = this._type || 'popup';
     
     // 标识鼠标事件触发自动状态转换
     this._autoState = 0;
@@ -28,9 +26,6 @@ esui.Popup = function ( options ) {
 
     // 初始化自动定位参数
     this.__initOption('autoPosition', null, 'AUTO_POSITION');
-    
-    // 初始化可拖拽参数
-    this.__initOption('draggable', null, 'DRAGGABLE');
 
     // 初始化宽度
     this.__initOption('width', null, 'WIDTH');
@@ -39,10 +34,17 @@ esui.Popup = function ( options ) {
     this.__initOption('top', null, 'TOP');
     this.top = parseInt( this.top, 10 );
 
+    // 初始化距离左侧的高度
+    this.__initOption('left', null, 'LEFT');
+    this.left = parseInt( this.left, 10 );
+
     this._resizeHandler = this._getResizeHandler();
 };
 
 esui.Popup.prototype = {
+    // 类型声明，用于生成控件子dom的id和class
+    _type: 'popup',
+    
     /**
      * 显示对话框
      * 
@@ -50,9 +52,14 @@ esui.Popup.prototype = {
      */
     show: function () {
         var mask = this.mask;
+        // 如果mask不是object，则会隐式装箱
+        // 装箱后的Object不具有level和type属性
+        // 相当于未传参数
+        mask && esui.Mask.show( mask.level, mask.type );
+
         var main;
         if ( !this.getLayer() ) {
-            this.render();            
+            this.render();
         }
 
         main = this.getLayer().main;
@@ -63,16 +70,6 @@ esui.Popup.prototype = {
         }
         
         this._resizeHandler();
-
-        // 拖拽功能初始化
-        if ( this.draggable ) {
-            esui.lib.draggable( main, {handler:this.getHead()} );
-        }        
-        
-        // 如果mask不是object，则会隐式装箱
-        // 装箱后的Object不具有level和type属性
-        // 相当于未传参数
-        mask && esui.Mask.show( mask.level, mask.type );
         
         this._isShow = true;
     },
@@ -115,10 +112,10 @@ esui.Popup.prototype = {
         this.content = content;
         var main = this.getLayer().main;
         if (main) {
-	        main.innerHTML = content;
-	        // 改变内容后再次自适应位置
-	        setTimeout(this._resizeHandler, 0);
-	    }
+            main.innerHTML = content;
+            // 改变内容后再次自适应位置
+            setTimeout(this._resizeHandler, 0);
+        }
     },
 
     
@@ -177,11 +174,6 @@ esui.Popup.prototype = {
         }
         
         layer = me.createLayer(document.body);
-        
-        // 拖拽功能初始化
-        if ( this.draggable ) {
-            esui.lib.draggable( layer.main, {handler:layer.main} );
-        }
     },
     
     createLayer: function (there) {
@@ -189,9 +181,11 @@ esui.Popup.prototype = {
         var layer = me._controlMap.layer = esui.util.create( 'Layer', {
             id      : me.__getId('layer'),
             retype  : me._type,
-            skin    : me.skin + (me.dragable ? ' dragable' : ''),
+            skin    : me.skin ? me.skin + (me.draggable ? ' draggable' : '') : '',
             width   : me.width,
-            main    : me.main
+            main    : me.main,
+            autoHide: me.autoHide,
+            onhide  : me.hide.bind(me)
         } );
         layer.appendTo(there);
         return layer;

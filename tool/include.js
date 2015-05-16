@@ -19,7 +19,13 @@ function include( pack ) {
                     var line = lines[ i ];
                     if ( /^\/\/\/\s*import\s+([^;]+)\s*;\s*$/.test( line ) ) {
                         var depend = RegExp.$1;
-                        if ( depend.indexOf( 'baidu' ) === 0 ) {
+                        if ( depend.indexOf( 'baidu.' ) === 0 || depend.indexOf('js.') === 0 ) {
+                            continue;
+                        }
+
+                        if (depend == 'esui.lib') {
+                            include(depend);
+                            include(window.baidu ? 'esui.~lib.tangram' : 'esui.~lib.jslib');
                             continue;
                         }
 

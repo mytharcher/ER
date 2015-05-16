@@ -38,6 +38,10 @@ esui.AjaxForm.prototype = {
             me._handlerSubmitSuccess = this._getHandlerSubmitSuccess();
             me._handlerSubmitFailure = this._getHandlerSubmitFailure();
         }
+
+        me.datasource && setTimeout(function () {
+            me.setFormData(me.datasource);
+        }, 0);
         
         // 设置disabled
         me.setDisabled( me.disabled );
@@ -181,9 +185,17 @@ esui.AjaxForm.prototype = {
      * 
      * @return {Object}
      */
-    getFormData: function () {
+    getFormData: function (allowEmpty) {
         var data = {};
         this.forEachField(this._getFieldDataIterator, this, data);
+        Object.keys(data).forEach(function (item) {
+            if (data[item] instanceof Array && data[item].length == 1) {
+                data[item] = data[item][0];
+            }
+            if (!allowEmpty && data[item] === '') {
+                delete data[item];
+            }
+        });
         return data;
     },
     
@@ -221,13 +233,17 @@ esui.AjaxForm.prototype = {
         
         for (var name in data) {
             var dataItem = data[name];
-            for (var i = 0, len = dataItem.length; i < len; i++) {
-                var value = typeof encoder == 'function' ? encoder(dataItem[i]) : dataItem[i];
-                query.push(name + '=' + value);
+            if (dataItem instanceof Array) {
+                for (var i = 0, len = dataItem.length; i < len; i++) {
+                    var value = typeof encoder == 'function' ? encoder(dataItem[i]) : dataItem[i];
+                    query.push(name + '=' + value);
+                }
+            } else {
+                query.push(name + '=' + (typeof encoder == 'function' ? encoder(dataItem) : dataItem));
             }
         }
         
-        return query.join('&')
+        return query.join('&');
     },
     
     /**
@@ -255,11 +271,22 @@ esui.AjaxForm.prototype = {
     },
 
     resetFields: function () {
-        this.forEachField(this._resetFieldIterator, this);
+        this.datasource ? this.setFormData(this.datasource) :
+            this.forEachField(this._resetFieldIterator, this);
     },
 
     _resetFieldIterator: function (field) {
-        field.render();
+        if (field instanceof esui.BoxControl) {
+            var dataItem = this.datasource[field.name] || [];
+            field.getGroup().selectByValues(dataItem.toString().split(','));
+        } else {
+            field.render();
+        }
+    },
+
+    reset: function () {
+        this.resetFields();
+        this.resetFormError();
     },
     
     /**
@@ -282,7 +309,7 @@ esui.AjaxForm.prototype = {
             if (!me.disabled) {
                 me.readyToSubmit();
             }
-            
+            ev.preventDefault();
             return false;
         };
     },
@@ -305,8 +332,7 @@ esui.AjaxForm.prototype = {
         var me = this;
         return function () {
             if (me.onreset() !== false) {
-                me.resetFormError();
-                me.resetFields();
+                me.reset();
             }
             return false;
         };
