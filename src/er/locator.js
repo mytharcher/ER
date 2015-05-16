@@ -110,11 +110,7 @@ er.locator = function () {
             loc = currentLocation;
 
             // 当location未变化，强制刷新时，直接route
-            if ( !isLocChanged ) {
-                er.router( loc );
-            } else {
-                doRoute( loc );
-            }
+            doRoute( loc );
         }
     }
     
