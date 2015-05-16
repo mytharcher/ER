@@ -185,12 +185,15 @@ esui.AjaxForm.prototype = {
      * 
      * @return {Object}
      */
-    getFormData: function () {
+    getFormData: function (allowEmpty) {
         var data = {};
         this.forEachField(this._getFieldDataIterator, this, data);
         Object.keys(data).forEach(function (item) {
             if (data[item] instanceof Array && data[item].length == 1) {
                 data[item] = data[item][0];
+            }
+            if (!allowEmpty && data[item] === '') {
+                delete data[item];
             }
         });
         return data;
