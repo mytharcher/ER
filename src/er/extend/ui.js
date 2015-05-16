@@ -69,38 +69,8 @@ er.extend.ui = function () {
          * @param {Object} opt_controlMap 要重绘的控件集合，默认重绘所有控件
          */
         repaint: function ( opt_controlMap ) {
-            opt_controlMap = opt_controlMap || this._controlMap;
-        
-            var key;
-            var control;
-            var refer;
-            var referTmp;
-            var referName;
-            var referRef;
-            var i;
-            var len;
-            var uiAdapter = uiExtend.adapter;
-            var ctrlData  = this._controlData;
-           
-            for ( key in opt_controlMap ) {
-                control = opt_controlMap[ key ];
-                refer = ctrlData[ key ];
-
-                if ( control && refer ) {
-                    // 重新灌入数据
-                    for ( i = 0, len = refer.length; i < len ; i++ ) {
-                        referTmp = refer[ i ].split( ':' );
-                        uiAdapter.setControlAttribute( 
-                            control, 
-                            referTmp[ 0 ],
-                            this.model.get( referTmp[ 1 ] )
-                        );
-                    }
-                    
-                    // 重绘控件
-                    uiAdapter.repaint( control );     
-                }
-            }
+            this.clear();
+            this.render();
         },
 
         /**
