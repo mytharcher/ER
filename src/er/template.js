@@ -1155,10 +1155,10 @@ er.template = function () {
      * @inner
      * @param {string} scope 
      * @param {string} varName 变量名
-     * @param {string} opt_filterName 过滤器名
+     * @param {string} filterStr 过滤器名
      * @return {string}
      */
-    function getVariableValue( scope, varName, opt_filterName ) {
+    function getVariableValue( scope, varName, filterStr ) {
         var typeRule = /:([a-z]+)$/i;
         var match    = name.match( typeRule );
         var value;
@@ -1174,9 +1174,18 @@ er.template = function () {
         }
         
         // 过滤处理
-        if ( opt_filterName ) {
-            opt_filterName = filterContainer[ opt_filterName.substr( 1 ) ];
-            opt_filterName && ( value = opt_filterName( value ) );
+        if ( filterStr ) {
+            var filters = filterStr.replace(/^\s*\|\s*/, '').split(/\s*\|\s*/);
+            filters.forEach(function (filter) {
+                filter = filter.split(':');
+                var filterName = filter.shift();
+                var filterParams = filter.length ? filter.join(':').split(',') : [];
+                var filterFn = filterContainer[filterName];
+                if (filterFn) {
+                    filterParams.unshift(value);
+                    value = filterFn.apply(null, filterParams);
+                }
+            });
         }
 
         return value;
@@ -1322,9 +1331,9 @@ er.template = function () {
      */
     function replaceVariable( text, scope ) {
         return text.replace(
-                /\$\{([.:a-z0-9\[\]'"_]+)\s*(\|[a-z]+)?\s*\}/ig,
-                function ( matcher, name, filter ) {
-                    return getVariableValue( scope, name, filter  );
+                /\$\{([.:a-z0-9\[\]'"_]+)\s*(\|\s*[^\|\}]+)*\s*\}/ig,
+                function ( matcher, name, filters ) {
+                    return getVariableValue( scope, name, filters  );
                 });
     }
 
